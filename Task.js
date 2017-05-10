@@ -3,67 +3,25 @@
 // Author: Sally A.M. Hogenboom
 // Version Control via Git
 
-// Set variables
-	var i = 1;
-
-
-// Determine window size
-    var winWidth = window.innerWidth												
-    // using both allows for this measure to work both in Explorer and other Browers
-        || document.documentElement.clientWidth 			
-        || document.body.clientWidth;
-
-    var winHeight = window.innerHeight 												
-     // using both allows for this measure to work both in Explorer and other Browers
-        || document.documentElement.clientHeight
-       || document.body.clientHeight;
-
-// TEST: present window size (in pixels) on webpage				
-    // replace text of 'windowWidth / windowHeight' with variable value, allows for test of variable change
-    document.getElementById('windowWidth').innerHTML = winWidth;		
-    document.getElementById('windowHeight').innerHTML = winHeight;		
-    	
-// Determine size of stimulus (e.g., single picture presented)
-    var stimWidth = document.getElementById('stim').width;
-    var stimHeight = document.getElementById('stim').width;
-   
- // TEST: present stimulus size (in pixels) on webpage
- 	// replace text of 'stimulusWidth/stimulusHeight' with variable values
- 	document.getElementById('stimulusWidth').innerHTML = stimWidth;		
-    document.getElementById('stimulusHeight').innerHTML = stimHeight;	
-    
- // Determine maximum of pictures that can be presented 
-    var horizontalPictures = winWidth / stimWidth;  //Math.floor > round down to nearest integer
-    var verticalPictures = winHeight / stimHeight;
- 
-// TEST: present total number of stimuli that can be presented
-//    var totalPictures = (Math.floor(winWidth / stimWidth)) * (Math.floor(winHeight / stimHeight));
-//    document.getElementById('test').innerHTML = totalPictures;
- 
- // presenting multiple pictures through appending to existing element <div id = 'stimuli'>
+ // presenting multiple pictures through appending to existing element <div id = 'stimuli'>;
      function stimuliPresentation (stimID, stimObject) {
-     	// stimID = id tag of the image that needs to be presented, stimObject = id tage of <div> to be appended to
+     	// stimID = id tag of the image that needs to be presented;
+     	// stimObject = id tag of <div> to which the additional pictures should be appended;
+     	
+     	// Determine size of window, using || allows for this function to work in Explorer and other browsers;
           var winWidth = window.innerWidth												
-              // using both allows for this function to work both in Explorer and other Browers
-                    || document.documentElement.clientWidth 			
-                    || document.body.clientWidth;
-
+                    || document.documentElement.clientWidth  || document.body.clientWidth;
           var winHeight = window.innerHeight 												
-              // using both allows for this function to work both in Explorer and other Browers
-                    || document.documentElement.clientHeight
-                    || document.body.clientHeight;
+                    || document.documentElement.clientHeight || document.body.clientHeight;
                     
-         // Determine size of stimulus (e.g., single picture presented)  // stimID input
+         // Determine size of stimulus (i.e. the picture / grid of dots that is to be presented
           var stimWidth = document.getElementById(stimID).width;
           var stimHeight = document.getElementById(stimID).height;
           
-          // Calculate number of pictures to fit the window
-          var totalPictures = (Math.floor(winWidth / stimWidth)) * (Math.floor(winHeight / stimHeight));
+          // Calculate  max number of pictures to fit the window
+          var totalPictures = (Math.floor(winWidth / stimWidth)) * (Math.floor(winHeight / stimHeight)); //Math.floor rounds the outcome down to an integer
           
-          // TEST: present output from totalPictures in 'test' object
-          document.getElementById('test').innerHTML = totalPictures;
-          
-          // Append number of totalPictures to exisitng stimObject
+          // Present more than 1 stimulus by adding the totalPictures number to an existing HTML object
          for (i = 1; i < totalPictures; ){
               // create new image object with appropriate values
               var stimAdd = new Image();
@@ -76,10 +34,10 @@
               document.getElementById(stimObject).appendChild(stimAdd);
               
             i = i + 1;
-          } 
-      }
+          }  // end picture creation loop
+      } // end stimuli creation function
 
-// initate function
+// initate function, input 'name of stimulus <img> id' & name of HTML object <div> id
 stimuliPresentation('stim', 'stimuli');
 
  
