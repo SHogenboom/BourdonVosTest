@@ -3,6 +3,10 @@
 // Author: Sally A.M. Hogenboom
 // Version Control via Git
 
+// INITIALIZE VARIABLES
+var corrected = "No";
+
+// DRAW CIRCKLES
 function drawGrid (posX, posY, sizeCirckel, verticalCirckles, horizontalCirckles) {
     // GOAL: Draw a canvas with a grid of 9 black dots
         // posX = place in the grid where the first circkel should be drawn
@@ -38,44 +42,48 @@ function drawGrid (posX, posY, sizeCirckel, verticalCirckles, horizontalCirckles
                         ctx.stroke();                                                               // draw specified shape
                         ctx.fillstyle = "black";                                                  // specify fill color
                         ctx.fill();                                                                      // execute filling of shape
+                        //ctx.closePath();                                                                
               
-         posX = posX + distance;     // increase position of X to place new circkles next to the other
-    } // END HORIZONTAL LOOP
+                        posX = posX + distance;     // increase position of X to place new circkles next to the other
+                } // END HORIZONTAL LOOP
     
-    posX = posXstart;   // reset posX for next horizontal line
-    posY = posY + distance; // increase posY so next cirkles are drawn below the other one
-
- } // END VERTICAL LOOP    
-
+        posX = posXstart;   // reset posX for next horizontal line
+        posY = posY + distance; // increase posY so next cirkles are drawn below the other one
+    } // END VERTICAL LOOP    
 } // END drawGrid FUNCTION
 
 // INITIALIZE FUNCTION
 drawGrid(10,10,5,3,3); //posX, posY, sizeCirckle, verticalCirckles, horizontalCirckles 
 
 
+// RESPOND TO MOUSECLICK WITH CROSS OUT & CORRECTION
+function correctionCross () {
+    // GOAL: draw a single line to cross out and a second line to correct for mistakes
+    // INITIALIZED: upon mouseClick
     
-   /* var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    ctx.beginPath();
-    ctx.arc(25,25,5,0,2*Math.PI);
-    ctx.stroke();
-    */
-    
-    /*
-    var c=document.getElementById("myCanvas");
-    var ctx=c.getContext("2d");
-    var img = document.getElementById("testImage");
-    ctx.drawImage(img,1,1,50,50);
-    */
-    
-  /*  function stimuliChange() {
-        var c=document.getElementById("myCanvas");
-        var ctx=c.getContext("2d");
-        ctx.moveTo(0,0);
-        ctx.lineTo(50,50);
-        ctx.stroke();
-    }
-*/
+    // If corrected = "no" then the canvas has not yet been clicked (thus create 1 line to cross out)
+    if (corrected == "No") {
+        var c=document.getElementById("myCanvas");         // refer to correct canvas
+        var ctx=c.getContext("2d");                                         // unkown but necessary
+        ctx.beginPath();                                                           // start new drawing
+        ctx.moveTo(0,0);                                                          // determine starting position of line (should depend on which canvas it is)
+        ctx.lineTo(50,50);                                                         // finish position of line (should depend on size of canvas)
+        ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+        ctx.strokeStyle = "#ff0000";                                          // color of line; red
+        ctx.stroke();    
+        corrected = "Yes"; 
+    } else { // create a correction line so that a cross appears
+        var c=document.getElementById("myCanvas");          // refer to correct canvas
+        var ctx=c.getContext("2d");                                          // unkown but necessary
+        ctx.beginPath();                                                            // start new drawing
+        ctx.moveTo(50,0);                                                        // determine starting position of line (should depend on which canvas it is)
+        ctx.lineTo(0,50);                                                           // finish position of line (should depend on size of canvas)
+        ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+        ctx.strokeStyle = "#ff0000";                                         // color of line; red
+        ctx.stroke();                                                                 // initialize drawing
+    } // END IF
+} // END correctionCross FUNCTION
+
 
 
 
