@@ -1,5 +1,5 @@
 ﻿// Bourdon Vos Test - Stimuli Presentation (i.e. Task)
-// Written in conjuction with /Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/Test.html
+// Written in conjuction with /Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVTest.html
 // Author: Sally A.M. Hogenboom
 // Version Control via Git
 
