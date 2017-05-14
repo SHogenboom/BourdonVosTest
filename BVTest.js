@@ -5,7 +5,13 @@
 
 // INITIALIZE stimulusPresentation FUNCTION
 window.onload = stimulusPresentation ("stimuli", 5,3,3);
+window.onload = startTime();
+
+// SET VARIABLES
 var corrected = "No"; // neccesarry for crossingout reponsiveness (needs adjusting so that first cross always has the same direction)
+var responseArray = [];
+clickArray = [];
+var correctionArray = [];
 
 ////////////////////////////////////// MAIN FUNCTION /////////////////////////////////////
 
@@ -20,7 +26,9 @@ function stimulusPresentation (appendObject, sizeCirckel, verticalCirckles, hori
          
     // DRAW 1st CANVAS + FIGURE (to be able to determine canvas size)
         createCanvas(appendObject, "Canvas1");                                                                      // create new responsive canvas
-        randomFigure ("Canvas1", 10,10,sizeCirckel, horizontalCirckles, verticalCirckles, getRandomInt(3, 5));       // draw figure containing 3/4/5 dots
+        var dots1 = getRandomInt(3, 5);
+        randomFigure ("Canvas1", 10,10,sizeCirckel, horizontalCirckles, verticalCirckles, dots1);       // draw figure containing 3/4/5 dots
+    
         
     // DETERMINE MAX AMOUNT OF FIGURES TO PRESENT
             // Determine size of window, using || allows for this function to work in Explorer and other browsers (from internet);
@@ -34,19 +42,44 @@ function stimulusPresentation (appendObject, sizeCirckel, verticalCirckles, hori
                  var stimHeight = document.getElementById("Canvas1").height;
           
             // Calculate max number of pictures to fit the window
+                 var winHeight = winHeight - stimHeight;  // to allow room for "finish" button
                  var totalPictures = ((((Math.floor(winWidth / stimWidth)) -1) * ((Math.floor(winHeight / stimHeight))))) +1; //Math.floor rounds the outcome down to an integer. +1 because first img object gets hidden so need to display an extra
+                
+                 clickArray = [];
+                 for (y=0; y < totalPictures; y++) { clickArray.push(0); }                                    // for each canvas start amount of clicks at 0            
+                window.alert("clickArray = " + clickArray);
             
             // set random order 3/4/5 dots
-                var arrayDots = [];
-                      var amountFigures = totalPictures / 3;
-                   
+                arrayDots = [];
+                                    
                     for (e = 3; e < 6; e++) {
+                        var amountFigures = totalPictures / 3;
+                        
+                        if (dots1 === 3 && e === 3) {                               // change amount of figures to create with one less depending on the amount of dots the first figure contains
+                            // window.alert((dots1 === 3 && e === 3));
+                            var amountFigures = (amountFigures - 1);
+                        } else if (dots1 === 4 && e === 4) {
+                            // window.alert((dots1 === 4 && e === 4));
+                            var amountFigures = (amountFigures - 1);
+                        } else if (dots1 === 5 && e === 5) {
+                           //  window.alert((dots1 === 5 && e === 5));
+                            var amountFigures = (amountFigures - 1);
+                        } else {
+                            // do nothing
+                        } // END IF
+                       // window.alert(amountFigures);
+                        
                         for (r = 0; r < amountFigures; r++) {           // append 1/3 of totalPictures with 3 dots, 1/3 4 dots, 1/3 5 dots
                             arrayDots.push(e);
                         } // END appending integers 1/3 of totalPictures
                     } // END appending 3/4/5 dots   
-                shuffleArray(arrayDots);                                    // shuffle to create random order
-            
+                
+                shuffleArray(arrayDots);                                    // shuffle to create random order of figures
+                arrayDots.unshift(dots1);                                   // append first created canvas to the total array of Dots (for response logging)
+               // var clickArray = arrayDots;
+                // clickArray.fill(0);
+                // window.alert(clickArray);
+                
         // TEST
            // document.getElementById("testing").innerHTML = ((Math.floor(winWidth / stimWidth)) -1);    
             // window.alert(arrayDots);
@@ -58,7 +91,7 @@ function stimulusPresentation (appendObject, sizeCirckel, verticalCirckles, hori
                 
                 var dots = arrayDots[z-2];
                 randomFigure (ID, 10,10,sizeCirckel, horizontalCirckles, verticalCirckles, dots); // call upon randomFigure (see below) to create random dot figure
-            } // END FOR LOOP  
+             } // END FOR LOOP  
 } // END stimulusPresentation FUNCTION
 
 ////////////////////////////////////// SUPPORTING FUNCTIONS /////////////////////////////////////
@@ -146,7 +179,7 @@ function createCanvas (appendObject, canvasID) {
         //drawGrid (10,10,5, 3, 3, "Canvas1");
 
  
- function randomFigure (canvasID, posX,posY,sizeCirckel, horizontalCirckles, verticalCirckles, dots) {
+function randomFigure (canvasID, posX,posY,sizeCirckel, horizontalCirckles, verticalCirckles, dots) {
     // GOAL: to create a random figure containing 3 - 4 - 5 black dots 
             // canvasID: name of canvas on which to draw (itterated in stimulusPresentation)
             // posX: set at 10 (needs to be deleted)
@@ -240,9 +273,113 @@ function createCanvas (appendObject, canvasID) {
       
 // TEST: INITIALIZE randomFigure FUNCTION
 // randomFigure("Canvas1",10,10,5, 3, 3);
- 
-   
 
+// TIMING 
+    function startTime () {
+        // GOAL: log current Time
+                // no input variables
+        var sTime = new Date();
+        var startTime = sTime.getTime();           
+        // window.alert(startTime);       // TEST
+        sessionStorage.setItem("start", startTime);
+    }
+ 
+    function finishTime () {
+        // GOAL: log current Time
+          // no input variables
+        var fTime = new Date ();
+        finishTime = fTime.getTime();
+        // document.getElementById("testing").innerHTML = (startTime - finishTime);  // TEST
+        sessionStorage.setItem("finish", finishTime)
+        window.location.href = "/Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVFinalScreen.html";
+    }
+   // document.getElementById("output").innerHTML = (startTime - finishTime);
+
+//////////////////////////// SCORING /////////////////////////
+window.alert(arrayDots);
+
+function responseLogging (canvasID, canvasWidth, canvasHeight) {
+    // DETERMINE CURRENT CANVAS
+        var ID = canvasID;
+        var index = (ID.replace("Canvas", ""))-1; //replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
+              
+    // LOG MOUSECLICKS
+        var clicks = clickArray[index];
+        if (clicks == 0) {
+            // canvas has not been clicked - draw line
+                    var c=document.getElementById(canvasID);              // refer to correct canvas
+                    var ctx=c.getContext("2d");                                         // unkown but necessary
+                    ctx.beginPath();                                                           // start new drawing
+                    ctx.moveTo(0,0);                                                          // determine starting position of line - constant
+                    ctx.lineTo(canvasWidth,canvasHeight);                       // finish position of line - changes on canvas size specifiedin drawGrid function
+                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+                    ctx.strokeStyle = "#ff0000";                                          // color of line; red
+                    ctx.stroke();                                                                  // initialize drawing 
+                    clickArray[index] = 1; 
+        } else if (clicks == 1) {
+            // second response, draw correction line
+                    var c=document.getElementById(canvasID);               // refer to correct canvas
+                    var ctx=c.getContext("2d");                                           // unkown but necessary
+                    ctx.beginPath();                                                            // start new drawing
+                    ctx.moveTo(canvasWidth,0);                                        // determine starting position of line (should depend on which canvas it is)
+                    ctx.lineTo(0,canvasHeight);                                          // finish position of line (should depend on size of canvas)
+                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+                    ctx.strokeStyle = "#ff0000";                                         // color of line; red
+                    ctx.stroke();                                                                 // initialize drawing
+                    clickArray[index] = 2;
+        } else {
+            // do nothing
+        } // END clicks IF
+        
+    // extract amount of dots presented in figure
+          var amountDots = arrayDots[index];
+           // window.alert(amountDots);
     
+    // CODE RESPONSES (only cross out (click = 1) figures with 4 dots)
+        if (amountDots == 3 || amountDots == 5) {
+            // do not click (click == 0) or correct mistake (click == 2) == HIT
+            if (clickArray[index] == 0) {                           // No click = CORRECT
+                responseArray.push("Hit");
+                correctionArray.push("No");
+            } else if (clickArray[index] == 1) {                // 1 click == WRONG (only click figures with 4 dots)
+                responseArray.push("False Alarm");
+                correctionArray.push("No");
+            } else {                                                        // 2 clicks == CORRECTION
+                // clickArray[index] == 2 
+                responseArray.push("Hit");
+                correctionArray.push("Yes");
+            } // END if click
+        } else {
+            // amountDots == 4
+             if (clickArray[index] == 0) {                  // no click == WRONG
+                responseArray.push("Miss");
+                correctionArray.push("No");
+            } else if (clickArray[index] == 1) {        // 1 click == CORRECT
+                responseArray.push("Hit");
+                correctionArray.push("No");
+            } else {                                                   // 2 clicks == unjust correction aka WRONG
+                // clickArray[index] == 2 
+                responseArray.push("Miss");
+                correctionArray.push("Yes");
+            } // END if click
+        } // END IF amountDots     
+} // END correctResponse FUNCTION
+
+// correctResponse("Canvas1");
+
+////////////////////////// TERMINATION //////////////
+function terminationButton () {
+    // see finalTime
+    // log completion time
+    // store timings, responseArray & correctionArray in temporary memory
+    // load next page
+    
+} // END terminationButton FUNCTION
+
+
+
+
+
+
 
     
