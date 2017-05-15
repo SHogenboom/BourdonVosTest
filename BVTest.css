@@ -1,0 +1,50 @@
+﻿/* Bourdon Vos Test - Stimuli Presentation (i.e. Task)
+    Written in conjuction with other BV files
+    Author: Sally A.M. Hogenboom
+    Version Control via Git
+*/
+
+/* CREATE & SET VARIABLES */
+:root {
+    --bgColor: MediumSpringGreen;  /*NOTE: no space between the -- and the variable name*/
+    --fontColor: Black;
+    --buttonColor: Black;
+    --buttonText: White;
+}
+
+
+/* BODY */
+body {
+    background-color: var(--bgColor);
+    
+}
+
+/* ALL BUTTONS */
+button {
+    display: block;           /* create block otherwise won't center */
+    text-align: center;      /* center text within button */
+    color: var(--buttonText);                /* font color */
+    margin: 0 auto;         /* center on page */
+    width: 20%;               /* enlarge button */
+    background-color: var(--buttonColor);
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--buttonText);
+    text-transform: uppercase;
+}
+
+div {
+    margin: auto;
+    background-color: White;
+    border-color: var(--bgColor);
+}
+
+canvas {
+    border-style: solid;
+    border-color: var(--bgColor);
+    border-width: 1px;
+}
+
+H6 {
+    font-size: 20px;
+}
