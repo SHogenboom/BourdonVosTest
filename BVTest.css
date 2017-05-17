@@ -10,6 +10,7 @@
     --fontColor: Black;
     --buttonColor: Black;
     --buttonText: White;
+    --fontFamily: Verdana; 
 }
 
 
@@ -35,7 +36,6 @@ button {
 
 div {
     margin: auto;
-    background-color: White;
     border-color: var(--bgColor);
 }
 
@@ -43,8 +43,16 @@ canvas {
     border-style: solid;
     border-color: var(--bgColor);
     border-width: 1px;
+    background-color: White;
 }
 
 H6 {
     font-size: 20px;
+    font-family: var(--fontFamily);
+    line-height: 2;
+}
+
+form {
+    font-size: 10px;
+    font-family: var(--fontFamily);
 }

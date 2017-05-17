@@ -1,21 +1,23 @@
-﻿// Bourdon Vos Test - Stimuli Presentation (i.e. Task)
-// Written in conjuction with /Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVTest_Duplicate.html
-// Author: Sally A.M. Hogenboom
-// Version Control via Git
+﻿/** // Bourdon Vos Test - Stimuli Presentation (i.e. Task)
+// Written in conjuction with /Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVTest.html
+// @author  Sally A.M. Hogenboom <hogen.boom@hotmail.com>
+// Version Control via Git */
 
 // SET [GLOBAL] VARIABLES
 var responseArray = [];
 var clickArray = [];
 var correctionArray = [];
 var responseOrderArray = [];
-var canvasIdArray = ["Canvas1"];        
+var canvasIdArray = ["Canvas1"];   
+var evaluationArray = [];
+var responseTimeArray = [];     
 
 // INITIALIZE FUNCTIONS
 window.onload = stimulusPresentation ("stimuli", 5,3,3);
 window.onload = startTime();
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// MAIN FUNCTION /////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +45,7 @@ function stimulusPresentation (appendObject, sizeCirckel, verticalCirckles, hori
         var totalFigures = maxFigures();
         // window.alert("amount of figures to present = " + totalFigures);             // TEST
     
-    // CREATE clickArray to log mouseclicks
+    // CREATE clickArray to log order of mouseclicks
         clickArray = [];
         for (y = 0; y < totalFigures; y++) { clickArray.push(0); }                                           // for each canvas start amount of clicks at 0            
        //  window.alert("ensure click array contains 0: " + clickArray);                                // TEST
@@ -56,7 +58,7 @@ function stimulusPresentation (appendObject, sizeCirckel, verticalCirckles, hori
         for (z = 2; z < (totalFigures +1); z++) {                    // start at 2 because first canvas was already created
             var ID = "Canvas" + z;                                 // Change .id for each newly created canvas
             canvasIdArray.push(ID);                             // store number for later reference to canvasIDs
-            createCanvas (appendObject, ID);            // call upon createCanvas (see below) to create responsive canvas
+            createCanvas (appendObject, ID, evaluationArray);            // call upon createCanvas (see below) to create responsive canvas
                 
             var dots = dotsArray[z-2];                          // -2 because index starts at 0
             randomFigure (ID, 10,10,sizeCirckel, horizontalCirckles, verticalCirckles, dots); // call upon randomFigure (see below) to create random dot figure
@@ -93,7 +95,7 @@ function firstCanvas (appendObject, sizeCirckel, horizontalCirckles, verticalCir
             // horizontalCirckles: width of the grid of dots
             // verticalCirckles: height of the grid of dots
             
-    createCanvas(appendObject, "Canvas1");                                                                              // create new responsive canvas
+    createCanvas(appendObject, "Canvas1", evaluationArray);                                                                              // create new responsive canvas
     var dots1 = getRandomInt(3, 5);                                                                                              // randomly select to present 3 / 4 / 5 dots
     randomFigure ("Canvas1", 10,10,sizeCirckel, horizontalCirckles, verticalCirckles, dots1);    // draw figure with dots1 amount of dots 
     
@@ -175,7 +177,7 @@ function randomizeDots (totalFigures, dots1, minDot, maxDot) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function createCanvas (appendObject, canvasID) { 
+function createCanvas (appendObject, canvasID, evaluationArray) { 
     // GOAL: create a new reponsive EMPTY canvas
         // appendObject: ID of the object to which the canvas should be appended <div id = "stimuli">
         // canvasID: name you want to give to the created canvas
@@ -187,11 +189,10 @@ function createCanvas (appendObject, canvasID) {
         addCanvas.id = canvasID;                                                  // .id to change on what is specified (itterates in stimulusPresentation function)
         addCanvas.width = 100;                                                     // determine canvas width (manipulated in randomFigure function)
         addCanvas.height = 100;                                                   // determine canvas height (manipulated in randomFigure function)
-        // addCanvas.style.border = "1px solid";                //  #d3d3d3" draw light grey border around canvas
-
+        
     // ASSIGN RESPONSE ACTIONS
-        addCanvas.onmouseover = function () { getID () } ;          // call upon getID function to register ID element that triggered function
-        addCanvas.onclick = function () {responseLogging (canvasID, canvasWidth, canvasHeight) } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
+        // addCanvas.onmouseover = function () {  responseTime(evaluationArray) } ;          // call upon getID function to register ID element that triggered function
+        addCanvas.onclick = function () {responseLogging(canvasID, canvasWidth, canvasHeight) } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
 
     // APPEND RESPONSE ACTIVE CANVAS
         document.getElementById(appendObject).appendChild(addCanvas); // append newly created canvas to exisitng element 
@@ -404,12 +405,11 @@ function finishTime () {
         finishTime = fTime.getTime();
         // document.getElementById("testing").innerHTML = (startTime - finishTime);  // TEST
         sessionStorage.setItem("finish", finishTime);
-        // window.location.href = "/Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVFinalScreen.html";
 } // END startTime FUNCTION
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// FROM INTERNET - ALLOWS FOR ARRAY STORAGE
+// FROM INTERNET - ALLOWS FOR ARRAY STORAGE IN TEMP MEMORY
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj));
 }
@@ -422,15 +422,18 @@ function terminationButton () {
         // startTime saved in Function
         finishTime();  // finishTime saved in Function
         window.alert(responseArray);
-        sessionStorage.setObj("responseArray", responseArray);                     // responses made
-        sessionStorage.setObj("correctionArray", correctionArray);                    // corrections made
-        sessionStorage.setObj("clickArray", clickArray);                                     // mouseclicks made
-        sessionStorage.setObj("responseOrderArray", responseOrderArray);   // order in which responses were made
-        sessionStorage.setObj("dotsArray", dotsArray);                                     // amount of dots in each figures
-        sessionStorage.setObj("canvasIdArray", canvasIdArray);                       // IDs of canvasses that were created
+        sessionStorage.setObj("ARRAY_MADE_RESPONSES", responseArray);                     // responses made
+        sessionStorage.setObj("ARRAY_MADE_CORRECTIONS", correctionArray);                    // corrections made
+        sessionStorage.setObj("ARRAY_N_MOUSECLICKS", clickArray);                                     // mouseclicks made
+        sessionStorage.setObj("ARRAY_CANVAS_RESPONSE_ORDER", responseOrderArray);   // order in which responses were made
+        sessionStorage.setObj("ARRAY_N_DOTS", dotsArray);                                     // amount of dots in each figures
+        sessionStorage.setObj("ARRAY_CANVAS_IDs", canvasIdArray);                       // IDs of canvasses that were created
         
          // load next page
-        window.location.href = "/Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVFinalScreen.html";
+        window.location.href = "BVFinalScreen.html";
 } // END terminationButton FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     
