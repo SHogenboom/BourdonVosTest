@@ -422,7 +422,7 @@ function terminationButton () {
     // STORE VARIABLES FOR CALCULATIONS
         // startTime saved in Function
         finishTime();  // finishTime saved in Function
-        window.alert(responseArray);
+        // window.alert(responseArray);
         sessionStorage.setObj("ARRAY_MADE_RESPONSES", responseArray);                     // responses made
         sessionStorage.setObj("ARRAY_MADE_CORRECTIONS", correctionArray);                    // corrections made
         sessionStorage.setObj("ARRAY_N_MOUSECLICKS", clickArray);                                     // mouseclicks made
