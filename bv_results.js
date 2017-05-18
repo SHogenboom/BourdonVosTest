@@ -1,12 +1,11 @@
 ﻿// Bourdon Vos Test - Stimuli Presentation (i.e. Task)
-// Written in conjuction with /Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVFinalScreen.html
 // Author: Sally A.M. Hogenboom
 // Version Control via Git
 /**
-* @todo make password validation work
+* @todo include reference group data 
 */
 
-// NOTE: Screen loads upon clicking "I am finished" on "bvtest.html"
+// NOTE: Screen loads upon clicking "I am finished" on "bv_test.html"
 
 // FUNCTION FROM INTERNET - ALLOWS FOR ARRAY CALLING FROM STORAGE
 Storage.prototype.getObj = function(key) {

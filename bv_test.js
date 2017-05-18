@@ -1,7 +1,8 @@
-﻿/** // Bourdon Vos Test - Stimuli Presentation (i.e. Task)
-// Written in conjuction with /Users/Sally/Documents/Universiteit/Master/9-Programming_NextStep/BourdonVosTest/BVTest.html
+﻿/** 
+// Bourdon Vos Test - Stimuli Presentation (i.e. Task)
 // @author  Sally A.M. Hogenboom <hogen.boom@hotmail.com>
-// Version Control via Git */
+// Version Control via Git 
+*/
 
 // SET [GLOBAL] VARIABLES
 var responseArray = [];
@@ -430,7 +431,7 @@ function terminationButton () {
         sessionStorage.setObj("ARRAY_CANVAS_IDs", canvasIdArray);                       // IDs of canvasses that were created
         
          // load next page
-        window.location.href = "BVFinalScreen.html";
+        window.location.href = "bv_results.html";
 } // END terminationButton FUNCTION
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 ﻿/** Bourdon Vos Test
 * @author hogen.boom@hotmail.com (Hogenboom, S. A. M.)
-* @fileoverview Flow order: BVFirstScreen > BVPractice > bvtest > bvfinalscreen
+* @fileoverview Flow order: index > bv_pratice > bv_test > bv_results
 * @todo 
 * - complete JSDOC comment style
 * - hide password entry with astrixes
@@ -91,7 +91,7 @@ function demographics () {
             "<br>" + "It is now time to call the participant." + "<br>" +
                 "Please press 'next' to display the participant instructions");
     document.getElementById("button").innerHTML = "next"; // change button text
-    document.getElementById("button").onclick = function(){window.location.href = "BVPractice.html"};
+    document.getElementById("button").onclick = function(){window.location.href = "bv_practice.html"};
     console.log(document.getElementById("button").onclick);
         // load practice window upon clicking the button
     

@@ -1,6 +1,6 @@
 ﻿/** Bourdon Vos Test
 * @author hogen.boom@hotmail.com (Hogenboom, S. A. M.)
-* @fileoverview Flow order: BVFirstScreen > BVPractice > bvtest > bvfinalscreen
+* @fileoverview Flow order: index > bv_pratice > bv_test > bv_results
 * @todo 
 * - complete JSDOC comment style
 * - allow for random figures
@@ -136,7 +136,7 @@ function responseActive() {
             "<br>" + "Please click 'Start the Test' to get going.")
             document.getElementById("button").innerHTML = "Start the Test";
             document.getElementById("button").style.visibility = "visible";
-            document.getElementById("button").onclick = function() {window.location.href = "bvtest.html"};
+            document.getElementById("button").onclick = function() {window.location.href = "bv_test.html"};
             warning = false;
         } else if (index != 1 && warning == true) {
             document.getElementById("maintext").innerHTML = 
