@@ -99,6 +99,6 @@ function demographics () {
      sessionStorage.setItem("FIRSTNAME", FIRSTNAME);
      sessionStorage.setItem("LASTNAME", LASTNAME);
      sessionStorage.setItem("AGE", AGE);
-     sessionStorage.setItem("RESULT_ACCES_PASSWORD", RESULT_ACCES_PASSWORD);
+     sessionStorage.setItem("RESULT_ACCES_PASSWORD", String(RESULT_ACCES_PASSWORD));
 } // END demographics FUNCTION
 

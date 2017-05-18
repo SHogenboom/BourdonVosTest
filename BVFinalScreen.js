@@ -28,9 +28,9 @@ Storage.prototype.getObj = function(key) {
     const LASTNAME = sessionStorage.getItem("LASTNAME");
      const AGE = sessionStorage.getItem("AGE");
      const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
-   window.alert(RESULT_ACCES_PASSWORD);
-   window.alert(typeof(RESULT_ACCES_PASSWORD))
-   window.alert(RESULT_ACCES_PASSWORD.length);
+   // window.alert(RESULT_ACCES_PASSWORD);
+   // window.alert(typeof(RESULT_ACCES_PASSWORD))
+   // window.alert(RESULT_ACCES_PASSWORD.length);
 // CREATE VARIABLES
     var cleanedResponseArray = [];      // for storing unique responses & calculating final hit/miss/false alarm numbers
 
@@ -52,26 +52,31 @@ document.getElementById("button").onclick = function () {displayResults() };
 function displayResults() {
     // RESULT_ACCES_PASSWORD = String(RESULT_ACCES_PASSWORD);
     var passWord = String(window.prompt("Please enter the specified password to acces the results"));
-    window.alert(passWord);
-    window.alert(typeof(passWord));
-    window.alert(passWord.length);
+    // window.alert(passWord);
+    // window.alert(typeof(passWord));
+    // window.alert(passWord.length);
     if (passWord == RESULT_ACCES_PASSWORD) {
+        window.alert("Correct password. These are the results: ")
         // CALL cleanResponses 
         var cleanedResponseArray = cleanResponses(ARRAY_CANVAS_RESPONSE_ORDER, ARRAY_MADE_RESPONSES, ARRAY_CANVAS_IDs);
 
         // CALL finalScore to present scores on screen
         finalScore(cleanedResponseArray);
-    } // END ID password comparison
-    var passwordReentry = window.confirm("This is not the correct password. Do you wish to try again?");
-    
-        if (passwordReentry == true) {
-            displayResults(); // launch again
-        } else {
-            document.getElementById("maintext").innerHTML = (
-            "Thank you for using the online Bourdon Vos Test" + "<br>" +
-            "For questions and comments, please contact: hogen.boom@hotmail.com")
-            document.getElementById("button").style.visibility = "hidden";
+         document.getElementById("button").style.visibility = "hidden";
+
+    } else {
+            var passwordReentry = window.confirm("This is not the correct password. Do you wish to try again?");
+            
+             if (passwordReentry == true) {
+                displayResults(); // launch again
+             } else {
+                document.getElementById("maintext").innerHTML = (
+                    "Thank you for using the online Bourdon Vos Test" + "<br>" +
+                        "For questions and comments, please contact: hogen.boom@hotmail.com")
+                document.getElementById("button").style.visibility = "hidden";
         } // END re-entry of password IF
+   } // END password Comparison
+     
     
 } // END displayResults FUNCTION
 
