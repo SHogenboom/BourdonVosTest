@@ -3,7 +3,7 @@
 // Author: Sally A.M. Hogenboom
 // Version Control via Git
 /**
-* @todo make password validation work
+* @todo implement referencegroup data for score calculations
 */
 
 // NOTE: Screen loads upon clicking "I am finished" on "bvtest.html"
