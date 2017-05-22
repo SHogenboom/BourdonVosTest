@@ -56,6 +56,7 @@ function practiceTrials (appendObject) {
         addCanvas.id = canvasID; // set name of canvas element
         addCanvas.width = 60; // set width of element                                                   
         addCanvas.height = 60; // set height of element
+        addCanvas.className = "practice";
         addCanvas.onclick = function () {responseActive() };                                            
 
         clickArray.push(0); // set to 0 for each canvas created   

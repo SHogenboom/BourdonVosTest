@@ -46,6 +46,13 @@ canvas {
     background-color: White;
 }
 
+.practice {
+    border-style: solid;
+    border-color: var(--bgColor);
+    border-width: 10px;
+    background-color: White;
+}
+
 H6 {
     font-size: 20px;
     font-family: var(--fontFamily);
