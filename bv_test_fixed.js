@@ -8,6 +8,9 @@
 var stimuliColumns = 24; // specified in Bourdon Vos Test
 var stimuliRows = 33; // specified in Bourdon Vos Test
 var totalStimuli = stimuliColumns * stimuliRows;
+var dotArray = []; // empty array to store which canvas contains which amount of dots
+//var arrayXpos = []; 
+//var arrayYpos = [];
 
 // INITIALIZE FUNCTIONS
 // window.onload = checkWindowSize();
@@ -24,35 +27,50 @@ function stimuliPresentation () {
         document.getElementById("maintext").style.visibility = "hidden"
         document.getElementById("button").style.visibility = "hidden"
     
-    // CALL canvasSize 
+    // DETERMINE MAX. CANVAS SIZE
         // to determine how large the canvasses (i.e. stimuli) can
-        // .... maximum be and still fit in the window    
+        // ....  be and still fit in the window    
         var canvasWidth = canvasSize(); // size returned from canvasSize function
         var canvasHeight = canvasWidth; // make square. Computer screens always wider than high.
         
-    // CALL createCanvas
-        // create empty responsive active canvas 
-   for (i = 1; i < (totalStimuli +1); i++) { // totalStimuli + 1 because counter starts at 1
-        var canvasID = "Canvas" + i        
-        createCanvas("stimuli", canvasID, canvasHeight, canvasWidth);   
-    } // END FOR LOOP     
+    // CREATE CANVASES
+        for (i = 1; i < (totalStimuli +1); i++) { // totalStimuli + 1 because counter starts at 1
+            var canvasID = "Canvas" + i        
+            createCanvas("stimuli", canvasID, canvasHeight, canvasWidth);   
+            
+                // DRAW FIGURES ON CANVAS
+                    var sizeCirckel = dotCoordinates (canvasID);
+                    for (x = 0 ; x < 9; x++) {
+                        var posX = arrayXpos[x];
+                        var posY = arrayYpos[x];
+                        blackDot (canvasID, posX, posY, sizeCirckel)
+                     } // END drawing figures LOOP
+
+            
+        } // END create canvas LOOP  
+    
+    // CREATE DOT ARRAY
+        // Create an array with 1/3 of totalStimuli containing "3", "4", or "5" > will represent amount of dots later on
+        for (i = 3; i < 6; i++) {
+            for (x = 1; x < ((totalStimuli / 3) + 1); x++) { // +1 because counter starts at 1
+                dotArray.push(i)    // add the number (i) to the entire array
+            } // END 1/3 of figure LOOP
+           // console.log(dotArray);
+           // console.log(dotArray.length);
+           // console.log(dotArray[(dotArray.length-1)])
+        } // END create dot array LOOP
+        shuffleArray(dotArray); // shuffle content of dotArray to allow for random figures
+        // TEST: window.alert(dotArray);
+        
+           console.log(arrayXpos);
+               
 } // END stimuliPresentation FUNCTION
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// NOTE: from internet (https://stackoverflow.com/questions/17143394/confirmation-before-exit-dialog)
-function confirmExit() {
-    // GOAL: make sure pp wanted to close the window and didn't do so by accident 
-    // ... which would mean loosing all scores.
-        return "You have attempted to leave this page. Are you sure?";
-} // END confirmExit FUNCTION
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
 function checkWindowSize() {
     // GOAL: Ensure that the participant is using the full screen for the task.
        
@@ -103,11 +121,113 @@ function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth) {
         addCanvas.height = canvasHeight; //  set canvasHeight (depending on screen size in canvasSize function) 
         
     // ASSIGN RESPONSE ACTIONS
-        addCanvas.onclick = function () {responseLogging(canvasID, canvasWidth, canvasHeight) } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
+       // addCanvas.onclick = function () {responseLogging(canvasID, canvasWidth, canvasHeight) } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
 
     // APPEND CANVAS TO EXISTING OBJECT
         document.getElementById(appendObject).appendChild(addCanvas); // append newly created canvas to existing element 
 } // END createCanvas FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+function blackDot (canvasID, posX, posY, sizeCirckel) {
+    // GOAL: draw a single black circkle
+            // canvasID: id of the canvas to be drawn on
+            // posX: X position of center circkel relative to canvas
+            // posY: Y position of center circkel relative to canvas
+            // sizeCirckel: size of circkel dependent on size of canvas
+        
+        // CALL CANVAS
+            var c = document.getElementById(canvasID);         // draw on prespecified canvas (see HTML)
+            var ctx = c.getContext("2d");                                    // unkown functionality but necessary 
+        
+        // DRAW CIRCKEL
+            ctx.beginPath();                                                        // initialize drawing
+            ctx.fillstyle = "black";                                                 // specify fill color = black
+            ctx.arc(posX,posY,sizeCirckel,0,2*Math.PI);            // specification of shape to draw (in this case a circkle)
+            ctx.stroke();                                                               // draw specified shape
+            ctx.closePath();                                                        // to allow for other figures to be drawn
+            ctx.fill();                                                                     // execute
+} // END blackDot FUNCTION    
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+function dotCoordinates (canvasID) {
+    // GOAL: create a combination of X & Y coordinates that match size of the canvas
+        // canvasID: id of canvas to be drawn on
+        
+        // SET VARIABLES
+        var canvasWidth = (document.getElementById(canvasID).width - 6); // -6 to allow for 3px blank border where no circkel is drawn
+        var canvasHeight = (document.getElementById(canvasID).height - 6); // -6 to allow for 3px blank border where no circkel is drawn
+        var sizeCirckel = (canvasWidth / 11); // divide by 11 to allow blank spaces between the dots
+        // console.log(sizeCirckel);
+        arrayXpos = []; 
+        arrayYpos = [];
+        
+        // possible X positions
+             arrayXPos = [];                                                                // create empty array accesible outside function
+                for (q = 1; q < (3 + 1); q++) {                 // repeat X coordinates for all coordinates of Y
+                    for (k = 1; k < (3 + 1); k++) {         // positions for the amount of horizontalCirckles specified (+1 because k = 1)
+                        var posX = ((3 * sizeCirckel) * k);                       // (should be changed depending on canvas & circkel size)
+                        arrayXpos.push(posX);                                      // append new position to array containing all X coordinates
+                    } // END horizontal LOOP
+                } // END vertical LOOP
+            // window.alert(arrayXPos);                                               // TEST
+     
+         // possible Y positions
+            arrayYPos = [];                                                                // create empty array accesisble outside function
+                for (w = 1; w < (3 + 1); w++) {           // repeat Y coordinates for all coordinates of X
+                     for (l = 1; l < (3 + 1); l++) {                // positions for the amount of verticalCirckles specified (+1 because l = 1)
+                        var posY = ((3 * sizeCirckel) * l);                         // change depending on circkelSize
+                        arrayYpos.push(posY);                                       // append new position to array containing all Y position
+                    } // END vertical LOOP
+                } // END horizontal LOOP
+            //  window.alert(arrayYPos);                                               // TEST
+            
+            // sort so when paired with X creates unique XY coordinates
+                 arrayYpos.sort();
+    
+    return sizeCirckel;
+} // END positionGrid FUNCTION
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// INTERNET FUNCTIONS /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// NOTE: Functions that were used to create the task that were not programmed by the author
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+// https://stackoverflow.com/questions/17143394/confirmation-before-exit-dialog)
+
+function confirmExit() {
+    // GOAL: make sure pp wanted to close the window and didn't do so by accident 
+    // ... which would mean loosing all scores.
+        return "You have attempted to leave this page. Are you sure?";
+} // END confirmExit FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+// https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
+
+function getRandomInt(min, max) {
+      // GOAL: get a random integer in a range from min to max
+        return Math.floor(Math.random() * (max - min + 1) + min);
+} // END RandomInt FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+
+function shuffleArray(array) {
+    // GOAL: to shuffle the content of an array (e.g., to create random presentation of stimuli)
+            for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            }
+        return array;
+} // END shuffleArray FUNCTION
 
 
 

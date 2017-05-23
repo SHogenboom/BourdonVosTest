@@ -18,7 +18,7 @@ window.onload = stimulusPresentation ("stimuli", 5,3,3);
 window.onload = startTime();
 
 
-//////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// MAIN FUNCTION /////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -170,7 +170,7 @@ function randomizeDots (totalFigures, dots1, minDot, maxDot) {
     
     // RANDOMIZE dots order
         shuffleArray(dotsArray);                            // shuffle to create random order of figures
-        dotsArray.unshift(dots1);                   // append firstly created canvas to the total array of Dots (for response tracking)
+        dotsArray.unshift(dots1);                           // append firstly created canvas to the total array of Dots (for response tracking)
         // window.alert(dotsArray);
         
     return dotsArray;
