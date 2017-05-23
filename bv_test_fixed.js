@@ -4,52 +4,40 @@
 * @todo 
 */
 
-/*window.onload = requestFullScreen();
+// SET VARIABLES
+var count = 0;
 
-// SET WINDOW SIZE
-function setWindow ()
-{
-    // Determine size of screen
-        var screenWidth = screen.availWidth;
-        var screenHeight = screen.availHeight;  
+// INITIALIZE FUNCTIONS
+window.onload = checkWindowSize();
+window.onbeforeunload = confirmExit();
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// NOTE: from internet (https://stackoverflow.com/questions/17143394/confirmation-before-exit-dialog)
+    function confirmExit() {
+        // GOAL: make sure pp wanted to close the window and didn't do so by accident 
+        // ... which would mean loosing all scores.
+        return "You have attempted to leave this page. Are you sure?";
+    } // END confirmExit FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+    function checkWindowSize() {
+        // GOAL: Ensure that the participant is using the full screen for the task.
+        // Determine computer screen size
+            var screenHeight = screen.height;
+            var screenWidth = screen.width;
         
-        window.resizeTo(screenWidth, screenHeight);
-        window.focus;
-}    // END setWindow FUNCTION
-*/
-/*
-function requestFullScreen(element) {
-    // Supports most browsers and their versions.
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-
-    if (requestMethod) { // Native full screen.
-        requestMethod.call(element);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
-        }
-    }
-}
-
-var elem = document.body; // Make the body go full screen.
-requestFullScreen(elem);
+        // Determine current window size 
+            var winWidth = window.outerWidth;
+            var winHeight = window.outerHeight;
         
-*/
-function requestFullScreen(el) {
-            // Supports most browsers and their versions.
-            var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-
-            if (requestMethod) { // Native full screen.
-                requestMethod.call(el);
-            } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-                var wscript = new ActiveXObject("WScript.Shell");
-                if (wscript !== null) {
-                    wscript.SendKeys("{F11}");
-                }
-            }
-            return false
-}
-
-window.onload = requestFullScreen(el);
-        
+        if ((screenHeight != winHeight) && (screenWidth != winWidth)) {
+            console.log("screenHeight = " + screenHeight + "winHeight = " + winHeight + "screenWidth = " + screenWidth + "winWidth" + winWidth);
+            alert("Window too small. Please ensure that the screen is in full screen mode");
+            // window.onresize =  checkWindowSize(); // relaunch the window check -> creates loop until if condition is satisfied
+        } // END IF    
+    } // END checkWindowSize FUNCTION
