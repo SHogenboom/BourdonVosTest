@@ -176,7 +176,7 @@ function calculateResponseTimes () {
         var canvasTime = cleanedResponseTimeArray[i]; // identify reaction time per canvas
 
         if (canvasTime == 999) {
-            // do nothing, no response was made i.e. no reaction time
+            // no response was made i.e. no reaction time
             canvasDeltaTime = 0;
         } else {
             canvasDeltaTime = ((canvasTime - STARTTIME) / 1000); // calculate delta response time between start and that canvas
@@ -201,47 +201,8 @@ function calculateResponseTimes () {
             
         // store total rowRT
             rowRTArray.push(rowRT);
-
-           // count = count + 1; // increment count
     } // END row LOOP
             
- /*   
-    for (i = 0; i < STIMULI_ROWS; i++) {
-        var reactionTimeArray = []; // create/reset empty reaction time array
-        
-        for (x = 0; x < STIMULI_COLS; x++) {
-            var canvasTime = cleanedResponseTimeArray[i]; // identify reaction time per canvas
-            
-            if (canvasTime == 999) {
-                // do nothing, no response was made i.e. no reaction time
-            } else {
-                var canvasDeltaTime = (canvasTime - STARTTIME); // calculate delta response time between start and that canvas
-            } // END valid time IF
-            
-            reactionTimeArray.push(canvasDeltaTime); // store response time
-        } // END stimuli cols LOOP
-        
-        // IF NO RESPONSE NO RT CAN BE CALCULATED
-            if (reactionTimeArray.length == 0) {
-                rowReactionTimeArray.push(0); 
-            } else {
-                // CALCULATE TOTAL RT FOR ROW
-                    for (t = 0; t < reactionTimeArray.length; t++) {
-                        var rowTotalTime = rowTotalTime + reactionTimeArray[t];    
-                    } // END reactionTimeArray LOOP
-        
-                // CALCULATE AVERAGE RT ROW
-                    var averageRT = ((rowTotalTime / reactionTimeArray.length) / 1000);
-                    rowReactionTimeArray.push(averageRT);
-            } // END reactionTimeArray.length IF
-        
-    // RESET VARIABLES
-        var rowTotalTime = 0;
-        var averageRT = 0;
-      
-    } // END stimuli row LOOP
-*/    
-
 } // END calculateResponseTimes FUNCTION
 
 
