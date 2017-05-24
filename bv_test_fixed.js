@@ -5,8 +5,8 @@
 */
 
 // SET VARIABLES
-var stimuliColumns = 24; // specified in Bourdon Vos Test
-var stimuliRows = 33; // specified in Bourdon Vos Test
+var stimuliColumns = 5; // 24 specified in Bourdon Vos Test
+var stimuliRows = 5; // 33 specified in Bourdon Vos Test
 var totalStimuli = stimuliColumns * stimuliRows;
 var dotArray = []; // store which canvas contains which amount of dots
 //var arrayXpos = []; 
@@ -265,7 +265,7 @@ function canvasMouseOut () {
         var index = (currentID.replace("Canvas", ""))-1; // replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
         // console.log(finishHover); // TEST
         
-        if ((finishHover - startHover) > 400) { // delay response so only activated when "hovered" for 500 miliseconds
+        if ((finishHover - startHover) > 300) { // delay response so only activated when "hovered" for 300 miliseconds
             // CHANGE BG COLOR
             document.getElementById(currentID).style.backgroundColor = "#CCCCCC"; 
             
@@ -312,6 +312,10 @@ function canvasMouseOut () {
                     } // END amountDots  IF
                             console.log("responseArray = " + responseArray);
                             console.log("correctionArray = " + correctionArray);
+                            
+            // STORE RESPONSE TIMES
+                    responseTimeArray.push(currentTime()); // store current Time in responseTimeArray
+                            
         } // END hover IF   
 } // END canvasMouseOut FUNCTION
   
@@ -361,15 +365,16 @@ function responseLogging () {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function terminationButton () {  
     // GOAL: store data for result calculations
-        // startTime saved on window load
+        // startTime stored on window load
         sessionStorage.setItem("finish", currentTime()); // store finish Time
+        sessionStorage.setItem("stimuliRows", stimuliRows); // store amount of rows containing stimuli
+        sessionStorage.setItem("stimuliCols", stimuliColumns); // store amount of columns containing stimuli
         
         sessionStorage.setObj("ARRAY_MADE_RESPONSES", responseArray);                     // responses made
         sessionStorage.setObj("ARRAY_MADE_CORRECTIONS", correctionArray);                    // corrections made
-       // sessionStorage.setObj("ARRAY_N_MOUSECLICKS", clickArray);                                     // mouseclicks made
        sessionStorage.setObj("ARRAY_CANVAS_RESPONSE_ORDER", responseOrderArray);   // order in which responses were made
         sessionStorage.setObj("ARRAY_N_DOTS", dotArray);                                     // amount of dots in each figures
-        // sessionStorage.setObj("ARRAY_CANVAS_IDs", canvasIdArray);                       // IDs of canvasses that were created
+        sessionStorage.setObj("ARRAY_RESPONSE_TIMES", responseTimeArray);                       // response times per canvas
         
          // load next page
         window.location.href = "bv_results.html";

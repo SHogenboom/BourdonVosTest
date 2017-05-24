@@ -137,7 +137,7 @@ function responseActive() {
             "<br>" + "Please click 'Start the Test' to get going.")
             document.getElementById("button").innerHTML = "Start the Test";
             document.getElementById("button").style.visibility = "visible";
-            document.getElementById("button").onclick = function() {window.location.href = "bv_test.html"};
+            document.getElementById("button").onclick = function() {window.location.href = "bv_test_fixed.html"};
             warning = false;
         } else if (index != 1 && warning == true) {
             document.getElementById("maintext").innerHTML = 
