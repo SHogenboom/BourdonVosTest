@@ -24,7 +24,7 @@ var responseOrderArray = []; // log order of canvases clicked
 // window.onload = checkWindowSize();
 window.onbeforeunload = confirmExit();
 window.onload = stimuliPresentation ();
-
+window.onload =  sessionStorage.setItem("start", currentTime()); // store start time until tab is closed so can be used on next page
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// MAIN FUNCTIONS ////////////////////////////////////////////
@@ -33,7 +33,6 @@ window.onload = stimuliPresentation ();
 function stimuliPresentation () {
     // HIDE EXISTING COMPONENTS
         document.getElementById("maintext").style.visibility = "hidden"
-        document.getElementById("button").style.visibility = "hidden"
         
     // SET VARIABLES
             var horizontal = 1;
@@ -41,11 +40,9 @@ function stimuliPresentation () {
             var posLeft;
             var posTop;
     
-    
-    
     // DETERMINE MAX. CANVAS SIZE
         // to determine how large the canvasses (i.e. stimuli) can
-        // ....  be and still fit in the window    
+        // ....  be and while still fitting in the window    
         var canvasWidth = canvasSize(); // size returned from canvasSize function
         var canvasHeight = canvasWidth; // make square. Computer screens always wider than high.
         
@@ -59,7 +56,7 @@ function stimuliPresentation () {
         shuffleArray(dotArray); // shuffle content of dotArray to allow for random figures
         // console.log(dotArray);
     
-    // CREATE CANVASES
+    // CREATE CANVASES WITH DOT FIGURES
         for (t = 1; t < (totalStimuli +1); t++) { // totalStimuli + 1 because counter starts at 1
             var canvasID = "Canvas" + t;
 
@@ -92,14 +89,20 @@ function stimuliPresentation () {
                         blackDot (canvasID, posX, posY, sizeCirckel)
                 } // END drawing figures LOOP
                 
-            // SET CLICKS TO 0
+            // SET CLICKS TO 0 FOR ALL CANVASES
                 clickArray.push(0);
         } // END create canvas LOOP  
         
             // console.log(dotArray); // TEST if correct dots are displayed
             // console.log("clickArray length = " + clickArray.length);  // TEST: should be equal to totalStimuli
 
-  
+    // PRESENT FINISH BUTTON
+        document.getElementById("button").innerHTML = "I am finished"; // change text
+        document.getElementById("button").style.position = "absolute"; // set position
+        document.getElementById("button").style.top = ((stimuliRows+0.5) * canvasHeight); // set position below all canvases
+        document.getElementById("button").style.left = (outerBorder + canvasBorder); // align left
+        document.getElementById("button").onclick = function() { terminationButton() }; // upon clicking store data & go to results
+
 } // END stimuliPresentation FUNCTION
 
 
@@ -262,7 +265,7 @@ function canvasMouseOut () {
         var index = (currentID.replace("Canvas", ""))-1; // replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
         // console.log(finishHover); // TEST
         
-        if ((finishHover - startHover) > 500) { // delay response so only activated when "hovered" for 500 miliseconds
+        if ((finishHover - startHover) > 300) { // delay response so only activated when "hovered" for 500 miliseconds
             // CHANGE BG COLOR
             document.getElementById(currentID).style.backgroundColor = "#CCCCCC"; 
             
@@ -355,6 +358,24 @@ function responseLogging () {
                 
 } // END responseLogging FUNCTION
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function terminationButton () {  
+    // GOAL: store data for result calculations
+        // startTime saved on window load
+        sessionStorage.setItem("finish", currentTime()); // store finish Time
+        
+        sessionStorage.setObj("ARRAY_MADE_RESPONSES", responseArray);                     // responses made
+        sessionStorage.setObj("ARRAY_MADE_CORRECTIONS", correctionArray);                    // corrections made
+       // sessionStorage.setObj("ARRAY_N_MOUSECLICKS", clickArray);                                     // mouseclicks made
+       // sessionStorage.setObj("ARRAY_CANVAS_RESPONSE_ORDER", responseOrderArray);   // order in which responses were made
+        sessionStorage.setObj("ARRAY_N_DOTS", dotArray);                                     // amount of dots in each figures
+        // sessionStorage.setObj("ARRAY_CANVAS_IDs", canvasIdArray);                       // IDs of canvasses that were created
+        
+         // load next page
+        window.location.href = "bv_results.html";
+} // END terminationButton FUNCTION
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,8 +416,14 @@ function shuffleArray(array) {
         return array;
 } // END shuffleArray FUNCTION
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+// https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
+// FROM INTERNET - ALLOWS FOR ARRAY STORAGE IN TEMP MEMORY
+Storage.prototype.setObj = function(key, obj) {
+    return this.setItem(key, JSON.stringify(obj));
+}
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
 
 
 
