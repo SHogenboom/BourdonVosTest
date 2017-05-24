@@ -11,6 +11,9 @@ var totalStimuli = stimuliColumns * stimuliRows;
 var dotArray = []; // empty array to store which canvas contains which amount of dots
 //var arrayXpos = []; 
 //var arrayYpos = [];
+var outerBorder = 10;
+var canvasBorder = 1;
+
 
 // INITIALIZE FUNCTIONS
 // window.onload = checkWindowSize();
@@ -26,6 +29,14 @@ function stimuliPresentation () {
     // HIDE EXISTING COMPONENTS
         document.getElementById("maintext").style.visibility = "hidden"
         document.getElementById("button").style.visibility = "hidden"
+        
+    // SET VARIABLES
+            var horizontal = 1;
+            var vertical = 1; 
+            var posLeft;
+            var posTop;
+    
+    
     
     // DETERMINE MAX. CANVAS SIZE
         // to determine how large the canvasses (i.e. stimuli) can
@@ -33,36 +44,51 @@ function stimuliPresentation () {
         var canvasWidth = canvasSize(); // size returned from canvasSize function
         var canvasHeight = canvasWidth; // make square. Computer screens always wider than high.
         
-    // CREATE CANVASES
-        for (i = 1; i < (totalStimuli +1); i++) { // totalStimuli + 1 because counter starts at 1
-            var canvasID = "Canvas" + i        
-            createCanvas("stimuli", canvasID, canvasHeight, canvasWidth);   
-            
-                // DRAW FIGURES ON CANVAS
-                    var sizeCirckel = dotCoordinates (canvasID);
-                    for (x = 0 ; x < 9; x++) {
-                        var posX = arrayXpos[x];
-                        var posY = arrayYpos[x];
-                        blackDot (canvasID, posX, posY, sizeCirckel)
-                     } // END drawing figures LOOP
-
-            
-        } // END create canvas LOOP  
-    
     // CREATE DOT ARRAY
         // Create an array with 1/3 of totalStimuli containing "3", "4", or "5" > will represent amount of dots later on
         for (i = 3; i < 6; i++) {
             for (x = 1; x < ((totalStimuli / 3) + 1); x++) { // +1 because counter starts at 1
                 dotArray.push(i)    // add the number (i) to the entire array
             } // END 1/3 of figure LOOP
-           // console.log(dotArray);
-           // console.log(dotArray.length);
-           // console.log(dotArray[(dotArray.length-1)])
         } // END create dot array LOOP
         shuffleArray(dotArray); // shuffle content of dotArray to allow for random figures
-        // TEST: window.alert(dotArray);
+        // console.log(dotArray);
+    
+    // CREATE CANVASES
+        for (t = 1; t < (totalStimuli +1); t++) { // totalStimuli + 1 because counter starts at 1
+            var canvasID = "Canvas" + t;
+
+            // POSITIONING OF CANVASES            
+                if (t == 1) { // first canvas
+                    posLeft = outerBorder + canvasBorder;
+                    posTop = outerBorder + canvasBorder;
+                } else { // all other canvases
+                    if (horizontal < stimuliColumns) { // Loop over Columns to set X positions
+                        posLeft = (((canvasWidth * horizontal) +  canvasBorder) + outerBorder); // +canvasBorder/outerBorder to prevent overlap with window & other canvases
+                        horizontal = horizontal + 1; // increment counter
+                    } else {  // a row was filled, change Y position  
+                        posLeft = outerBorder + canvasBorder;
+                        horizontal = 1; // reset counter for next row
+                        posTop = (((canvasHeight * vertical) + canvasBorder) + outerBorder);
+                        vertical = vertical + 1; // increment counter
+                    } // END horizontal/vertical IF
+                } // END first canvas IF
+      
+            createCanvas("stimuli", canvasID, canvasHeight, canvasWidth, posLeft, posTop);   
+        } // END create canvas LOOP  
+
         
-           console.log(arrayXpos);
+   /*     
+    // DRAW FIGURES ON CANVAS
+        var sizeCirckel = dotCoordinates (canvasID);
+            for (k = 0 ; k < (dotArray[k]); k++) {
+                var index =  indexArray[k];       
+                var posX = arrayXpos[index]; 
+                var posY = arrayYpos[index];
+                blackDot (canvasID, posX, posY, sizeCirckel)
+        } // END drawing figures LOOP
+        */
+            
                
 } // END stimuliPresentation FUNCTION
 
@@ -98,16 +124,20 @@ function canvasSize() {
     // ... Thus in order to create maximum sized squares, only the width needs to be taken into account.
     
     // Determine current window size 
-           var winWidth = window.innerWidth; // available amount of pixels on the inside of the window
+           var winWidth = (window.innerWidth - (2* outerBorder)); // available amount of pixels on the inside of the window
+           // var divWidth = document.getElementById("stimuli").offsetWidth; 
             
     // Determine max canvas width
-        var canvasWidth = (winWidth / (stimuliColumns + 1)); // +1 to allow for room for the borders between canvases & the side of the window
-
+        var canvasWidth = (winWidth / (stimuliColumns)); // -4 to allow for room for the borders between canvases & the side of the window
+            
+        console.log(canvasWidth);
+        console.log(winWidth);
+        
      return canvasWidth;
 }  // END canvasSize FUNCTION
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
-function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth) { 
+function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth, posLeft, posTop) { 
     // GOAL: create a new RESPONSIVE empty canvas
         // appendObject: ID of the object to which the canvas should be appended <div id = "stimuli">
         // canvasID: name you want to give to the created canvas
@@ -119,6 +149,10 @@ function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth) {
         addCanvas.id = canvasID; // .id to change on what is specified (itterates in stimulusPresentation function)
         addCanvas.width = canvasWidth; // set canvasWidth (depending on screen size in canvasSize function)                                              
         addCanvas.height = canvasHeight; //  set canvasHeight (depending on screen size in canvasSize function) 
+        addCanvas.style.position = "absolute";
+        addCanvas.style.left = posLeft;
+        addCanvas.style.top = posTop;
+        
         
     // ASSIGN RESPONSE ACTIONS
        // addCanvas.onclick = function () {responseLogging(canvasID, canvasWidth, canvasHeight) } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
@@ -183,6 +217,13 @@ function dotCoordinates (canvasID) {
             
             // sort so when paired with X creates unique XY coordinates
                  arrayYpos.sort();
+                 
+      // shuffle XY positions
+            indexArray = [];                                                                     // create new Array for random indexing out of XY coordinate arrays
+                for (y = 1; y < 9; y++) {   // create integers for each point in the grid (1 - 9) 
+                    indexArray.push(y);                                                             // append integer to indexArray
+                } // END for LOOP
+            shuffleArray(indexArray);                                                             // shuffle order of integers to allow for random indexing (i.e. dot placement)
     
     return sizeCirckel;
 } // END positionGrid FUNCTION
