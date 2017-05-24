@@ -8,11 +8,16 @@
 var stimuliColumns = 24; // specified in Bourdon Vos Test
 var stimuliRows = 33; // specified in Bourdon Vos Test
 var totalStimuli = stimuliColumns * stimuliRows;
-var dotArray = []; // empty array to store which canvas contains which amount of dots
+var dotArray = []; // store which canvas contains which amount of dots
 //var arrayXpos = []; 
 //var arrayYpos = [];
 var outerBorder = 15;
 var canvasBorder = 1;
+var responseTimeArray = []; // store currentTime per canvas
+var clickArray = []; // store how many time a canvas was clicked
+var responseArray = []; // log hits/misses/false alarms
+var correctionArray = []; // log whether response was corrected
+var responseOrderArray = []; // log order of canvases clicked
 
 
 // INITIALIZE FUNCTIONS
@@ -86,13 +91,15 @@ function stimuliPresentation () {
                          var posY = arrayYpos[index];
                         blackDot (canvasID, posX, posY, sizeCirckel)
                 } // END drawing figures LOOP
-
+                
+            // SET CLICKS TO 0
+                clickArray.push(0);
         } // END create canvas LOOP  
-            console.log(dotArray);
+        
+            // console.log(dotArray); // TEST if correct dots are displayed
+            // console.log("clickArray length = " + clickArray.length);  // TEST: should be equal to totalStimuli
 
-            
-            
-               
+  
 } // END stimuliPresentation FUNCTION
 
 
@@ -156,9 +163,10 @@ function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth, posLef
         addCanvas.style.left = posLeft;
         addCanvas.style.top = posTop;
         
-        
     // ASSIGN RESPONSE ACTIONS
-       // addCanvas.onclick = function () {responseLogging(canvasID, canvasWidth, canvasHeight) } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
+       addCanvas.onclick = function () {responseLogging() } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
+        addCanvas.onmouseover = function () {canvasMouseOver()} ; // 
+        addCanvas.onmouseout = function () {canvasMouseOut()} ; 
 
     // APPEND CANVAS TO EXISTING OBJECT
         document.getElementById(appendObject).appendChild(addCanvas); // append newly created canvas to existing element 
@@ -231,16 +239,130 @@ function dotCoordinates (canvasID) {
     return sizeCirckel;
 } // END positionGrid FUNCTION
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function canvasMouseOver () {
+    // GOAL: set current time when hovering over canvas
+    // ... used in conjunction with canvasMouseOut ()
+    
+    // SET VARIABLES
+        var currentID = event.currentTarget.id; // log id of event that triggered the function
+        startHover = currentTime(); 
+        // console.log(startHover); // TEST
+        
+} // END canvasMouseOver FUNCTION
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function canvasMouseOut () {
+    // GOAL: color canvas grey if on mouseout more than 500 miliseconds have passed since mouseover     
+        // SET VARIABLES
+        var currentID = event.currentTarget.id; // log id of event that triggered the function
+        var finishHover = currentTime(); 
+        var index = (currentID.replace("Canvas", ""))-1; // replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
+        // console.log(finishHover); // TEST
+        
+        if ((finishHover - startHover) > 500) { // delay response so only activated when "hovered" for 500 miliseconds
+            // CHANGE BG COLOR
+            document.getElementById(currentID).style.backgroundColor = "#CCCCCC"; 
+            
+            // STORE RESPONSE TIMES
+            responseTimeArray.push(finishHover);
+            
+            // STORE RESPONSE MADE
+                // extract amount of dots presented in figure
+                    var amountDots = dotArray[index];
+                    // window.alert(amountDots); // TEST whether accurate
+    
+                // CODE RESPONSES (only cross out (click = 1) figures with 4 dots)
+                        // responses: HIT (1), Miss (2), False Alarm (3) 
+                        // corrections: NO (0), YES (1)
+                    if (amountDots == 3 || amountDots == 5) {
+                        // do not click (click == 0) or correct mistake (click == 2) == HIT
+                        if (clickArray[index] == 0) {                           // No click = CORRECT  // NOTE: not coded because function only activated upon mouseclick
+                            responseArray.push(1);                             // HIT
+                            correctionArray.push(0);                            // NO
+                            // responseOrderArray.push(canvasID);
+                        } else if (clickArray[index] == 1) {                // 1 click == WRONG (only click figures with 4 dots)
+                            responseArray.push(3);                              // FALSE ALARM
+                            correctionArray.push(0);                               // NO
+                            // responseOrderArray.push(canvasID);
+                        } else {                                                        // 2 clicks == CORRECTION
+                            responseArray.push(1);                          // HIT
+                            correctionArray.push(1);                            // YES
+                            // responseOrderArray.push(canvasID);
+                        } // END  click amount IF
+                    } else { // amountDots == 4
+                         if (clickArray[index] == 0) {                  // no click == WRONG // NOTE: not coded because function only activated upon mouseclick
+                            responseArray.push(2);                          // MISS
+                            correctionArray.push(0);                         // NO
+                            // responseOrderArray.push(canvasID);
+                        } else if (clickArray[index] == 1) {        // 1 click == CORRECT
+                            responseArray.push(1);                          // HIT
+                            correctionArray.push(0);                        // NO
+                            // responseOrderArray.push(canvasID);
+                        } else {                                                   // 2 clicks == unjust correction aka WRONG
+                            responseArray.push(2);                      // MISS
+                            correctionArray.push(1);                     // YES
+                            // responseOrderArray.push(canvasID);
+                        } // END click amount IF
+                    } // END amountDots  IF
+                            console.log("responseArray = " + responseArray);
+                            console.log("correctionArray = " + correctionArray);
+        } // END hover IF   
+} // END canvasMouseOut FUNCTION
+  
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function currentTime () {
+    // GOAL: retrieve the current time in Javascript since 1st January 1970
+    // .... delta time can still be used!
+    
+    var time = new Date ();
+    return time.getTime();
+} // END currentTime FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function responseLogging () {
+    // SET VARIABLES
+        var currentID = event.currentTarget.id; // log id of event that triggered the function
+        var canvasWidth = document.getElementById(currentID).width; // determine canvas width
+        var canvasHeight = document.getElementById(currentID).height;  // determine canvas height   
+        var index = (currentID.replace("Canvas", ""))-1; // replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
+              
+    // DRAW RESPONSE 
+        var clicks = clickArray[index];
+        if (clicks == 0) {
+            // canvas has not been clicked - draw line
+                    var c=document.getElementById(currentID);              // refer to correct canvas
+                    var ctx=c.getContext("2d");                                         // unkown but necessary
+                    imageData = ctx.getImageData(0,0,canvasWidth, canvasHeight); // store canvas picture as is
+                    ctx.beginPath();                                                           // start new drawing
+                    ctx.moveTo(0,0);                                                          // determine starting position of line - constant
+                    ctx.lineTo(canvasWidth,canvasHeight);                       // finish position of line - changes on canvas size specifiedin drawGrid function
+                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+                    ctx.strokeStyle = "#ff0000";                                          // color of line; red
+                    ctx.stroke();                                                                  // initialize drawing 
+                    clickArray[index] = 1;                                                    // increment clicks to 1
+        } else if (clicks == 1) {
+            // second response, draw correction line
+                    var c=document.getElementById(currentID);               // refer to correct canvas
+                    var ctx=c.getContext("2d");                                           // unkown but necessary
+                    ctx.putImageData(imageData, 0,0);                               // reset previous picture (i.e. remove red line)
+                    clickArray[index] = 2;
+        } else {
+            // do nothing, pictures should not be clicked more than twice
+        } // END clicks IF
+                
+} // END responseLogging FUNCTION
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// INTERNET FUNCTIONS /////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// NOTE: Functions that were used to create the task that were not programmed by the author
+
+// NOTE
+// Functions that were used to create the task that were not programmed by the author
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
 // https://stackoverflow.com/questions/17143394/confirmation-before-exit-dialog)
