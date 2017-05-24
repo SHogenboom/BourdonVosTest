@@ -63,3 +63,23 @@ form {
     font-size: 10px;
     font-family: var(--fontFamily);
 }
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: auto;
+}
+
+table, th, td {
+    border: 1px solid white;
+    text-align: center;
+    padding: 10px;
+}
+
+th {
+    background-color: black;
+    color: white;
+    border-color: var(--buttonText);
+    text-align: center;
+}
+
