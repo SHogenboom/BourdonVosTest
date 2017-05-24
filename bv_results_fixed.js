@@ -185,19 +185,24 @@ function calculateResponseTimes () {
     } // END FOR LOOP
     
     var count = 0;
+    
     for (x = 0; x < STIMULI_ROWS; x++) {
-     var rowRT = 0;
+     // reset rowReactionTime
+        var rowRT = 0;
+        
     // CALCULATE ROW RT
         // loop all stimuli columns
             for (c = 0; c < STIMULI_COLS; c++) {
                 // window.alert(deltaResponseTimeArray[count]);
-                var rowRT = rowRT + deltaResponseTimeArray[count];
+                console.log(deltaResponseTimeArray[count]);
+                var rowRT = (rowRT + deltaResponseTimeArray[count]);
+                count = count + 1;
             } // END stimuli col LOOP
             
         // store total rowRT
             rowRTArray.push(rowRT);
 
-            count = count + 1; // increment count
+           // count = count + 1; // increment count
     } // END row LOOP
             
  /*   
