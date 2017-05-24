@@ -11,7 +11,7 @@ var totalStimuli = stimuliColumns * stimuliRows;
 var dotArray = []; // empty array to store which canvas contains which amount of dots
 //var arrayXpos = []; 
 //var arrayYpos = [];
-var outerBorder = 10;
+var outerBorder = 15;
 var canvasBorder = 1;
 
 
@@ -75,19 +75,22 @@ function stimuliPresentation () {
                 } // END first canvas IF
       
             createCanvas("stimuli", canvasID, canvasHeight, canvasWidth, posLeft, posTop);   
-        } // END create canvas LOOP  
+            
+            // DRAW FIGURES ON CANVAS
+                var sizeCirckel = dotCoordinates (canvasID);
+                    var dots = dotArray[(t-1)]; // -1 because index starts at 0
+                    
+                    for (k = 0 ; k < dots; k++) {
+                        var index =  indexArray[k];       
+                        var posX = arrayXpos[index]; 
+                         var posY = arrayYpos[index];
+                        blackDot (canvasID, posX, posY, sizeCirckel)
+                } // END drawing figures LOOP
 
-        
-   /*     
-    // DRAW FIGURES ON CANVAS
-        var sizeCirckel = dotCoordinates (canvasID);
-            for (k = 0 ; k < (dotArray[k]); k++) {
-                var index =  indexArray[k];       
-                var posX = arrayXpos[index]; 
-                var posY = arrayYpos[index];
-                blackDot (canvasID, posX, posY, sizeCirckel)
-        } // END drawing figures LOOP
-        */
+        } // END create canvas LOOP  
+            console.log(dotArray);
+
+            
             
                
 } // END stimuliPresentation FUNCTION
