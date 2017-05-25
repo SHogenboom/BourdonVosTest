@@ -81,7 +81,6 @@ function passwordValidation () {
         document.getElementById("button").onclick = function () {print()};
         
         document.body.style.backgroundColor = "LightGoldenRodYellow";
-        document.table.style.borderColor = "black";
     } else {
             var passwordReentry = window.confirm("This is not the correct password. Do you wish to try again?");
             // returns true if "confirm" is pressed
@@ -401,8 +400,8 @@ function createOutput () {
 var outputTableRowData = outputTableRows();
     
 document.getElementById("maintext").innerHTML = (
-"Conclusion" +"</b>" + "<br>" +
-FIRSTNAME + " " + LASTNAME + "'s continued attention age is " + (((accuracyAgeArray[3]) + (attentionAgeArray[(STIMULI_ROWS-1)])) - AGE) +
+"<br>" + 
+(FIRSTNAME.toUpperCase()) + " " + (LASTNAME.toUpperCase()) + "'s continued attention age is " + (((accuracyAgeArray[3]) + (attentionAgeArray[(STIMULI_ROWS-1)])) - AGE) +
 " years old." + "<br>" + "<br>" +
 
 "<table>" +
