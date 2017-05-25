@@ -265,7 +265,7 @@ function canvasMouseOut () {
         var index = (currentID.replace("Canvas", ""))-1; // replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
         // console.log(finishHover); // TEST
         
-        if ((finishHover - startHover) > 300) { // delay response so only activated when "hovered" for 300 miliseconds
+        if ((finishHover - startHover) > 200) { // delay response so only activated when "hovered" for 300 miliseconds
             // CHANGE BG COLOR
             document.getElementById(currentID).style.backgroundColor = "#CCCCCC"; 
             

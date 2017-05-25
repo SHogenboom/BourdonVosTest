@@ -8,6 +8,7 @@ Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key));
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
 
 //  DATA FROM bv_test_fixed.html
     const STARTTIME = sessionStorage.getItem("start");                                                // startTime BV Test
@@ -21,43 +22,93 @@ Storage.prototype.getObj = function(key) {
     const STIMULI_ROWS = sessionStorage.getItem("stimuliRows"); // amount of rows containing stimuli
     const STIMULI_COLS = sessionStorage.getItem("stimuliCols"); // amount of stimuli columns
 
-// DATA FROM BVFirstScreen.js
+// DATA FROM bv_index.html
     const FIRSTNAME = sessionStorage.getItem("FIRSTNAME"); // participants first name
     const LASTNAME = sessionStorage.getItem("LASTNAME");
-     const AGE = sessionStorage.getItem("AGE");
-     const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
+    const AGE = Number(sessionStorage.getItem("AGE"));
+    const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
  
 // SET VARIABLES
-var cleanedResponseArray = [];
-var cleanedCorrectionArray = [];
-var cleanedResponseTimeArray = [];
+    var cleanedResponseArray = [];
+    var cleanedCorrectionArray = [];
+    var cleanedResponseTimeArray = [];
+    validated = "";
+    var attentionAgeArray = [];
+    var accuracyAgeArray = [];
 
-// DISPLAY COMPLETION TEXT
-document.getElementById("maintext").innerHTML = (
-    "Well done! You have finished the Bourdon Vos Test." + "<br>" +
-    "Please call your supervisor and tell him/her that you are finished.");
-
-document.getElementById("button").innerHTML = "Results";
-document.getElementById("button").onclick = function () {displayResults() };
+    var hits = 0;
+    var miss = 0;
+    var falseAlarm = 0;
+    var corrections = 0;
+    var noResponse = 0;
+    var responses = 0;
+    
+    var attentionAge = Number(AGE);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// MAIN FUNCTIONS ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-window.onload = presentScores();
+// DISPLAY COMPLETION TEXT
+    document.getElementById("maintext").innerHTML = (
+    "Well done! You have finished the Bourdon Vos Test." + "<br>" +
+    "Please call your supervisor and tell him/her that you are finished.");
 
+document.getElementById("button").innerHTML = "Results";
+document.getElementById("button").onclick = function () {passwordValidation() };
+
+// var validated = passwordValidation();
+/*
+if (validated == "Yes") {
+    // only present results if password is validated
+    
+    presentScores ();
+
+} // END password valdiated IF
+*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function presentScores () {
-    // SET VARIABLES
-    var hits = 0;
-    var miss = 0;
-    var falseAlarm = 0;
-    var noResponse = 0;
+function passwordValidation () {
+    // GOAL: prevent participant from accessing the results.
+    // ... i.e. validate the password that is provided against the earlier specified password
     
+    // SET VARIABLES
+      validated = "No"; // make global so can be accessed in other functions
+    
+    var passWord = String(window.prompt("Please enter the pre-specified password to access the results"));
+    
+    if (passWord == RESULT_ACCES_PASSWORD) {
+        window.alert("Correct password. These are the results: ")
+        validated = "Yes";
+        presentScores ();
+        document.getElementById("button").style.visibility="hidden"; // do not show button anymore
+    } else {
+            var passwordReentry = window.confirm("This is not the correct password. Do you wish to try again?");
+            // returns true if "confirm" is pressed
+            
+             if (passwordReentry == true) { 
+                passwordValidation(); // launch password validation again
+             } else {
+                document.getElementById("maintext").innerHTML = (
+                    "Thank you for using the online Bourdon Vos Test" + "<br>" +
+                        "For questions and comments, please contact: sally.hogenboom@student.uva.nl")
+                document.getElementById("button").style.visibility = "hidden";
+            } // END re-entry of password IF
+            
+   } // END password Comparison
+   
+    return validated;
+} // END passwordValidation FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function presentScores () {
+    // GOAL: display all relevant scores to the Experiment Leader
+        
     // CLEAN RESPONSES
     lastResponses();
     
@@ -78,16 +129,30 @@ function presentScores () {
             } // END what score should be IF
         } // END hit/miss/falsealarm/noresponse IF
     } // END LOOP
+
+    totalStimuli = (hits + miss + falseAlarm);
+    responses = (totalStimuli - noResponse);
+    
+    for (i = 0; i < ARRAY_MADE_CORRECTIONS; i++) {
+        // correction was coded as 1, no correction coded as 0
+        // therefore sum of array = amount of corrections made
+        corrections = corrections + ARRAY_MADE_CORRECTIONS[i];
+    } // END correction count LOOP
+
     
     // CALCULATE SCORES _ PERCENTAGE
-        totalStimuli = (hits + miss + falseAlarm);
         percHits = round(((hits / totalStimuli)*100),2);
         percMiss = round(((miss / totalStimuli)*100),2);
         percFalseAlarms = round(((falseAlarm / totalStimuli)*100),2);
         percNoResponse = round(((noResponse / totalStimuli)*100),2);
+        percResponses = round(((responses / totalStimuli)*100),2);
+        percCorrections = round(((corrections / totalStimuli)*100),2)
     
     // CALCULATE ROW RT's
         calculateResponseTimes();
+        
+    // COMAPARE WITH NORM DATA
+        normScores();
     
     // PRESENT OUTPUT
         createOutput();
@@ -97,6 +162,8 @@ function presentScores () {
         // window.alert(deltaResponseTimeArray);
      
 } // END FUNCTION
+ 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 function lastResponses () {
     // GOAL: determine which response was made to which canvas
@@ -116,17 +183,6 @@ function lastResponses () {
         } // END response made IF
     } // END all canvases LOOP
 } // END lastResponses FUNCTION
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function identifyNormGroup () {
-    // GOAL: select the appropriate normGroup variable for calculation of scores
-    for (i = 6; i < 18; i++) {
-        if (i == AGE) { // extract correct normgroup
-            var referenceData = "normGroup"+ i;
-        } // END IF
-    } // END FOR ALL AGES
-} // END identifyNormGroup FUNCTION
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -178,100 +234,288 @@ function calculateResponseTimes () {
             // no response was made i.e. no reaction time
             canvasDeltaTime = 0;
         } else {
-            canvasDeltaTime = ((canvasTime - STARTTIME) / 1000); // calculate delta response time between start and that canvas
+            canvasDeltaTime = ((canvasTime - STARTTIME) / 10000); // calculate delta response time between start and that canvas
         } // END valid time IF
         deltaResponseTimeArray.push(canvasDeltaTime);
     } // END FOR LOOP
     
     var count = 0;
+    var previousRT = 0;
     
     for (x = 0; x < STIMULI_ROWS; x++) {
      // reset rowReactionTime
-        var rowRT = 0;
+        var rowRTTotal = 0;
+                
+    if (x == 0) {
+        // first row reaction time
+        // totalRT = rowTotal
+        previousRT = 0;
+        console.log("previousRT =" + previousRT);
+    } else {
+        previousRT = rowRTArray[(x-1)];
+        console.log("previousRT =" + previousRT);
+    }
         
     // CALCULATE ROW RT
         // loop all stimuli columns
             for (c = 0; c < STIMULI_COLS; c++) {
                 // window.alert(deltaResponseTimeArray[count]);
-                console.log(deltaResponseTimeArray[count]);
-                var rowRT = (rowRT + deltaResponseTimeArray[count]);
+                // console.log(deltaResponseTimeArray[count]);
+                var rowRTTotal = round((rowRTTotal + deltaResponseTimeArray[count]),2);
                 count = count + 1;
             } // END stimuli col LOOP
             
+            console.log("rowTTtotal =  " + rowRTTotal);
         // store total rowRT
+        if (rowRTTotal == 0) {
+            var rowRT = 0;
+        } else {
+            var rowRT = (rowRTTotal - previousRT); // extract previous row time because all times are delta with STARTTIME
+        } // END rowRTTotal IF
+        
             rowRTArray.push(rowRT);
     } // END row LOOP
             
 } // END calculateResponseTimes FUNCTION
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function identifyNormGroup () {
+    // GOAL: select the appropriate normGroup variable for calculation of scores
+    
+    for (i = 6; i < 18; i++) {
+        if (i == AGE) { // extract correct normgroup
+            var referenceData = "normGroup"+ i;
+        } // END IF
+    } // END FOR ALL AGES
+    
+    return referenceData;
+} // END identifyNormGroup FUNCTION
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function normScores () {
+    // GOAL: determine how the participant did in comparison to the relevant norm group (age)
+
+    // SET VARIABLES
+        var normGroup = "";
+        // attentionAge: is defined as calander age at the beginning of the script
+        // AGE: defined from sessionStorage
+
+    // DETERMINE NORM GROUP (i.e. referenceData)
+         for (i = 6; i < 18; i++) {
+                if (i == AGE) { // extract correct normgroup
+                  normGroup = "normGroup"+ i;
+                } // END IF
+        } // END FOR ALL AGES
+        var referenceData = NORM_GROUP_DATA[normGroup]; // access relevant normgroup data (all data stored below)
+         // console.log(referenceData);
+ 
+    // SPEED (per row)
+        for (i = 0; i < STIMULI_ROWS ; i++) {
+            // GOAL: compare row rt with norm group data
+            
+            // extract row rt
+                var rowRT = rowRTArray[i];
+               //  console.log(rowRT);
+            
+            // comapre with norm group data
+            if (rowRT > referenceData[3]) { // referenceData[3] = lowest RT boundary
+                if (rowRT > referenceData[2]) {
+                    if (rowRT > referenceData[1]) {
+                        if (rowRT > referenceData[0]) {
+                            // reaction time larger than upper RT boundary
+                            attentionAge = (attentionAge - 2);
+                        } else {
+                            // reaction time between [1] & [0]
+                            // attentionAge = calender age - 1
+                            attentionAge = (attentionAge - 1);
+                        } // END IF [1]
+                    } else {
+                        // reaction time between [2] & [1]
+                        // attentionAge = calender age
+                        attentionAge = attentionAge;
+                    } // END IF [1]
+                } else {
+                    // reaction time between [3] & [2]
+                    // attentionAge = +1 calender age
+                    attentionAge = (attentionAge + 1);
+                } // END IF [2]
+            } else {
+                // if reaction time lower than lowest RT boundary than no if's were met
+                // attentionAge = -2 calander age
+                attentionAge = (attentionAge + 2); 
+            } // END IF [3]
+            
+           attentionAgeArray.push(attentionAge);
+        } // END rt rows LOOP 
+    
+    // ACCURACY
+            
+            // FALSE ALARMS 
+                if (falseAlarm > 4 ) {
+                    if (falseAlarm > 12) {
+                        // false alarms > 12 == -1
+                        var faAge =  Number(-1);
+                    } else {
+                     // false alarms between 4 & 12
+                        var faAge = 0;
+                    } // END IF [1]
+                } else {
+                    // falseAlarms < 4 == accuracyAge + 1
+                    var faAge = 1;
+                } // END falseAlarm IF [0]
+        
+                accuracyAgeArray.push((AGE + faAge));
+                
+            // CORRECTIONS
+                if (corrections == 0) {
+                    var cAge = 1;
+                } else if (corrections < 3) {
+                    var cAge = 0;
+                } else {
+                    // corrections > 3
+                    var cAge = (cAge-1);
+                } // END corrections IF
+                
+                accuracyAgeArray.push((AGE + cAge));
+                
+            // MISSES
+                if (miss > 0) {
+                    var mAge = Number(-1);
+                } else {
+                    // miss == 0
+                    var mAge = 0;
+                } // END miss IF
+                
+                accuracyAgeArray.push((AGE + mAge));
+                
+            // TOTAL
+                accuracyAgeTotal = (AGE + (faAge + cAge + mAge));
+                accuracyAgeArray.push(accuracyAgeTotal);
+    
+} // END normScores FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 function createOutput () {
+    
+var outputTableRowData = outputTableRows();
+    
 document.getElementById("maintext").innerHTML = (
+"Conclusion" +"</b>" + "<br>" +
+FIRSTNAME + " " + LASTNAME + "'s continued attention age is " + (((accuracyAgeArray[3]) + (attentionAgeArray[(STIMULI_ROWS-1)])) - AGE) +
+" years old." + "<br>" + "<br>" +
+
 "<table>" +
     "<tr>" +
         "<th>" + "" +
         "<th>" + "Absolute Amounts" +
         "<th>" + "Percentages" +
+        "<th>" + "Calender Age" +
+        "<th>" + "Accuracy Age" +
     "</tr>" +
     "<tr>" +
         "<td>" + "Hits" +
         "<td>" + hits +
         "<td>" + percHits + " %" +
+        "<td>" + AGE +
+        "<td>" + "-" +
     "</tr>" +
     "<tr>" +
         "<td>" + "Misses" +
         "<td>" + miss +
         "<td>" + percMiss + " %" +
+        "<td>" + AGE + 
+        "<td>" + accuracyAgeArray[2] + 
     "</tr>" +
     "<tr>" +
         "<td>" + "False Alarms" +
         "<td>" + falseAlarm +
         "<td>" + percFalseAlarms + " %" +
+        "<td>" + AGE + 
+        "<td>" + accuracyAgeArray[0] + 
     "</tr>" +
     "<tr>" +
-        "<td>" + "No Responses" +
-        "<td>" + noResponse + 
-        "<td>" + percNoResponse + " %" +
+        "<td>" + "Corrections" +
+        "<td>" + corrections +
+        "<td>" + percCorrections + " %" +
+        "<td>" + AGE + 
+        "<td>" + accuracyAgeArray[1] + 
+    "</tr>" +
+     "<tr>" +
+        "<td>" + "" +
+        "<td>" + "" + 
+        "<td>" + "" + 
+        "<td>" + "" +
+        "<td>" + "" +
+    "</tr>" +
+    "<tr>" +
+        "<td>" + "<b>" + "Missed Responses" + 
+        "<td>" + "<b>"+ noResponse + 
+        "<td>" + "<b>"+ percNoResponse + " %" +
+        "<td>" + "<b>"+ "-" +
+        "<td>" + "<b>"+ "-" +
+    "</tr>" +
+       "<tr>" +
+        "<td>" + "Responses" +
+        "<td>" + responses + 
+        "<td>" + percResponses + " %" +
+        "<td>" + "-" +
+        "<td>" + "-" +
+    "</tr>" +
+    "<tr>" +
+        "<th>" + "TOTAL" +
+        "<th>" + "" +
+        "<th>" + "" +
+        "<th>" + AGE + " years" + 
+        "<th>" + accuracyAgeArray[3] + " years" + 
     "</tr>" +
 "</table>" +
 "<br>" +
-
-"<table>" +
-    "<tr>" +
-        "<th>" + "" +
-        "<th>" + "Absolute Amounts" +
-        "<th>" + "Percentages" +
-    "</tr>" +
-    "<tr>" +
-        "<td>" + "Hits" +
-        "<td>" + hits +
-        "<td>" + percHits + " %" +
-    "</tr>" +
-    "<tr>" +
-        "<td>" + "Misses" +
-        "<td>" + miss +
-        "<td>" + percMiss + " %" +
-    "</tr>" +
-    "<tr>" +
-        "<td>" + "False Alarms" +
-        "<td>" + falseAlarm +
-        "<td>" + percFalseAlarms + " %" +
-    "</tr>" +
-    "<tr>" +
-        "<td>" + "No Responses" +
-        "<td>" + noResponse + 
-        "<td>" + percNoResponse + " %" +
-    "</tr>" +
-"</table>" + 
-"<br>" +
-"Delta response times are: " + deltaResponseTimeArray + "<br>" +
-"cleaned RT array = " + cleanedResponseTimeArray + "<br>" + 
-"rowRTArray = " + rowRTArray
+outputTableRowData +
+"<br>"
 ); // END HTML OBJECT
 
 } // END createOutput FUNCTION
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function outputTableRows () {
+    // GOAL: to create an output table for the row times
+    
+    var headers =  String("<table>" +
+    "<tr>" +
+        "<th>" + "Row Number" +
+        "<th>" + "Reaction Time" +
+        "<th>" + "Calender Age" +
+        "<th>" + "Attention Age" +
+    "</tr>");
+    
+    var middleSection  = "";
+    
+    for (i = 0; i < STIMULI_ROWS; i++) {
+        middleSection = (String(middleSection) + (
+       "<tr>" + 
+        "<td>" + (i+1) +
+        "<td>" + rowRTArray[i] +
+        "<td>" + AGE + 
+        "<td>" +  attentionAgeArray[i] +
+    "</tr>"));
+    // console.log(middleSection);     
+    } // END LOOP
+    
+    var endTable = ("<tr>" +
+        "<th>" + "TOTAL" +
+        "<th>" + ((FINISHTIME - STARTTIME)/1000) +
+        "<th>" + AGE + " years" +
+        "<th>" + attentionAgeArray[(STIMULI_ROWS-1)] + " years" +
+    "</tr>" +
+    "</table>");
+    
+    return (headers + middleSection + endTable);
+} // END outputTableRows FUNCTION
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,21 +541,23 @@ function round(value, decimals) {
     // between [1] & [2] == 0
     // between [2] & [3] == +1
     // smaller than [3] == +2
-    
-const normGroup6 = [31.5	,	24.9	,	18.4	,	16.5];
-const normGroup7 = [27.6	,	23.5	,	18.0	,	15.6];
-const normGroup8 = [23.2	,	19.6	,	16.4	,	13.7];
-const normGroup9 = [20.4	,	18.0	,	14.3	,	12.5];
-const normGroup10 = [20.6	,	16.8	,	13.7	,	12.0];
-const normGroup11 = [17.2	,	14.9	,	12.4	,	11.1];
-const normGroup12 = [17.1	,	14.7	,	11.9	,	10.0];
-const normGroup13 = [16.5	,	14.2	,	11.1	,	9.1];
-const normGroup14 = [15.3	,	12.8	,	9.9	,	8.4];
-const normGroup15 = [14.2	,	11.6	,	9.7	,	9.2];
-const normGroup16 = [13.6	,	11.4	,	9.0	,	8.4];
-const normGroup17 = [13.0	,	11.1	,	9.1	,	8.2];
-
-
+ 
+ const NORM_GROUP_DATA = {
+    normGroup6: [31.5	,	24.9	,	18.4	,	16.5],
+    normGroup7: [27.6	,	23.5	,	18.0	,	15.6],
+    normGroup8: [23.2	,	19.6	,	16.4	,	13.7],
+    normGroup9: [20.4	,	18.0	,	14.3	,	12.5],
+    normGroup10: [20.6	,	16.8	,	13.7	,	12.0],
+    normGroup11: [17.2	,	14.9	,	12.4	,	11.1],
+    normGroup12: [17.1	,	14.7	,	11.9	,	10.0],
+    normGroup13: [16.5	,	14.2	,	11.1	,	9.1],
+    normGroup14: [15.3	,	12.8	,	9.9	,	8.4],
+    normGroup15: [14.2	,	11.6	,	9.7	,	9.2],
+    normGroup16: [13.6	,	11.4	,	9.0	,	8.4],
+    normGroup17: [13.0	,	11.1	,	9.1	,	8.2],
+ }   // END OBJECT
+ 
+ 
 
 
 
