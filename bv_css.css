@@ -34,6 +34,13 @@ button {
     text-transform: uppercase;
 }
 
+.bug {
+    position: fixed;
+    top: 2px;
+    right: 2px;
+    width: 10%;
+}
+
 div {
     margin: auto;
     border-color: var(--bgColor);
@@ -71,7 +78,7 @@ table {
 }
 
 table, th, td {
-    border: 1px solid white;
+    border: 2px solid black;
     text-align: center;
     padding: 10px;
 }
@@ -79,7 +86,8 @@ table, th, td {
 th {
     background-color: black;
     color: white;
-    border-color: var(--buttonText);
+    border-color: black;
     text-align: center;
 }
+
 
