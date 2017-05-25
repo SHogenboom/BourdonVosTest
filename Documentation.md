@@ -72,7 +72,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H4 id="taskflowuser"> Task Flow User </H4>
 
-**Experiment Leader** follows instructions from the [User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual.docx) to start the O-BVT. The O-BVT starts with the index page to display **Experiment Leader** instructions & allows for entering the *demographics* of the participant. The **Experiment Leader** then calls the **Participant** to the computer who will start the *practice* phase. After completing the practice phase, indicating that the **Participant** understands how to operate the computer and what is expected in the task, the **Participant** will continue on to the main phase: the *Bourdon Vos Test*. When the **Participant** has finished the task, he/she will call the **Experiment Leader** again. The **Experiment Leader** then has to enter the pre-specified password in order to access the participant's *results*.
+**Experiment Leader** follows instructions from the [User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) to start the O-BVT. The O-BVT starts with the index page to display **Experiment Leader** instructions & allows for entering the *demographics* of the participant. The **Experiment Leader** then calls the **Participant** to the computer who will start the *practice* phase. After completing the practice phase, indicating that the **Participant** understands how to operate the computer and what is expected in the task, the **Participant** will continue on to the main phase: the *Bourdon Vos Test*. When the **Participant** has finished the task, he/she will call the **Experiment Leader** again. The **Experiment Leader** then has to enter the pre-specified password in order to access the participant's *results*.
 
 <H4 id="taskflowsoftware"> Task Flow Software </H4>
 
@@ -249,7 +249,7 @@ console.log("count delta RT = " + deltaResponseTimeArray[count]);
 
 <H3 id="documentation"> Documentation </H3>
 
-Three types of documentation were created. Firstly, the [User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual.docx) for Experiment Leaders. This document describes to the Experiment Leader how they should install the O-BVT and what it is used for. Furthermore, it specifies the hardware requirements.   
+Three types of documentation were created. Firstly, the [User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) for Experiment Leaders. This document describes to the Experiment Leader how they should install the O-BVT and what it is used for. Furthermore, it specifies the hardware requirements.   
 
 Secondly, the current documentation was made in a markdown file, which is also available [online](https://github.com/SHogenboom/BourdonVosTest/blob/master/README.html). This document contains information on the process behind creating the O-BVT inline with the requirements for the course "Programming The Next Step", which was given at the University of Amsterdam, the Netherlands, in 2017.  
 
@@ -270,7 +270,7 @@ function anyFunction (){
     
 } // END anyFunction FUNCTION
 ```
-In doing so I ensured that I did not put certain statements in the wrong loop and to prevent for forgetting to close a loop or function. 
+In doing so I ensured that I did not put certain statements in the wrong loop and to prevent forgetting to close a loop or function. 
 
 
 <H2 id="verification"> Verification </H2>
