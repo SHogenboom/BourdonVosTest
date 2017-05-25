@@ -55,18 +55,11 @@ Storage.prototype.getObj = function(key) {
     "Well done! You have finished the Bourdon Vos Test." + "<br>" +
     "Please call your supervisor and tell him/her that you are finished.");
 
+// ENABLE PASSWORD VALIDATION
 document.getElementById("button").innerHTML = "Results";
 document.getElementById("button").onclick = function () {passwordValidation() };
 
-// var validated = passwordValidation();
-/*
-if (validated == "Yes") {
-    // only present results if password is validated
-    
-    presentScores ();
 
-} // END password valdiated IF
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +77,11 @@ function passwordValidation () {
         window.alert("Correct password. These are the results: ")
         validated = "Yes";
         presentScores ();
-        document.getElementById("button").style.visibility="hidden"; // do not show button anymore
+        document.getElementById("button").innerHTML="print results"; // allow for printing of results
+        document.getElementById("button").onclick = function () {print()};
+        
+        document.body.style.backgroundColor = "LightGoldenRodYellow";
+        document.table.style.borderColor = "black";
     } else {
             var passwordReentry = window.confirm("This is not the correct password. Do you wish to try again?");
             // returns true if "confirm" is pressed

@@ -13,6 +13,7 @@
 *       upon completion of the test by the participant.
 */
 
+document.body.style.backgroundColor = "LightGoldenRodYellow";
 
 document.getElementById("maintext").innerHTML = ("Dear Experimenter, " + "<br> <br>" + 
     "You are about to test a participant with the Bourdon Vos Test. " + "<br>" + 
