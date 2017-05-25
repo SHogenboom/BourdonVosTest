@@ -14,7 +14,6 @@
 */
 
 
-/** Welcome text */
 document.getElementById("maintext").innerHTML = ("Dear Experimenter, " + "<br> <br>" + 
     "You are about to test a participant with the Bourdon Vos Test. " + "<br>" + 
         "Please be aware this test is not suited for children younger than 6" +
@@ -24,28 +23,14 @@ document.getElementById("maintext").innerHTML = ("Dear Experimenter, " + "<br> <
 
 document.getElementById("button").innerHTML = "Demographics";
 
-/**
-*@function demographics
-* GOAL: to let the experiment leader enter the participant's demographics 
-* & stop the task from exectution if age requirements (6 < age < 17) are not met.
-* @summary Enter pp. demographics
-* @const {String} FIRSTNAME First name of the participant
-* @const {String} LASTNAME Last name of the participant
-* @const {String} GENDER Gender of the participant. Advised options: 
-*    [Male/Female/Other]
-* @const {Number} AGE Current age of the participant 
-* @const {String | Number} RESULT_ACCES_PASSWORD Lets the experimenter set 
-*    a password that is needed to access the participants results at the end. 
-*    Default set at "password"
-* @var {Boolean} reEnter Whether the experiment leader chose to re-enter
-*    the participants demographics, after the age did not meet requirements.
-*/
-
 function demographics () {
     // GOAL: to let the experiment leader enter the participant's demographics 
         // ... & stop the task from exectution if age requirements (6 < age < 17) 
         // ... are not met.
         // no input variables
+        
+    // SET VARIABLES
+    var validated = "No";
             
     const FIRSTNAME = 
         window.prompt("First name: "); // ... enter pp. first name
@@ -54,23 +39,68 @@ function demographics () {
     const GENDER = 
         window.prompt("The participant is ... [Male/Female/Other]"); 
         // ... enter pp gender [suggestions] 
-    const AGE =
-        window.prompt("The participant is ... years old: ");
-        // ... enter pp age > validated!
     
-    /** check if age falls within limits: 6 < age < 17, if not prompt for re-entry of demographics */ 
+    while (validated == "No") {
+         var AGE =
+            parseFloat(window.prompt("The participant is ... years old: "));
+            // ... enter pp age > validated!
+            console.log("AGE = " + AGE);
+         
+         if (isNaN(AGE) == false) {
+            // number validation passed
+            
+            // check if age falls within limits: 6 < age < 17, if not prompt for re-entry of demographics  
+            if (AGE < 6 || AGE > 17) {
+                window.alert("The participants age = " + AGE + ". The BVTest is only suited for children between 6 and 17 years"); 
+                    
+                    // RE-enter participant age?
+                        let reEnter =  window.confirm(
+                             "Do you wish to re-enter the participant's age?"); 
+                                // Confirm or cancel pop-up box
+                                // ... if confirmed reEnter == true, if canceld reEnter == false
+       
+                        if (reEnter == true) {
+                            validated == "No"; // prompts re-entry and re-validation for age
+                        } else { 
+                            // the experimenter did not want to re-enter the pp demographics
+                            console.log("The experiment leader did not wish to re-enter the demographics")
+                            document.getElementById("maintext").innerHTML = 
+                            "Thank you for using the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+                            document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+                        } // END reEnter  
+                    
+                } else {
+                    // participant within age range
+                    validated = "Yes";
+                }   // END age IF
+            
+            } else {
+                window.alert("The participant age you specified was not a number. Please enter the participant's age in numbers only")
+                validated == "No";
+                
+                console.log(typeof(AGE));
+
+                var AGE = 0;
+                console.log(typeof(AGE));
+         } // END number IF
+            
+    } // END WHILE LOOP
+   
+/*
+    // check if age falls within limits: 6 < age < 17, if not prompt for re-entry of demographics  
     if (AGE < 6 || AGE > 17) {
         console.log("The participants age = " + AGE + 
             "The BVTest is only suited for 6-17 years");    
             
        let reEnter =  window.confirm(
            "The Bourdon Vos Test is only suited for children between 6 and 17 years old." + 
-               "\n" + "Do you wish to re-enter the participant's demographics?"); 
+               "\n" + "Do you wish to re-enter the participant's age?"); 
                // Confirm or cancel pop-up box
                // ... if confirmed reEnter == true, if canceld reEnter == false
        
         if (reEnter == true) {
-            demographics(); // re-initialize the function to allow for re-entry
+            const AGE = window.prompt("The participant is ... years old: ");
+                // ... enter pp age > validated!
         } else { 
             // the experimenter did not want to re-enter the pp demographics
             console.log("The experiment leader did not wish to re-enter the demographics")
@@ -79,7 +109,7 @@ function demographics () {
             document.getElementById("button").style.visibility = "hidden"; 
                 // no advance possible to task
         } // END reEnter  
-    } // END AGE suitability check
+    } // END AGE suitability check */
     
     const RESULT_ACCES_PASSWORD =
         window.prompt(("Please enter a password that will allow only you" +
@@ -95,7 +125,7 @@ function demographics () {
     console.log(document.getElementById("button").onclick);
         // load practice window upon clicking the button
     
-    /** store variables in temporary memory for acces later on */
+    // store variables in temporary memory for acces later on 
      sessionStorage.setItem("FIRSTNAME", FIRSTNAME);
      sessionStorage.setItem("LASTNAME", LASTNAME);
      sessionStorage.setItem("AGE", AGE);
