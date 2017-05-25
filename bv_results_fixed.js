@@ -47,12 +47,16 @@ document.getElementById("button").onclick = function () {displayResults() };
 
 window.onload = presentScores();
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function presentScores () {
     // SET VARIABLES
-    hits = 0;
-    miss = 0;
-    falseAlarm = 0;
-    noResponse = 0;
+    var hits = 0;
+    var miss = 0;
+    var falseAlarm = 0;
+    var noResponse = 0;
     
     // CLEAN RESPONSES
     lastResponses();
@@ -88,17 +92,12 @@ function presentScores () {
     // PRESENT OUTPUT
         createOutput();
         
-        window.alert("STIMULI_ROWS = " + STIMULI_ROWS);
-        window.alert("STIMULI_COLS = " + STIMULI_COLS);
-        window.alert(deltaResponseTimeArray);
+        // window.alert("STIMULI_ROWS = " + STIMULI_ROWS);
+        // window.alert("STIMULI_COLS = " + STIMULI_COLS);
+        // window.alert(deltaResponseTimeArray);
      
 } // END FUNCTION
  
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function lastResponses () {
     // GOAL: determine which response was made to which canvas
     // ... and log if canvas was not responded to (i.e. not hovered over)

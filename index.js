@@ -50,7 +50,7 @@ function demographics () {
     const FIRSTNAME = 
         window.prompt("First name: "); // ... enter pp. first name
     const LASTNAME = 
-        window.prompt("Last name: "); // ... enters pp last name
+        window.prompt("Last name: "); // ... enters pp. last name
     const GENDER = 
         window.prompt("The participant is ... [Male/Female/Other]"); 
         // ... enter pp gender [suggestions] 

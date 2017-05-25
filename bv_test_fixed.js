@@ -5,8 +5,8 @@
 */
 
 // SET VARIABLES
-var stimuliColumns = 5; // 24 specified in Bourdon Vos Test
-var stimuliRows = 5; // 33 specified in Bourdon Vos Test
+var stimuliColumns = 24; // 24 specified in Bourdon Vos Test
+var stimuliRows = 33; // 33 specified in Bourdon Vos Test
 var totalStimuli = stimuliColumns * stimuliRows;
 var dotArray = []; // store which canvas contains which amount of dots
 //var arrayXpos = []; 

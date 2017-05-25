@@ -71,7 +71,7 @@ function displayResults() {
              } else {
                 document.getElementById("maintext").innerHTML = (
                     "Thank you for using the online Bourdon Vos Test" + "<br>" +
-                        "For questions and comments, please contact: hogen.boom@hotmail.com")
+                        "For questions and comments, please contact: sally.hogenboom@student.uva.nl")
                 document.getElementById("button").style.visibility = "hidden";
         } // END re-entry of password IF
    } // END password Comparison
