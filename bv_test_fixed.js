@@ -5,12 +5,19 @@
 */
 
 // SET VARIABLES
-var stimuliColumns = 24; // 24 specified in Bourdon Vos Test
-var stimuliRows = 33; // 33 specified in Bourdon Vos Test
-var totalStimuli = stimuliColumns * stimuliRows;
+/*if (trial == true) {
+    var stimuliColumns = 24; // practice
+    var stimuliRows = 1; // 33 specified in Bourdon Vos Test
+} else {
+    var stimuliColumns = 24; // 24 specified in Bourdon Vos Test
+    var stimuliRows = 33; // 33 specified in Bourdon Vos Test
+} // END trial IF */
+
+stimuliColumns = 24; // 24 specified in Bourdon Vos Test
+stimuliRows = 33; // 33 specified in Bourdon Vos Test
+totalStimuli = stimuliColumns * stimuliRows;
+
 var dotArray = []; // store which canvas contains which amount of dots
-//var arrayXpos = []; 
-//var arrayYpos = [];
 var outerBorder = 15;
 var canvasBorder = 1;
 var responseTimeArray = []; // store currentTime per canvas
@@ -19,12 +26,33 @@ var responseArray = []; // log hits/misses/false alarms
 var correctionArray = []; // log whether response was corrected
 var responseOrderArray = []; // log order of canvases responded to
 
+var trial = true;
+
 
 // INITIALIZE FUNCTIONS
-// window.onload = checkWindowSize();
 window.onbeforeunload = confirmExit();
-window.onload = stimuliPresentation ();
-window.onload =  sessionStorage.setItem("start", currentTime()); // store start time until tab is closed so can be used on next page
+// window.onload = stimuliPresentation ();
+// window.onload =  sessionStorage.setItem("start", currentTime()); // store start time until tab is closed so can be used on next page
+window.onload = trialPresentation ();
+
+function trialPresentation() {
+    stimuliColumns = 24; // practice
+    stimuliRows = 1; // practice
+    totalStimuli = stimuliColumns * stimuliRows;
+
+    // RESET VARIABLES
+    var dotArray = []; // store which canvas contains which amount of dots
+    var outerBorder = 15;
+    var canvasBorder = 1;
+    var responseTimeArray = []; // store currentTime per canvas
+    var clickArray = []; // store how many time a canvas was clicked
+    var responseArray = []; // log hits/misses/false alarms
+    var correctionArray = []; // log whether response was corrected
+    var responseOrderArray = []; // log order of canvases responded to
+                    
+    stimuliPresentation (); 
+    
+} // END TRIAL
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// MAIN FUNCTION ////////////////////////////////////////////
@@ -37,8 +65,8 @@ function stimuliPresentation () {
     // SET VARIABLES
             var horizontal = 1;
             var vertical = 1; 
-            var posLeft;
-            var posTop;
+            var posLeft = 0;
+            var posTop = 0;
     
     // DETERMINE MAX. CANVAS SIZE
         // to determine how large the canvasses (i.e. stimuli) can
@@ -365,6 +393,33 @@ function responseLogging () {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function terminationButton () {  
     // GOAL: store data for result calculations
+ 
+    if (trial == true) {       
+        if ((responseArray.length == stimuliColumns)){
+            // all canvases responded to, and no corrections made
+            
+            // PREPARE PARTICIPANT
+            window.alert("Welldone! You are now going to start the Bourdon Vos Test. Rember to only click those figures with 4 dots" +
+            ", and to move your mouse over each figure. If you accidently clicked a figure with 3 or 5 dots, click again to correct your mistake. Good Luck!");
+        
+            // PRESENT BV TASK
+                stimuliColumns = 24; // 24 specified in Bourdon Vos Test
+                stimuliRows = 33; // 33 specified in Bourdon Vos Test
+                totalStimuli = stimuliColumns * stimuliRows;
+
+                trial = false;
+                stimuliPresentation ();  // present actual task
+        } else {
+            // trial not done accordingly
+            window.alert("Unfortunately, something went wrong! Rember to only click those figures with 4 dots" +
+            ", and to move your mouse over each figure so it turns grey. Try not to make any mistakes");
+            
+            trialPresentation ();
+            
+        } // END reponse IF
+    } else {
+    // no trial so set termination button functionality!
+    
         // startTime stored on window load
         sessionStorage.setItem("finish", currentTime()); // store finish Time
         sessionStorage.setItem("stimuliRows", stimuliRows); // store amount of rows containing stimuli
@@ -378,6 +433,9 @@ function terminationButton () {
         
          // load next page
         window.location.href = "bv_results.html";
+
+    } // END trial IF
+           
 } // END terminationButton FUNCTION
 
 

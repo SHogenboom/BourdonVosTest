@@ -15,10 +15,6 @@
 
 /** Retrieve stored data */
      const FIRSTNAME = sessionStorage.getItem("FIRSTNAME");
-     const LASTNAME = sessionStorage.getItem("LASTNAME");
-     const AGE = sessionStorage.getItem("AGE");
-     const RESULT_ACCES_PASSWORD = sessionStorage.getItem("RESULT_ACCES_PASSWORD");
-
      
 /** Display welcome text and instructions */
 document.getElementById("maintext").innerHTML = 
@@ -31,12 +27,16 @@ document.getElementById("button").innerHTML =
     "Let's Practice";
 document.getElementById("button").onclick = function() { practiceTrials("stimuli") };
 
-/** initialize variables */
+// INITIALIZE VARIABLES
     var clickArray = []; // log mouseclicks per canvas
+    var stimuliColumns = 24; // 24 specified in Bourdon Vos Test
+    var stimuliRows = 33; // 33 specified in Bourdon Vos Test
 
-/**
-*@function practiceTrials
-*/
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// SUPPORTING FUNCTIONS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function practiceTrials (appendObject) {
     // GOAL: to familarize the participant with the task, 
     // ... and continue untill correct responses are made to each type 
@@ -77,19 +77,14 @@ function practiceTrials (appendObject) {
     " Cross figures out when they contain 4 dots. " +
     "In this case that is the middle figure." + "<br>" +
     "Try clicking on the middle figure with the mouse to cross the figure out.");
-    
-    
-
-    
+      
 } // END practiceTrials FUNCTION
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /** initizalize warnig variable */
   var warning = true;
 
-
-/**
-*@function responseActive
-*/
 function responseActive() {
     // GOAL: to ensure that the canvas - upon mouse click - gets 
     // ... cross out or corrected.
@@ -123,37 +118,6 @@ function responseActive() {
         } else {
             // do nothing, pictures should not be clicked more than twice
         } // END clicks IF
-
-    
-    /*
-    var clicks = clickArray[index];
-        if (clicks == 0) {
-            // canvas has not been clicked - draw line
-                    var c=document.getElementById(ID);              // refer to correct canvas
-                    var ctx=c.getContext("2d");                                         // unkown but necessary
-                    ctx.beginPath();                                                           // start new drawing
-                    ctx.moveTo(0,0);                                                          // determine starting position of line - constant
-                    ctx.lineTo(60,60);                       // finish position of line - changes on canvas size specifiedin drawGrid function
-                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
-                    ctx.strokeStyle = "#ff0000";                                          // color of line; red
-                    ctx.stroke();                                                                  // initialize drawing 
-                    clickArray[index] = 1; 
-        } else if (clicks == 1) {
-            // second response, draw correction line
-                    var c=document.getElementById(ID);               // refer to correct canvas
-                    var ctx=c.getContext("2d");                                           // unkown but necessary
-                    ctx.beginPath();                                                            // start new drawing
-                    ctx.moveTo(60,0);                                        // determine starting position of line (should depend on which canvas it is)
-                    ctx.lineTo(0,60);                                          // finish position of line (should depend on size of canvas)
-                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
-                    ctx.strokeStyle = "#ff0000";                                         // color of line; red
-                    ctx.stroke();                                                                 // initialize drawing
-                    clickArray[index] = 2;
-        } else {
-            // do nothing
-        } // END clicks IF */
-        
-        console.log("clicks = " + clicks + " / index = " + index)
                 
         if (index == 1 && clicks == 0) {
             document.getElementById("maintext").innerHTML = 
@@ -175,7 +139,12 @@ function responseActive() {
         
 } // END responseActive FUNCTION
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 function figureCreation(canvasID) {
+    // GOAL create three target figures
+    
     var dots = (canvasID.replace("Canvas", "")); 
     // Delete "Canvas" from id to identify amount of dots
     
@@ -198,11 +167,8 @@ function figureCreation(canvasID) {
     
 } // END figureCreation FUNCTION
 
-/**
-*@function blackDot
-*@description Function to draw a single black dot on a figure
-*@todo enable for circkle size larger than 6
-*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function blackDot (posX, posY, sizeCirckel, canvasID) {
         // GOAL: draw a single  black circkle
             // posX: X position of center circkel relative to canvas
@@ -221,5 +187,7 @@ function blackDot (posX, posY, sizeCirckel, canvasID) {
             ctx.closePath();                                                        // to allow for other figures to be drawn
             ctx.fill();                                                                         // execute
 } // END blackDot FUNCTION    
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     
