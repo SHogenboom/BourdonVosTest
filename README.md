@@ -45,14 +45,13 @@ The BVT is administered by an `Experiment Leader` to a child aged 6 - 17 with (u
 
 <H3 id="screenshots"> Screenshots </H3>
 
-![Screenshot Bourdon Vos Test](/Users/Sally/Documents/Universiteit/Master/9-
-Programming_NextStep/BourdonWiersma.png)   
+![Screenshot Bourdon Vos Test](BourdonVosTest/BourdonWiersma.png)   
 
 *Screenshot of Bourdon Vos Test*      
 
 
 ![Screenshot Online Bourdon Vos Test](/Users/Sally/Documents/Universiteit/Master/9-
-Programming_NextStep/O-BVT.png)  
+PBourdonVosTest/O-BVT.png)  
 
 *Screenshot of Online Bourdon Vos Test*    
 All figures with 4 dots are to be clicked (i.e. crossed out). When the participant has moved the mouse over a figure, this figure will turn grey. 
