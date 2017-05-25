@@ -94,10 +94,38 @@ function responseActive() {
     // GOAL: to ensure that the canvas - upon mouse click - gets 
     // ... cross out or corrected.
    
-    var ID = event.currentTarget.id; // log id of current canvas
-    var index = (ID.replace("Canvas", "")-3); // -3 because index starts at 0 and ID starts at 3
+    var currentID = event.currentTarget.id; // log id of current canvas
+    var canvasWidth = document.getElementById(currentID).width; // determine canvas width
+    var canvasHeight = document.getElementById(currentID).height;  // determine canvas height   
+    var index = (currentID.replace("Canvas", "")-3); // -3 because index starts at 0 and ID starts at 3
         console.log("Index = " + index);
     
+    // DRAW RESPONSE 
+        var clicks = clickArray[index];
+        if (clicks == 0) {
+            // canvas has not been clicked - draw line
+                    var c=document.getElementById(currentID);              // refer to correct canvas
+                    var ctx=c.getContext("2d");                                         // unkown but necessary
+                    imageData = ctx.getImageData(0,0,canvasWidth, canvasHeight); // store canvas picture as is
+                    ctx.beginPath();                                                           // start new drawing
+                    ctx.moveTo(0,0);                                                          // determine starting position of line - constant
+                    ctx.lineTo(canvasWidth,canvasHeight);                       // finish position of line - changes on canvas size specifiedin drawGrid function
+                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+                    ctx.strokeStyle = "#ff0000";                                          // color of line; red
+                    ctx.stroke();                                                                  // initialize drawing 
+                    clickArray[index] = 1;                                                    // increment clicks to 1
+        } else if (clicks == 1) {
+            // second response, draw correction line
+                    var c=document.getElementById(currentID);               // refer to correct canvas
+                    var ctx=c.getContext("2d");                                           // unkown but necessary
+                    ctx.putImageData(imageData, 0,0);                               // reset previous picture (i.e. remove red line)
+                    clickArray[index] = 2;
+        } else {
+            // do nothing, pictures should not be clicked more than twice
+        } // END clicks IF
+
+    
+    /*
     var clicks = clickArray[index];
         if (clicks == 0) {
             // canvas has not been clicked - draw line
@@ -123,7 +151,8 @@ function responseActive() {
                     clickArray[index] = 2;
         } else {
             // do nothing
-        } // END clicks IF
+        } // END clicks IF */
+        
         console.log("clicks = " + clicks + " / index = " + index)
                 
         if (index == 1 && clicks == 0) {
