@@ -69,7 +69,7 @@ function stimuliPresentation () {
             var posTop = 0;
     
     // REMOVE ANY EXISTING CANVASES
-        for (i = 0; i < totalStimuli; i++ {
+        for (i = 0; i < totalStimuli; i++) {
              document.getElementById("stimuli").removeChild(child);
         } // END remove canvas LOOP
     
