@@ -39,17 +39,7 @@ function trialPresentation() {
     stimuliColumns = 24; // practice
     stimuliRows = 1; // practice
     totalStimuli = stimuliColumns * stimuliRows;
-
-   // RESET VARIABLES
-    var dotArray = []; // store which canvas contains which amount of dots
-    var outerBorder = 15;
-    var canvasBorder = 1;
-    var responseTimeArray = []; // store currentTime per canvas
-    var clickArray = []; // store how many time a canvas was clicked
-    var responseArray = []; // log hits/misses/false alarms
-    var correctionArray = []; // log whether response was corrected
-    var responseOrderArray = []; // log order of canvases responded to
-    
+  
     stimuliPresentation (); 
     
 } // END TRIAL
@@ -68,6 +58,16 @@ function stimuliPresentation () {
             var posLeft = 0;
             var posTop = 0;
     
+    // RESET VARIABLES
+    var dotArray = []; // store which canvas contains which amount of dots
+    var outerBorder = 15;
+    var canvasBorder = 1;
+    var responseTimeArray = []; // store currentTime per canvas
+    var clickArray = []; // store how many time a canvas was clicked
+    var responseArray = []; // log hits/misses/false alarms
+    var correctionArray = []; // log whether response was corrected
+    var responseOrderArray = []; // log order of canvases responded to
+  
     // REMOVE ANY EXISTING CANVASES
         var element = document.getElementById("stimuli");
         while (element.firstChild){
