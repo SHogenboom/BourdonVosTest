@@ -40,7 +40,7 @@ function trialPresentation() {
     stimuliRows = 1; // practice
     totalStimuli = stimuliColumns * stimuliRows;
 
-    // RESET VARIABLES
+   // RESET VARIABLES
     var dotArray = []; // store which canvas contains which amount of dots
     var outerBorder = 15;
     var canvasBorder = 1;
@@ -49,7 +49,7 @@ function trialPresentation() {
     var responseArray = []; // log hits/misses/false alarms
     var correctionArray = []; // log whether response was corrected
     var responseOrderArray = []; // log order of canvases responded to
-                    
+    
     stimuliPresentation (); 
     
 } // END TRIAL
@@ -67,6 +67,11 @@ function stimuliPresentation () {
             var vertical = 1; 
             var posLeft = 0;
             var posTop = 0;
+    
+    // REMOVE ANY EXISTING CANVASES
+        for (i = 0; i < totalStimuli; i++ {
+             document.getElementById("stimuli").removeChild(child);
+        } // END remove canvas LOOP
     
     // DETERMINE MAX. CANVAS SIZE
         // to determine how large the canvasses (i.e. stimuli) can
@@ -427,7 +432,7 @@ function terminationButton () {
         
         sessionStorage.setObj("ARRAY_MADE_RESPONSES", responseArray);                     // responses made
         sessionStorage.setObj("ARRAY_MADE_CORRECTIONS", correctionArray);                    // corrections made
-       sessionStorage.setObj("ARRAY_CANVAS_RESPONSE_ORDER", responseOrderArray);   // order in which responses were made
+        sessionStorage.setObj("ARRAY_CANVAS_RESPONSE_ORDER", responseOrderArray);   // order in which responses were made
         sessionStorage.setObj("ARRAY_N_DOTS", dotArray);                                     // amount of dots in each figures
         sessionStorage.setObj("ARRAY_RESPONSE_TIMES", responseTimeArray);                       // response times per canvas
         
