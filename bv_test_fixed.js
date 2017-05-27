@@ -69,9 +69,10 @@ function stimuliPresentation () {
             var posTop = 0;
     
     // REMOVE ANY EXISTING CANVASES
-        for (i = 0; i < totalStimuli; i++) {
-             document.getElementById("stimuli").removeChild(child);
-        } // END remove canvas LOOP
+        var element = document.getElemenyById("stimuli");
+        while (element.firstChild){
+            element.removeChild(element.firstChild);
+        } // END while LOOP
     
     // DETERMINE MAX. CANVAS SIZE
         // to determine how large the canvasses (i.e. stimuli) can
