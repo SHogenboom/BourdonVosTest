@@ -57,6 +57,8 @@ function stimuliPresentation () {
             var vertical = 1; 
             var posLeft = 0;
             var posTop = 0;
+   
+    sessionStorage.setItem("start", currentTime()); // store start time until tab is closed so can be used on next page
     
     // RESET VARIABLES
      dotArray = []; // store which canvas contains which amount of dots
