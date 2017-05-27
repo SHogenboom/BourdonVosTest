@@ -59,13 +59,13 @@ function stimuliPresentation () {
             var posTop = 0;
     
     // RESET VARIABLES
-    var dotArray = []; // store which canvas contains which amount of dots
-    var outerBorder = 15;
-    var canvasBorder = 1;
-    var responseTimeArray = []; // store currentTime per canvas
-    var clickArray = []; // store how many time a canvas was clicked
-    var responseArray = []; // log hits/misses/false alarms
-    var correctionArray = []; // log whether response was corrected
+     dotArray = []; // store which canvas contains which amount of dots
+     outerBorder = 15;
+     canvasBorder = 1;
+     responseTimeArray = []; // store currentTime per canvas
+     clickArray = []; // store how many time a canvas was clicked
+     responseArray = []; // log hits/misses/false alarms
+     correctionArray = []; // log whether response was corrected
     console.log("i've reset the correctionArray" + correctionArray);
     var responseOrderArray = []; // log order of canvases responded to
   
@@ -438,6 +438,7 @@ function terminationButton () {
         sessionStorage.setObj("ARRAY_N_DOTS", dotArray);                                     // amount of dots in each figures
         sessionStorage.setObj("ARRAY_RESPONSE_TIMES", responseTimeArray);                       // response times per canvas
         
+        console.log("correction array = " + correctionArray);
          // load next page
         window.location.href = "bv_results.html";
 
