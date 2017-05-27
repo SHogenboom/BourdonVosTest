@@ -265,7 +265,7 @@ function calculateResponseTimes () {
             
             console.log("rowTTtotal =  " + rowRTTotal);
         // store total rowRT
-        if (rowRTTotal == 0) {
+        if ((rowRTTotal == 0) || (isNaN(rowRTTotal) == true)) {
             var rowRT = 0;
         } else {
             var rowRT = (rowRTTotal - previousRT); // extract previous row time because all times are delta with STARTTIME
