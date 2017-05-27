@@ -28,6 +28,8 @@ Storage.prototype.getObj = function(key) {
     const AGE = Number(sessionStorage.getItem("AGE"));
     const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
  
+console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
+
 // SET VARIABLES
     var cleanedResponseArray = [];
     var cleanedCorrectionArray = [];
