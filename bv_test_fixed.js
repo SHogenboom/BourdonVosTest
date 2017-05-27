@@ -66,6 +66,7 @@ function stimuliPresentation () {
     var clickArray = []; // store how many time a canvas was clicked
     var responseArray = []; // log hits/misses/false alarms
     var correctionArray = []; // log whether response was corrected
+    window.alert("i've reset the correctionArray" + correctionArray);
     var responseOrderArray = []; // log order of canvases responded to
   
     // REMOVE ANY EXISTING CANVASES
