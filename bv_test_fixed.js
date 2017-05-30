@@ -57,6 +57,7 @@ function stimuliPresentation () {
             var vertical = 1; 
             var posLeft = 0;
             var posTop = 0;
+            totalStimuli = stimuliColumns * stimuliRows;
    
     sessionStorage.setItem("start", currentTime()); // store start time until tab is closed so can be used on next page
     
@@ -175,14 +176,10 @@ function canvasSize() {
     
     // Determine current window size 
            var winWidth = (window.innerWidth - (2* outerBorder)); // available amount of pixels on the inside of the window
-           // var divWidth = document.getElementById("stimuli").offsetWidth; 
             
     // Determine max canvas width
         var canvasWidth = (winWidth / (stimuliColumns)); // -4 to allow for room for the borders between canvases & the side of the window
-            
-        console.log(canvasWidth);
-        console.log(winWidth);
-        
+                    
      return canvasWidth;
 }  // END canvasSize FUNCTION
 
@@ -191,6 +188,10 @@ function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth, posLef
     // GOAL: create a new RESPONSIVE empty canvas
         // appendObject: ID of the object to which the canvas should be appended <div id = "stimuli">
         // canvasID: name you want to give to the created canvas
+        // canvasHeight:  height of the canvas
+        // canvasWidth: width of the canvas
+        // posLeft: left side of the canvas should be placed on which X-coordinate (in pixels)
+        // posTop: top side of the canvas should be placed on which Y-coordinate (in pixels)
 
     // CREATE CANVAS
         var addCanvas = document.createElement('canvas');       // Create new canvas element
