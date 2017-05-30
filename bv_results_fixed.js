@@ -414,7 +414,7 @@ var outputTableRowData = outputTableRows();
     
 document.getElementById("maintext").innerHTML = (
 "<br>" + 
-(FIRSTNAME.toUpperCase()) + " " + (LASTNAME.toUpperCase()) + "'s continued attention age is " + (((accuracyAgeArray[3]) + (attentionAgeArray[(STIMULI_ROWS-1)])) - AGE) +
+(FIRSTNAME.toUpperCase()) + " " + (LASTNAME.toUpperCase()) + "'s continued attention age is " + (((accuracyAgeArray[3]) + finalAttentionAge) - AGE) +
 " years old." + "<br>" + "<br>" +
 
 "<table>" +
@@ -494,6 +494,8 @@ outputTableRowData +
 function outputTableRows () {
     // GOAL: to create an output table for the row times
     
+     finalAttentionAge = AGE;
+    
     var headers =  String("<table>" +
     "<tr>" +
         "<th>" + "Row Number" +
@@ -516,9 +518,8 @@ function outputTableRows () {
     
         if (attentionAgeArray[i] == "-") {
             // do nothing to final attention age
-            var finalAttentionAge = AGE;
         } else {
-            var finalAttentionAge = attentionAgeArray[i];
+            finalAttentionAge = attentionAgeArray[i];
         } // END finalAttentionAge IF
      
     } // END LOOP

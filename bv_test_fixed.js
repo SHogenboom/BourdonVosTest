@@ -327,30 +327,25 @@ function canvasMouseOut () {
                         } else if (clickArray[index] == 1) {                // 1 click == WRONG (only click figures with 4 dots)
                             responseArray.push(3);                              // FALSE ALARM
                             correctionArray.push(0);                               // NO
-                            // responseOrderArray.push(index);// store number of canvas
                         } else {                                                        // 2 clicks == CORRECTION
                             responseArray.push(1);                          // HIT
                             correctionArray.push(1);                            // YES
-                            // responseOrderArray.push(index); // store number of canvas
                         } // END  click amount IF
                     } else { // amountDots == 4
                          if (clickArray[index] == 0) {                  // no click == WRONG // NOTE: not coded because function only activated upon mouseclick
                             responseArray.push(2);                          // MISS
                             correctionArray.push(0);                         // NO
-                            // responseOrderArray.push(index); // store number of canvas
                         } else if (clickArray[index] == 1) {        // 1 click == CORRECT
                             responseArray.push(1);                          // HIT
                             correctionArray.push(0);                        // NO
-                            // responseOrderArray.push(index); // store number of canvas
                         } else {                                                   // 2 clicks == unjust correction aka WRONG
                             responseArray.push(2);                      // MISS
                             correctionArray.push(1);                     // YES
-                            //responseOrderArray.push(index); // store number of canvas
                         } // END click amount IF
                     } // END amountDots  IF
-                            console.log("responseArray = " + responseArray);
-                            console.log("correctionArray = " + correctionArray);
-                            console.log("response order Array = "+ responseOrderArray);
+                            // console.log("responseArray = " + responseArray);
+                            // console.log("correctionArray = " + correctionArray);
+                            // console.log("response order Array = "+ responseOrderArray);
                             
             // STORE RESPONSE TIMES
                     responseTimeArray.push(currentTime()); // store current Time in responseTimeArray
