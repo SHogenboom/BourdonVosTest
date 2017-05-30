@@ -594,14 +594,152 @@ Repeat appropriate amount of times
 
 <H4 id="response"> Response Actions </H4>
 
+The O-BVT requires the following response actions:
+
+1. 1 Click = cross-out figure & 2 Clicks = correction 
+3. Record Hits/Misses/False Alarms
+4. Reaction Times per Row
+
+I have also added the response action to change the background color of the figure when it is hovered over with the mouse. This way participants are more clear on where the mouse is, and thus which figure they are responding to. 
+
+All these functionalities were added to the figures (i.e. canvasses) as they were created. All functionalities are placed in the `.mouseout` function with a delay of 200 miliseconds. In other words: none of these responses are logged if you quickly scroll over the stimuli, they are only logged if you "hover" over a figure longer than 200 miliseconds: ` if ((finishHover - startHover) > 200)`. 
+
+**NOTE**
+
+Initially any response is coded, pushed to the relevant array, and stored in memory. The responses are not cleaned until the results section.
+
+<details><summary> Code: Mouse Click Actions </summary><p> 
+
+``` javascript
+
+	function responseLogging () {
+    // SET VARIABLES
+        var currentID = event.currentTarget.id; // log id of event that triggered the function
+        var canvasWidth = document.getElementById(currentID).width; // determine canvas width
+        var canvasHeight = document.getElementById(currentID).height;  // determine canvas height   
+        var index = (currentID.replace("Canvas", ""))-1; // replace "Canvas" by nothing so unique number remains, -1 because index starts from 0
+              
+    // DRAW RESPONSE 
+        var clicks = clickArray[index];
+        if (clicks == 0) {
+            // canvas has not been clicked - draw line
+                    var c=document.getElementById(currentID);              // refer to correct canvas
+                    var ctx=c.getContext("2d");                                         // unkown but necessary
+                    imageData = ctx.getImageData(0,0,canvasWidth, canvasHeight); // store canvas picture as is
+                    ctx.beginPath();                                                           // start new drawing
+                    ctx.moveTo(0,0);                                                          // determine starting position of line - constant
+                    ctx.lineTo(canvasWidth,canvasHeight);                       // finish position of line - changes on canvas size specifiedin drawGrid function
+                    ctx.lineWidth = 4;                                                         // size of the line to be drawn (should depend on circkle size)
+                    ctx.strokeStyle = "#ff0000";                                          // color of line; red
+                    ctx.stroke();                                                                  // initialize drawing 
+                    clickArray[index] = 1;                                                    // increment clicks to 1
+        } else if (clicks == 1) {
+            // second response, draw correction line
+                    var c=document.getElementById(currentID);               // refer to correct canvas
+                    var ctx=c.getContext("2d");                                           // unkown but necessary
+                    ctx.putImageData(imageData, 0,0);                               // reset previous picture (i.e. remove red line)
+                    clickArray[index] = 2;
+        } else {
+            // do nothing, pictures should not be clicked more than twice
+        } // END clicks IF
+                
+	} // END responseLogging FUNCTION
+
+```
+
+
+</p></details>
+***
+
+<details><summary> Code: Hit/Miss/False Alarm Coding </summary><p> 
+
+``` javascript
+
+ 	// CODE RESPONSES (only cross out (click = 1) figures with 4 dots)
+                        // responses: HIT (1), Miss (2), False Alarm (3) 
+                        // corrections: NO (0), YES (1)
+                    if (amountDots == 3 || amountDots == 5) {
+                        // do not click (click == 0) or correct mistake (click == 2) == HIT
+                        if (clickArray[index] == 0) {                           // No click = CORRECT  // NOTE: not coded because function only activated upon mouseclick
+                            responseArray.push(1);                             // HIT
+                            correctionArray.push(0);                            // NO
+                        } else if (clickArray[index] == 1) {                // 1 click == WRONG (only click figures with 4 dots)
+                            responseArray.push(3);                              // FALSE ALARM
+                            correctionArray.push(0);                               // NO
+                        } else {                                                        // 2 clicks == CORRECTION
+                            responseArray.push(1);                          // HIT
+                            correctionArray.push(1);                            // YES
+                        } // END  click amount IF
+                    } else { // amountDots == 4
+                         if (clickArray[index] == 0) {                  // no click == WRONG // NOTE: not coded because function only activated upon mouseclick
+                            responseArray.push(2);                          // MISS
+                            correctionArray.push(0);                         // NO
+                        } else if (clickArray[index] == 1) {        // 1 click == CORRECT
+                            responseArray.push(1);                          // HIT
+                            correctionArray.push(0);                        // NO
+                        } else {                                                   // 2 clicks == unjust correction aka WRONG
+                            responseArray.push(2);                      // MISS
+                            correctionArray.push(1);                     // YES
+                        } // END click amount IF
+                    } // END amountDots  IF
+
+```
+
+</p></details>
+***
+
+
+<details><summary> Code: Reaction Time </summary><p> 
+
+``` javascript
+            // STORE RESPONSE TIMES
+                    responseTimeArray.push(currentTime()); // store current Time in responseTimeArray
+
+```
+
+*NOTE* Reaction Times are initialy stored per canvas. In the results section the average row reaction time is calculated.
+
+</p></details>
+***
+
+All responses are stored in `sessionStorage` memory to allow for calling in the results section of the O-BVT.
+
+<details><summary> Code: Store Data </summary><p> 
+
+``` javascript
+ 	// startTime stored on window load
+        sessionStorage.setItem("finish", currentTime()); // store finish Time
+        sessionStorage.setItem("stimuliRows", stimuliRows); // store amount of rows containing stimuli
+        sessionStorage.setItem("stimuliCols", stimuliColumns); // store amount of columns containing stimuli
+        
+        sessionStorage.setObj("ARRAY_MADE_RESPONSES", responseArray);                     // responses made
+        sessionStorage.setObj("ARRAY_MADE_CORRECTIONS", correctionArray);                    // corrections made
+        sessionStorage.setObj("ARRAY_CANVAS_RESPONSE_ORDER", responseOrderArray);   // order in which responses were made
+        sessionStorage.setObj("ARRAY_N_DOTS", dotArray);                                     // amount of dots in each figures
+        sessionStorage.setObj("ARRAY_RESPONSE_TIMES", responseTimeArray);                       // response times per canvas
+        
+
+```
+
+</p></details>
+***
+
+
+In the results section, all data are cleaned (i.e. only the last responses is used for score calculations).
 
 
 
 
 
+<details><summary> Code:  </summary><p> 
+
+``` javascript
 
 
+```
 
+</p></details>
+***
 
 
 
@@ -609,6 +747,8 @@ Repeat appropriate amount of times
 <H2 id="implementation"> Implementation </H2>
 
 This was the first time that I programmed in HTML/Javascript/CSS, therefore, the implementation started of by trying to get something on the screen. C. Stevenson helped me by explaining which files / aspects make up a webpage, and I went from there. I completed almost all tutorials on [w3schools](https://www.w3schools.com) in order to be able to create the current task. Of course [stackoverflow](https://stackoverflow.com) also provided useful answers to the many issues I came across. Some functions that were used were not created by the student (i.e. me), but those are clearly marked in the `Internet Functions` sections in the code files. An example of such a function is the [`arrayShuffle()`](https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array) function from a forum question on stackoverflow:
+
+<details><summary> Code: shuffleArray Function </summary><p>
 
 ``` javascript
 function shuffleArray(array) {
@@ -623,6 +763,9 @@ function shuffleArray(array) {
 } // END shuffleArray FUNCTION
 
 ```
+
+</p></details>
+***
 
 <H3 id="versioncontrol"> Version Control </H3>
 
