@@ -4,7 +4,7 @@ The Online Bourdon Vos Test (O-BVT) has transformed the Bourdon Vos Test (BVT; 1
 
 **IF YOU WISH TO USE THE ONLINE BOURDON VOS TEST - PLEASE SEE THE [USER MANUAL](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) FOR INSTRUCTIONS !**
 
-This document contains information on the process behind creating the O-BVT inline with the requirements for the course "Programming The Next Step", which was given at the University of Amsterdam, the Netherlands, in 2017. For other software developers I recommend looking at the [Design](#design) section as it contains examples of the code. Of course, all source files are accessible on GitHub: [Bourdon Vos Test](https://github.com/SHogenboom/BourdonVosTest). All files contain in-line comments.
+This document contains information on the process behind creating the O-BVT in line with the requirements for the course "Programming The Next Step", which was given at the University of Amsterdam, the Netherlands, in 2017. For other software developers I recommend looking at the [Design](#design) section as it contains examples of the code. Of course, all source files are accessible on GitHub: [Bourdon Vos Test](https://github.com/SHogenboom/BourdonVosTest). All files contain in-line comments.
 
 <H2> Content </H2>
 
@@ -59,7 +59,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H3 id="taskflow"> Task Flow </H3>
 
-| Page |`HTML` | `Javascript` | `CSS` | Function|
+| Page |`HTML` | `JavaScript` | `CSS` | Function|
 |:----:|:-----:|:------------:|:-----:|:-------:|
 |1|[index.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/index.html)|[index.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/index.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)|Demograhpics|
 |2|[bv\_practice.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_practice.html)|[bv\_practice.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_practice.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)| Explain task|
@@ -76,7 +76,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H4 id="taskflowsoftware"> Task Flow Software </H4>
 
-*NOTE: all links refer to the javascript code documented in the [O-BVT Design](#design) section.*
+*NOTE: all links refer to the JavaScript code documented in the [O-BVT Design](#design) section.*
 
 1. **Display** instructions to Experiment Leader
 2. **Ask for  & store** Participant's [Demographics](#demographics)
@@ -93,7 +93,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
     + **Store** amount of practice trials
 7. **Present** [Bourdon Vos Test](#bvt) to Participant
 	+ **Create** [Stimuli](#stimuli)
-	+ **Track** responses
+	+ **Track** [responses](#response)
     + Enable **response visualizations** to each figure (i.e. crossing out)
     + **Store** reaction times per row & for total Bourdon Vos test
 8. **Change interface** from Participant interface to Experiment Leader interface
@@ -122,11 +122,12 @@ This section provides context on the code that was used to create the Bourdon Vo
 	+ [Stimuli](#stimuli)
     + [Response Actions](#response)
 * [Results](#results)  
+* [Function From Internet Sources](#internet)
 
 
 <H3 id="demographics"> Demographics </H3>
 
-The experiment leader is asked to provide the participant's `FIRSTNAME`, `LASTNAME`, `GENDER`, and `AGE`. `FIRSTNAME`, `LASTNAME`, `GENDER` input is **not validated** because these are not used for any other reason than to adress the participant at a later phase. `AGE` is **validated** against two criteria: 1) The input is a number, and 2) the participant is between 6 and 17 years old. This validation is important because norm group data is not available for other age groups. 
+The experiment leader is asked to provide the participant's `FIRSTNAME`, `LASTNAME`, `GENDER`, and `AGE`. `FIRSTNAME`, `LASTNAME`, `GENDER` input is **not validated** because these are not used for any other reason than to address the participant at a later phase. `AGE` is **validated** against two criteria: 1) The input is a number, and 2) the participant is between 6 and 17 years old. This validation is important because norm group data is not available for other age groups. 
 
 The experiment leader is provided with a way out by clicking "cancel" in the prompt boxes. In doing so the experiment leader does not continue with the rest of the O-BVT. 
 
@@ -269,7 +270,7 @@ function agePrompt ()  {
 
 <H3 id="password"> Password Protect Results </H3>
 
-Both the Experiment Leader and the Participant use the same computer, therefore, the *results* are protected from being viewed by the participant through a password. When the Eperiment Leader sets up the experiment by entering the participant demographics, he/she is also asked to specify a password. The default value is set to "password".  
+Both the Experiment Leader and the Participant use the same computer, therefore, the *results* are protected from being viewed by the participant through a password. When the Experiment Leader sets up the experiment by entering the participant demographics, he/she is also asked to specify a password. The default value is set to "password".  
 
 **WARNING** 
 If the Experiment Leader forgets the password they previously specified, he/she will not be able to view the participant's results.
@@ -385,6 +386,7 @@ The participant is guided through the process of which figures to click (only th
 ```
 
 </p></details>
+
 ***
 
 Upon familiarization with all possible responses (i.e. 1 click = cross out, 2 clicks = correction) the participant is redirected to the actual practice phase of the BVT: a single line with random figures. Presentation of this practice line was programmed in the `bv_test_fixed.html` file as all necessary functions were already present there. 
@@ -395,7 +397,7 @@ In order to provide the participant with a functioning Bourdon Vos Test I had to
 
 <H4 id="stimuli"> Stimulus Creation </H4>
 
-In order to create anything graphical on a webpage that is not an image, one has to create a `canvas` element. In the Bourdon Vos Test it is specified that their are 24 figures per row, and 33 rows. Therefore, depending on the window size, the canvasses are smaller or larger. It is assumed that computer screens are wider than they are high, thus only the maximum width has to be determined in order to create square canvasses
+In order to create anything graphical on a webpage that is not an image, one has to create a `canvas` element. In the Bourdon Vos Test it is specified that there are 24 figures per row, and 33 rows. Therefore, depending on the window size, the canvasses are smaller or larger. It is assumed that computer screens are wider than they are high, thus only the maximum width has to be determined in order to create square canvasses
 
 <details><summary> Code: Determine Canvas Size </summary><p>
 
@@ -420,6 +422,7 @@ In order to create anything graphical on a webpage that is not an image, one has
 ```
 
 </p></details>
+
 ***
 
 After the maximum height and width of the canvasses are determined, an empty canvas is created and attached to an existing `<div>` HTML element. This function is repeated in the `stimuliPresentation` function to create the appropriate amount of canvasses as specified by the Bourdon Vos Test (24 figures x 33 rows = 792).
@@ -458,9 +461,10 @@ After the maximum height and width of the canvasses are determined, an empty can
 	} // END createCanvas FUNCTION
 
 ```
-*NOTE* the variables are passed forward to this function in the main function `stimuliPresentation();`. Secondly, all response actions are stored in seperate functions.
+*NOTE* the variables are passed forward to this function in the main function `stimuliPresentation();`. Secondly, all response actions are stored in separate functions.
 
 </p></details>
+
 ***
 
 Once an empty canvas is created (or a screen full of empty canvasses) it is time to draw a dot figure on that canvas. To do so, first we have to determine how many 3, 4, and 5 dots figures there are, and randomize presentation order
@@ -484,6 +488,7 @@ Once an empty canvas is created (or a screen full of empty canvasses) it is time
 ```
 
 </p></details>
+
 ***
 
 After knowing how many dots will be presented in each figure, it is key to determine where these dots can be drawn on the canvas. This is dependent on the canvas size. For this version of the O-BVT a 3x3 grid of dot placements was created. Future versions could increase this grid size to allow for more varied figures, similar to the figures in the BVT. 
@@ -540,6 +545,7 @@ After knowing how many dots will be presented in each figure, it is key to deter
 ```
 
 </p></details>
+
 ***
 
 We now have an empty canvas upon which we can draw a figure, we know how many dots should go on that figure, and we know all possible positions of a single dot. All that is left now is to draw a dot, and repeat that action for the appropriate amount of times.
@@ -590,6 +596,7 @@ Repeat appropriate amount of times
 ```
 
 </p></details>
+
 ***
 
 <H4 id="response"> Response Actions </H4>
@@ -602,7 +609,7 @@ The O-BVT requires the following response actions:
 
 I have also added the response action to change the background color of the figure when it is hovered over with the mouse. This way participants are more clear on where the mouse is, and thus which figure they are responding to. 
 
-All these functionalities were added to the figures (i.e. canvasses) as they were created. All functionalities are placed in the `.mouseout` function with a delay of 200 miliseconds. In other words: none of these responses are logged if you quickly scroll over the stimuli, they are only logged if you "hover" over a figure longer than 200 miliseconds: ` if ((finishHover - startHover) > 200)`. 
+All these functionalities were added to the figures (i.e. canvasses) as they were created. All functionalities are placed in the `.mouseout` function with a delay of 200 milliseconds. In other words: none of these responses are logged if you quickly scroll over the stimuli, they are only logged if you "hover" over a figure longer than 200 milliseconds: ` if ((finishHover - startHover) > 200)`. 
 
 **NOTE**
 
@@ -649,6 +656,7 @@ Initially any response is coded, pushed to the relevant array, and stored in mem
 
 
 </p></details>
+
 ***
 
 <details><summary> Code: Hit/Miss/False Alarm Coding </summary><p> 
@@ -686,6 +694,7 @@ Initially any response is coded, pushed to the relevant array, and stored in mem
 ```
 
 </p></details>
+
 ***
 
 
@@ -700,6 +709,7 @@ Initially any response is coded, pushed to the relevant array, and stored in mem
 *NOTE* Reaction Times are initialy stored per canvas. In the results section the average row reaction time is calculated.
 
 </p></details>
+
 ***
 
 All responses are stored in `sessionStorage` memory to allow for calling in the results section of the O-BVT.
@@ -722,11 +732,12 @@ All responses are stored in `sessionStorage` memory to allow for calling in the 
 ```
 
 </p></details>
+
 ***
 
 <H3 id="results"> Results </H3>
 
-Experiment Leaders can not access the results section unless the correct [password](#password) was entered. If the Experiment Leader does so, he/she will be provided with the Participant's scores and "Attention Age". "Attention Age" is calculated based on the participant's scores compared to the relevant norm group data. An "Attention Age" for accuracy and speed are provided. In addition to being able to view the data, the Experiment Leader is provided with the option to print the results.
+Experiment Leaders cannot access the results section unless the correct [password](#password) was entered. If the Experiment Leader does so, he/she will be provided with the Participant's scores and "Attention Age". "Attention Age" is calculated based on the participant's scores compared to the relevant norm group data. An "Attention Age" for accuracy and speed are provided. In addition to being able to view the data, the Experiment Leader is provided with the option to print the results.
 
 First, all responses are cleaned so that only the last time a person clicked a canvas is used to calculate absolute scores.
 
@@ -756,6 +767,7 @@ First, all responses are cleaned so that only the last time a person clicked a c
 ```
 
 </p></details>
+
 ***
 
 Then, the total amount of hits, misses, and false alarms is coded & compared to the norm group data. 
@@ -850,6 +862,7 @@ Compare to norm group data:
 ```
 
 </p></details>
+
 ***
 
 
@@ -920,6 +933,7 @@ After determining the accuracy of the participants, it is also important to code
 ```
 
 </p></details>
+
 ***
 
 Then, these row reaction times (rowRT) had to be compared to the relevant norm group data.
@@ -952,7 +966,9 @@ Then, these row reaction times (rowRT) had to be compared to the relevant norm g
 
 ```
 *NOTE* from Bourdon Vos Manual (Vos, 1998)
+
 </p></details>
+
 ***
 
 
@@ -1029,6 +1045,7 @@ Compare rowRT to norm group data
 ```
 
 </p></details>
+
 ***
 
 Once all scores were calculated, output tables of all the scores were created:
@@ -1162,9 +1179,10 @@ Output SPEED
 ```
 
 </p></details>
+
 ***
 
-<H4 id="internet"> Supporting Function From Internet </H4>
+<H4 id="internet"> Supporting Functions From Internet </H4>
 
 A few functions were used that were not created by the author:
 
@@ -1180,20 +1198,32 @@ A few functions were used that were not created by the author:
 <a href ="http://www.jacklmoore.com/notes/rounding-in-javascript/"> Source </a>
 
 </p></details>
+
 ***
 
-
-
-
-<H2 id="implementation"> Implementation </H2>
-
-This was the first time that I programmed in HTML/Javascript/CSS, therefore, the implementation started of by trying to get something on the screen. C. Stevenson helped me by explaining which files / aspects make up a webpage, and I went from there. I completed almost all tutorials on [w3schools](https://www.w3schools.com) in order to be able to create the current task. Of course [stackoverflow](https://stackoverflow.com) also provided useful answers to the many issues I came across. Some functions that were used were not created by the student (i.e. me), but those are clearly marked in the `Internet Functions` sections in the code files. An example of such a function is the [`arrayShuffle()`](https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array) function from a forum question on stackoverflow:
-
-<details><summary> Code: shuffleArray Function </summary><p>
+<details><summary> Code: Random Integer </summary><p> 
 
 ``` javascript
-function shuffleArray(array) {
-    // GOAL: to shuffle the content of an array (e.g., to create random order of stimuli)
+
+	function getRandomInt(min, max) {
+      // GOAL: get a random integer in a range from min to max
+        return Math.floor(Math.random() * (max - min + 1) + min);
+	} // END RandomInt FUNCTION
+
+```
+
+<a href ="https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range"> Source </a>
+
+</p></details>
+
+***
+
+<details><summary> Code: Shuffle Array Content </summary><p> 
+
+``` javascript
+
+	function shuffleArray(array) {
+    // GOAL: to shuffle the content of an array (e.g., to create random presentation of stimuli)
             for (var i = array.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
             var temp = array[i];
@@ -1201,12 +1231,48 @@ function shuffleArray(array) {
             array[j] = temp;
             }
         return array;
-} // END shuffleArray FUNCTION
+	} // END shuffleArray FUNCTION
 
 ```
 
+<a href ="https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array"> Source </a>
+
 </p></details>
+
 ***
+
+<details><summary> Code: Array Storage Temporary Memory </summary><p> 
+
+Store Array
+
+``` javascript
+
+	Storage.prototype.setObj = function(key, obj) {
+    return this.setItem(key, JSON.stringify(obj));
+	}
+	
+```
+
+Retrieve Array
+
+``` javascript
+
+	Storage.prototype.getObj = function(key) {
+    return JSON.parse(this.getItem(key));
+	}
+
+```
+
+<a href ="https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage"> Source </a>
+
+</p></details>
+
+***
+
+<H2 id="implementation"> Implementation </H2>
+
+This was the first time that I programmed in HTML/JavaScript/CSS. I spoke to my supervisor C. Stevenson who pointed me in the direction of these three components that make up a website. Because I had only limited knowledge of HTML, and none of JavaScript and CSS, I started of by completing almost all tutorials on [w3schools](https://www.w3schools.com). This allowed me to come to grasp with different functions, and thus decide on which components I needed in order to create my O-BVT task. Of course [stackoverflow](https://stackoverflow.com) also provided useful answers to the many issues I came across. As I was completely new to the programming languages, some functions were not created by the Author. An example of this is how to store the content of an Array into memory. All functions (N = 4) that were extracted from the internet are cited in the [Supporting Functions From Internet](#internet) section.  
+
 
 <H3 id="versioncontrol"> Version Control </H3>
 
@@ -1214,14 +1280,14 @@ Version control was established by creating a [GitHub](https://github.com) accou
 
 <H3 id="codingstyle"> Coding Style </H3>
 
-As the main part of the O-BVT in programmed in Javascript in will only discuss those coding style guidelines. The HTML and CSS files are of such short and basic content that they did not follow any pre-specified coding styles.
+As the main part of the O-BVT in programmed in JavaScript in will only discuss those coding style guidelines. The HTML and CSS files are of such short and basic content that they did not follow any pre-specified coding styles.
 
-I started of by learning Javascript on [w3schools](https://www.w3schools.com), and thus followed their [coding style guidelines](https://www.w3schools.com/js/js_conventions.asp) & example formats. However, I must note that I forgot about the "rule" that javascript code lines should not be longer than 80 characters. Therefore, the earlier code does not follow this format. Unfortunately, due to time constraints, I was unable to revert all source files to the appropriate style guidelines. Furthermore, it is important to note that the w3schools coding style guidelines do not mention that "variables" that remain constant should be assigned `CAPITALIZED` names, as is specified in the [Google Javascript Style Guide](https://google.github.io/styleguide/jsguide.html). The w3schools guideline merely states naming variables with `camelCase` format. Consequently, variables are named according to the `camelCase` format, unless they were stored in `sessionStorage` memory. The coding style guidelines also did not agree on whether variables should be initialized at the beginning of the document, or where they are used. The current source files initialize variables at the beginning of the document when they influence, for example, the amount of figures that should be created. Variables that are only relevant for that function / section of code (e.g., a counter) are initialized before use. 
+I started of by learning JavaScript on [w3schools](https://www.w3schools.com), and thus followed their [coding style guidelines](https://www.w3schools.com/js/js_conventions.asp) & example formats. However, I must note that I forgot about the "rule" that JavaScript code lines should not be longer than 80 characters. Therefore, the earlier code does not follow this format. Unfortunately, due to time constraints, I was unable to revert all source files to the appropriate style guidelines. Furthermore, it is important to note that the w3schools coding style guidelines do not mention that "variables" that remain constant should be assigned `CAPITALIZED` names, as is specified in the [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html). The w3schools guideline merely states naming variables with `camelCase` format. Consequently, variables are named according to the `camelCase` format, unless they were stored in `sessionStorage` memory. The coding style guidelines also did not agree on whether variables should be initialized at the beginning of the document, or where they are used. The current source files initialize variables at the beginning of the document when they influence, for example, the amount of figures that should be created. Variables that are only relevant for that function / section of code (e.g., a counter) are initialized before use. 
 
 I have also incorporated my own coding style preferences. Firstly, that all functions should be accompanied by an explanation of their function. I find that this increases understanding of the code at a later time. Secondly, I mark all ends of functions, loops, and if statements as soon as I create one. This is mainly to do with error provision, as it allows me to keep track of where one section begins, and another finishes.   
 
 
-**According to me the most important Javascript style guide aspects were: ** 
+**According to me the most important JavaScript style guide aspects were: ** 
 
 * Indent coding with 4 spaces
 * camelCase name variables
@@ -1262,11 +1328,11 @@ Three types of documentation were created. Firstly, the [User Manual](https://gi
 
 Secondly, the current documentation was made in a markdown file, which is also available [online](https://github.com/SHogenboom/BourdonVosTest/blob/master/README.html). This document contains information on the process behind creating the O-BVT inline with the requirements for the course "Programming The Next Step", which was given at the University of Amsterdam, the Netherlands, in 2017.  
 
-Thirdly, all source files contain in-code documentation. Specifically, each function that was created contains information on the `goal` of that function and explains the input variables. Numerical codings for conditions are also explained (e.g., hits == 1, miss == 2, falseAlarm == 3).
+Thirdly, all source files contain in-code documentation. Specifically, each function that was created contains information on the `goal` of that function and explains the input variables. Numerical coding for conditions are also explained (e.g., hits == 1, miss == 2, falseAlarm == 3).
 
 <H3 id="errorprovision"> Error Provision </H3>
 
-The main thing I did to prevent errors in the code is to mark beginnings and endings of loops/functions/if-statments as I created them:
+The main thing I did to prevent errors in the code is to mark beginnings and endings of loops/functions/if-statements as I created them:
 
 ``` javascript
 function anyFunction (){
@@ -1291,7 +1357,7 @@ Personal verifications were made along the way, and are similar to the steps I t
 Alpha testing revealed the following things:
 
 1. The instructions were clear: everyone was able to complete the task accordingly
-2. The O-BVT does not run on Android sytems
+2. The O-BVT does not run on Android systems
 3. Absolute scores (hit/miss/false alarms) are confusing, they should be displayed in percentages. Maybe even a graph. 
 
 
@@ -1299,13 +1365,13 @@ Alpha testing revealed the following things:
 
 I implemented a bug report button leading to a [google form](https://goo.gl/forms/eOf5efi0RSLs2xjr1). All throughout the experiment a small button will be available for the Experiment Leader to click on and report a bug. 
 
-**WARNING** The form can currenlty only be completed by University of Amsterdam accounts due to allowing for screenshot file uploads.
+**WARNING** The form can currently only be completed by University of Amsterdam accounts due to allowing for screenshot file uploads.
 
 <H2 id="development"> Planned Developments </H2>
 
 Although the O-BVT meets the basic requirements, I have envisioned a few adjustments / functionalities that should be implemented in the future. 
 
-1. The respondents data should be stored in an online datbase so that the normgroup data can grow with each participant. 
+1. The respondents data should be stored in an online database so that the norm group data can grow with each participant. 
 
 2. The test could be adjusted to meet the Bourdon Wiersma criteria (the adult version). This way, depending on the age entered in the demographics stage, either the Bourdon Vos (children) or Bourdon Wiersma (adults) is presented. 
 
