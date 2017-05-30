@@ -1388,7 +1388,14 @@ Although the O-BVT meets the basic requirements, I have envisioned a few adjustm
 	+ Distributor of the official manual & test materials: [Pearson Benelux](http://www.pearsonclinical.nl/bourdon-vos-test)
     + [Article](http://bit.ly/2qZkPPc): Role of the Experimenter in administring the Bourdon Vos Test by Keldenbach (2015)
     
-* <p id="normgroup"> norm group file link </p>
+* [Norm Group Data](https://github.com/SHogenboom/BourdonVosTest/blob/master/Normtable_BV.png) 
+
+![Screenshot Norm Group Data]
+(https://github.com/SHogenboom/BourdonVosTest/blob/master/Normtable_BV.png)
+
+
+
+
 
 
 
