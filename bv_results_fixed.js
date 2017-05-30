@@ -28,7 +28,8 @@ Storage.prototype.getObj = function(key) {
     const AGE = Number(sessionStorage.getItem("AGE"));
     const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
  
-console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
+// console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
+console.log("ARRAY_CANVAS_RESPONSE_ORDER = " + ARRAY_CANVAS_RESPONSE_ORDER);
 
 // SET VARIABLES
     var cleanedResponseArray = [];
@@ -248,10 +249,10 @@ function calculateResponseTimes () {
         // first row reaction time
         // totalRT = rowTotal
         previousRT = 0;
-        console.log("previousRT =" + previousRT);
+        // console.log("previousRT =" + previousRT);
     } else {
         previousRT = rowRTArray[(x-1)];
-        console.log("previousRT =" + previousRT);
+        // console.log("previousRT =" + previousRT);
     }
         
     // CALCULATE ROW RT
@@ -263,7 +264,7 @@ function calculateResponseTimes () {
                 count = count + 1;
             } // END stimuli col LOOP
             
-            console.log("rowTTtotal =  " + rowRTTotal);
+            // console.log("rowTTtotal =  " + rowRTTotal);
         // store total rowRT
         if ((rowRTTotal == 0) || (isNaN(rowRTTotal) == true)) {
              rowRT = ("-");
@@ -295,7 +296,7 @@ function identifyNormGroup () {
 function normScores () {
     // GOAL: determine how the participant did in comparison to the relevant norm group (age)
     
-    console.log("rowRTArray = " + rowRTArray);
+   //  console.log("rowRTArray = " + rowRTArray);
 
     // SET VARIABLES
         var normGroup = "";
@@ -322,10 +323,10 @@ function normScores () {
            if ((isNaN(rowRT) == true) || (rowRT == 0)) {
             // do nothing to attentionAge
             attentionAge = "-";
-            console.log("rowRT =  NaN");
-            console.log("attentionAgeArray = " + attentionAgeArray);
+            // console.log("rowRT =  NaN");
+            // console.log("attentionAgeArray = " + attentionAgeArray);
            } else {
-            console.log("rowRT = " + rowRT);
+            // console.log("rowRT = " + rowRT);
                 // comapre with norm group data
                 if (rowRT > referenceData[3]) { // referenceData[3] = lowest RT boundary
                     if (rowRT > referenceData[2]) {

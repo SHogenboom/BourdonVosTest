@@ -68,8 +68,8 @@ function stimuliPresentation () {
      clickArray = []; // store how many time a canvas was clicked
      responseArray = []; // log hits/misses/false alarms
      correctionArray = []; // log whether response was corrected
-    console.log("i've reset the correctionArray" + correctionArray);
-    var responseOrderArray = []; // log order of canvases responded to
+    // console.log("i've reset the correctionArray" + correctionArray);
+     responseOrderArray = []; // log order of canvases responded to
   
     // REMOVE ANY EXISTING CANVASES
         var element = document.getElementById("stimuli");
@@ -313,6 +313,8 @@ function canvasMouseOut () {
                 // extract amount of dots presented in figure
                     var amountDots = dotArray[index];
                     // window.alert(amountDots); // TEST whether accurate
+                    responseOrderArray.push(index); // store number of canvas
+
     
                 // CODE RESPONSES (only cross out (click = 1) figures with 4 dots)
                         // responses: HIT (1), Miss (2), False Alarm (3) 
@@ -322,33 +324,33 @@ function canvasMouseOut () {
                         if (clickArray[index] == 0) {                           // No click = CORRECT  // NOTE: not coded because function only activated upon mouseclick
                             responseArray.push(1);                             // HIT
                             correctionArray.push(0);                            // NO
-                            responseOrderArray.push(index); // store number of canvas
                         } else if (clickArray[index] == 1) {                // 1 click == WRONG (only click figures with 4 dots)
                             responseArray.push(3);                              // FALSE ALARM
                             correctionArray.push(0);                               // NO
-                            responseOrderArray.push(index);// store number of canvas
+                            // responseOrderArray.push(index);// store number of canvas
                         } else {                                                        // 2 clicks == CORRECTION
                             responseArray.push(1);                          // HIT
                             correctionArray.push(1);                            // YES
-                            responseOrderArray.push(index); // store number of canvas
+                            // responseOrderArray.push(index); // store number of canvas
                         } // END  click amount IF
                     } else { // amountDots == 4
                          if (clickArray[index] == 0) {                  // no click == WRONG // NOTE: not coded because function only activated upon mouseclick
                             responseArray.push(2);                          // MISS
                             correctionArray.push(0);                         // NO
-                            responseOrderArray.push(index); // store number of canvas
+                            // responseOrderArray.push(index); // store number of canvas
                         } else if (clickArray[index] == 1) {        // 1 click == CORRECT
                             responseArray.push(1);                          // HIT
                             correctionArray.push(0);                        // NO
-                            responseOrderArray.push(index); // store number of canvas
+                            // responseOrderArray.push(index); // store number of canvas
                         } else {                                                   // 2 clicks == unjust correction aka WRONG
                             responseArray.push(2);                      // MISS
                             correctionArray.push(1);                     // YES
-                            responseOrderArray.push(index); // store number of canvas
+                            //responseOrderArray.push(index); // store number of canvas
                         } // END click amount IF
                     } // END amountDots  IF
                             console.log("responseArray = " + responseArray);
                             console.log("correctionArray = " + correctionArray);
+                            console.log("response order Array = "+ responseOrderArray);
                             
             // STORE RESPONSE TIMES
                     responseTimeArray.push(currentTime()); // store current Time in responseTimeArray
