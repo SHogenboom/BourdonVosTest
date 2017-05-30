@@ -148,8 +148,9 @@ This section provides examples of the code that was used to create the Bourdon V
 
 
 </p>
-</details>  
+</details>    
 
+***
 
 The participant's `age` is **validated** to be between 6 and 17 years old. This is important because the Bourdon Vos Test is only suited for this age range, and thus no norm group data are available for other age groups. 
 
