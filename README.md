@@ -1,6 +1,6 @@
 <H1 id="top"> Online Bourdon Vos Test </H1>
 
-The Online Bourdon Vos Test (O-BVT) has transformed the Bourdon Vos Test (BVT; 1998) from a paper-and-pencil version to a web based test. The O-BVT & BVT measure continued attention in children aged 6 - 17. This is done by providing the participants with a sheet (BVT) or screen (O-BVT) containing 33 rows with 24 figures each (i.e. 792 figures). Each figure contains of either 3, 4, or 5 black dots. This is why the adult version (Bourdon Wiersma Test) is also called the "Dot Cancellation Test".  
+The Online Bourdon Vos Test (O-BVT) has transformed the Bourdon Vos Test (BVT; 1998) from a paper-and-pencil version to a web based test. The O-BVT & BVT measure continued attention in children aged 6 - 17. This is done by providing the participants with a sheet (BVT) or screen (O-BVT) containing 33 rows with 24 figures each (i.e. 792 figures). Each figure contains of either 3, 4, or 5 black dots. This is why the adult version (the Bourdon Wiersma Test) is also called the "Dot Cancellation Test".  
 
 **IF YOU WISH TO USE THE ONLINE BOURDON VOS TEST - PLEASE SEE THE [USER MANUAL](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) FOR INSTRUCTIONS !**
 
@@ -62,8 +62,8 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 | Page |`HTML` | `Javascript` | `CSS` | Function|
 |:----:|:-----:|:------------:|:-----:|:-------:|
 |1|[index.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/index.html)|[index.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/index.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)|Demograhpics|
-|2|[bv\_practice.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_practice.html)|[bv\_practice.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_practice.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)| Practice the task|
-|3|[bv_test_fixed.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_test_fixed.html)|[bv_test_fixed.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_test_fixed.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)| Bourdon Vos Test|
+|2|[bv\_practice.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_practice.html)|[bv\_practice.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_practice.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)| Explain task|
+|3|[bv_test_fixed.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_test_fixed.html)|[bv_test_fixed.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_test_fixed.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)| Practice Line + Bourdon Vos Test|
 |4|[bv\_results.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_results.html)|[bv\_results\_fixed.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_results_fixed.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)|Results|  
 
 *Table of HTML pages presented in the O-BVT in the order they are displayed to the user. Supporting Javascript & CSS files per page. All links refer to the source file location on 
@@ -127,21 +127,41 @@ This section provides examples of the code that was used to create the Bourdon V
 
 **Goal** is to extract `firstName`, `lastName`, `gender`, `age`. Especially the participant's `age` is relevant to be able to compare the participant's results to norm group data.
 
-``` javascript
+
+<details>
+	<summary> Prompt Demographic Input </summary> 
+    <p>  
+
+
+```javascript
+
 	const FIRSTNAME = 
         window.prompt("First name: "); // ... enter pp. first name
     const LASTNAME = 
         window.prompt("Last name: "); // ... enters pp. last name
     const GENDER = 
-        window.prompt("The participant is ... [Male/Female/Other]"); 
-        // ... enter pp gender [suggestions] 
+        window.prompt("The participant is ... [Male/Female/Other]"); // ... enter pp gender [suggestions] 
     const AGE =
-        window.prompt("The participant is ... years old: ");
-        // ... enter pp age > validated!
+        window.prompt("The participant is ... years old: ");// ... enter pp age > validated!
+
+```  
+
+
+</p>
+</details>  
+
+
+The participant's `age` is **validated** to be between 6 and 17 years old. This is important because the Bourdon Vos Test is only suited for this age range, and thus no norm group data are available for other age groups. 
+
+``` javascript
+var validated = "No";
+
+
+
+
 
 ```
 
-The participant's `age` is **validated** to be between 6 and 17 years old. This is important because the Bourdon Vos Test is only suited for this age range, and thus no norm group data are available for other age groups.  
 
 <H6 id="password"> Password Protection </H6>
 **Goal** is to allow only the Experiment Leader to access the results. Therefore, the Experiment leader has to specify the password after entering the demographics:
