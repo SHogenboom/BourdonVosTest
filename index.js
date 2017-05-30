@@ -1,20 +1,8 @@
-﻿/** Bourdon Vos Test
-* @author hogen.boom@hotmail.com (Hogenboom, S. A. M.)
-* @fileoverview Flow order: index > bv_pratice > bv_test > bv_results
-* @todo 
-* - complete JSDOC comment style
-* - hide password entry with astrixes
-* @description 
-*       The first screen that is presented when launching the Bourdon Vos Test.
-*       The screen is viewed by the experimenter and allows for 
-*       entry of the demographics into memory.
-*       Furthermore, it allows to set a personal password so that 
-*       the results can be viewed by the experimenter
-*       upon completion of the test by the participant.
-*/
-
+﻿
+// set background color to math the Experiment Leader background
 document.body.style.backgroundColor = "LightGoldenRodYellow";
 
+// Display instructions
 document.getElementById("maintext").innerHTML = ("Dear Experimenter, " + "<br> <br>" + 
     "You are about to test a participant with the Bourdon Vos Test. " + "<br>" + 
         "Please be aware this test is not suited for children younger than 6" +
@@ -22,12 +10,12 @@ document.getElementById("maintext").innerHTML = ("Dear Experimenter, " + "<br> <
                 "Please click the 'demographics' button to enter the " +
                     " participant's demogrpahics before calling the participant.");
 
+// Display button
 document.getElementById("button").innerHTML = "Demographics";
 
 function demographics () {
     // GOAL: to let the experiment leader enter the participant's demographics 
-        // ... & stop the task from exectution if age requirements (6 < age < 17) 
-        // ... are not met.
+        // ... & stop the task from exectution if age requirements (6 < age < 17) are not met.
         // no input variables
         
     // SET VARIABLES
@@ -47,20 +35,19 @@ function demographics () {
                                          " to access the participant's results after completion"), "password");
                                 // experimenter enters password that is required to extract results at the end
                                 
-    document.getElementById("maintext").innerHTML = 
-        ("Thank you for entering the participant's demographics" +
-            "<br>" + "It is now time to call the participant." + "<br>" +
-                "Please press 'next' to display the participant instructions");
-    document.getElementById("button").innerHTML = "next"; // change button text
-    document.getElementById("button").onclick = function(){window.location.href = "bv_practice.html"};
-    console.log(document.getElementById("button").onclick);
-        // load practice window upon clicking the button
+                                    document.getElementById("maintext").innerHTML = 
+                                        ("Thank you for entering the participant's demographics" +
+                                            "<br>" + "It is now time to call the participant." + "<br>" +
+                                            "Please press 'next' to display the participant instructions");
+                                    document.getElementById("button").innerHTML = "next"; // change button text
+                                    document.getElementById("button").onclick = function(){window.location.href = "bv_practice.html"};
+                                    // load practice window upon clicking the button
     
-    // store variables in temporary memory for acces later on 
-     sessionStorage.setItem("FIRSTNAME", FIRSTNAME);
-     sessionStorage.setItem("LASTNAME", LASTNAME);
-     sessionStorage.setItem("AGE", AGE);
-     sessionStorage.setItem("RESULT_ACCES_PASSWORD", String(RESULT_ACCES_PASSWORD));
+                                // store variables in temporary memory for acces later on 
+                                    sessionStorage.setItem("FIRSTNAME", FIRSTNAME);
+                                    sessionStorage.setItem("LASTNAME", LASTNAME);
+                                    sessionStorage.setItem("AGE", AGE);
+                                    sessionStorage.setItem("RESULT_ACCES_PASSWORD", String(RESULT_ACCES_PASSWORD));
 
                         } else {
                             // finish task
@@ -86,28 +73,12 @@ function demographics () {
                 "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
             document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
     } // END firstname IF
-    
- /*   
-    if (LASTNAME != null) {
-        const GENDER = window.prompt("The participant is ... [Male/Female/Other]"); // ... enter pp gender [suggestions] 
-    } else {
-        // finish task
-        document.getElementById("maintext").innerHTML = 
-            "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
-        document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
-    } // END valid lastname ENTRY
 
-    if (GENDER != null) {
-        validated = "No"; // age input still to be validated in while loop
-    } else {
-        // finish task
-        document.getElementById("maintext").innerHTML = 
-            "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
-        document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
-        validated == "Yes"; // do not ask for age input
-    } // END valid lastname ENTRY
-*/
-  function agePrompt ()  {
+} // END demographics FUNCTION
+
+
+function agePrompt ()  {
+    // GOAL: To determine whether the input for the participant demographics is a number and falls between the appropriate age range for the Bourdon Vos Test (6 - 17)
     
     while (validated == "No") { 
         var AGE = parseFloat(window.prompt("The participant is ... years old: ")); // parseFloat to change numerical input from prompt to number instead of string
@@ -170,7 +141,5 @@ function demographics () {
     } // END WHILE LOOP
     
     return AGE;
-} // END agePrompt FUNCTION      
-           
-} // END demographics FUNCTION
+} // END agePrompt FUNCTION    
 
