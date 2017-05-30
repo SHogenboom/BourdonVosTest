@@ -143,7 +143,7 @@ function responseActive() {
 
 
 function figureCreation(canvasID) {
-    // GOAL create three target figures
+    // GOAL create three practice figures
     
     var dots = (canvasID.replace("Canvas", "")); 
     // Delete "Canvas" from id to identify amount of dots
