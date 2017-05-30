@@ -511,14 +511,22 @@ function outputTableRows () {
         "<td>" + AGE + 
         "<td>" +  attentionAgeArray[i] +
     "</tr>"));
-    // console.log(middleSection);     
+    // console.log(middleSection);    
+    
+        if (attentionAgeArray[i] == "-") {
+            // do nothing to final attention age
+            var finalAttentionAge = AGE;
+        } else {
+            var finalAttentionAge = attentionAgeArray[i];
+        } // END finalAttentionAge IF
+     
     } // END LOOP
     
     var endTable = ("<tr>" +
         "<th>" + "TOTAL" +
         "<th>" + ((FINISHTIME - STARTTIME)/1000) +
         "<th>" + AGE + " years" +
-        "<th>" + attentionAgeArray[(STIMULI_ROWS-1)] + " years" +
+        "<th>" + finalAttentionAge + " years" +
     "</tr>" +
     "</table>");
     
