@@ -116,17 +116,18 @@ This section provides context on the code that was used to create the Bourdon Vo
 <H4 id="content"> Content </H4>  
 
 * [Demographics](#demographics)
-* [Password](#password)
+* [Password Protect Results](#password)
 * [Practice Trial](#practice)
 * [Bourdon Vos Test](#bvt)
 	+ [Stimuli](#stimuli)
 * [Results](#results)  
 
 
-<H5 id="demographics"> Demographics </H5>
+<H4 id="demographics"> Demographics </H4>
 
-**Functionality**  
-The experiment leader is asked to provide the participant's `firstName`, `lastName`, `gender`, `age`. `firstName`, `lastName`, `gender` input is not validated because these are not used for any other reason than to adress the participant at a later phase. `age` is validated against two criteria: 1) The input is a number, and 2) the participant age lies between 6 and 17. This validation is important because norm group data is not available for other age groups. The experiment leader is provided with a way out by clicking "cancel" in the prompt boxes. In doing so the experiment leader does not continue with the rest of the O-BVT. 
+The experiment leader is asked to provide the participant's `FIRSTNAME`, `LASTNAME`, `GENDER`, and `AGE`. `FIRSTNAME`, `LASTNAME`, `GENDER` input is **not validated** because these are not used for any other reason than to adress the participant at a later phase. `AGE` is **validated** against two criteria: 1) The input is a number, and 2) the participant is between 6 and 17 years old. This validation is important because norm group data is not available for other age groups. 
+
+The experiment leader is provided with a way out by clicking "cancel" in the prompt boxes. In doing so the experiment leader does not continue with the rest of the O-BVT. 
 
 <details>
 	<summary> Code: Prompt Demographic Input </summary> 
@@ -143,12 +144,9 @@ The experiment leader is asked to provide the participant's `firstName`, `lastNa
                     if (GENDER != null) {
                         const AGE = agePrompt();
                         if (AGE != null) {
-                                const RESULT_ACCES_PASSWORD =
-                                    window.prompt(("Please enter a password that will allow only you" +
-                                         " to access the participant's results after completion"), "password");
-                                // experimenter enters password that is required to extract results at the end
+                                // ENTER PASSWORD
                                 
-                                    document.getElementById("maintext").innerHTML = 
+                                document.getElementById("maintext").innerHTML = 
                                         ("Thank you for entering the participant's demographics" +
                                             "<br>" + "It is now time to call the participant." + "<br>" +
                                             "Please press 'next' to display the participant instructions");
@@ -267,20 +265,14 @@ function agePrompt ()  {
 
 ***
 
-The participant's `age` is **validated** to be between 6 and 17 years old. This is important because the Bourdon Vos Test is only suited for this age range, and thus no norm group data are available for other age groups. 
 
-``` javascript
-var validated = "No";
+<H4 id="password"> Password Protect Results </H5>
 
+Both the Experiment Leader and the Participant use the same computer, therefore, the *results* are protected from being viewed by the participant through a password. When the Eperiment Leader sets up the experiment by entering the participant demographics, he/she is also asked to specify a password. The default value is set to "password".  
 
+**WARNING** If the Experiment Leader forgets the password they previously specified, he/she will not be able to view the participant's results.
 
-
-
-```
-
-
-<H6 id="password"> Password Protection </H6>
-**Goal** is to allow only the Experiment Leader to access the results. Therefore, the Experiment leader has to specify the password after entering the demographics:
+<details><summary> Code: Prompt Password </summary><p>
 
 ``` javascript
 	const RESULT_ACCES_PASSWORD =
@@ -288,7 +280,14 @@ var validated = "No";
         " to access the participant's results after completion"), "password");
 
 ```
-This password is stored in `sessionStorage`. When the participant has completed the Bourdon Vos Test, the Experiment Leader is prompted to enter their personal password. The entered password is **validated** against the earlier given password. 
+</p></details>
+
+***
+
+The password that is entered by the Experiment Leader is stored in `sessionStorage` until it is recalled in the results section of the O-BVT. When the participant has completed the Bourdon Vos Test, the Experiment Leader is prompted to enter their personal password. The entered password is **validated** against the earlier given password. 
+
+
+<details><summary> Code: Validate Password </summary><p>
 
 ``` javascript
 	var passWord = String(window.prompt("Please enter the specified password to access the results"));
@@ -312,9 +311,53 @@ This password is stored in `sessionStorage`. When the participant has completed 
    	} // END password Comparison
 
 ```
+</p></details>
 
-**WARNING**   
-If the Experiment Leader has forgotten the password, he/she will not be able to access the results.
+***
+
+<H4 id="practice"> Practice Trials </H4>
+
+The participants is provided with two opportunities to become familiar with the upcoming task. Firstly, he/she is provided with the `practice.html` screen which shows 3 figures. The first figure contains 3 dots, the second 4 dots, and the third 5 dots. 
+
+<details><summary> Code: Create Practice Figures </summary><p>
+
+``` javascript
+
+	function figureCreation(canvasID) {
+    	// GOAL create three practice figures
+    
+    	var dots = (canvasID.replace("Canvas", "")); 
+    	// Delete "Canvas" from id to identify amount of dots
+    
+    	if (dots == 3) {
+        	blackDot(10,10,5,canvasID);
+        	blackDot(40,30,5,canvasID);
+        	blackDot(10,50,5,canvasID);
+    	} else if (dots == 4) {
+        	blackDot(30,10,5,canvasID);
+        	blackDot(10,50,5,canvasID);
+        	blackDot(30,30,5,canvasID);
+        	blackDot(50,50,5,canvasID);
+    	} else if (dots == 5) {
+        	blackDot(30,30,5,canvasID);
+        	blackDot(10,50,5,canvasID);
+        	blackDot(50,10,5,canvasID);
+        	blackDot(50,50,5,canvasID);
+        	blackDot(30,10,5,canvasID);
+    	}
+    
+	} // END figureCreation FUNCTION
+
+```
+
+*note* the blackDot function is explained in the [stimuli](#stimuli) section
+</p></details>
+
+***
+
+
+<H4 id="stimuli"> Stimuli </H4>
+
 
 
 <H2 id="implementation"> Implementation </H2>
