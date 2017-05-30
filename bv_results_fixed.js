@@ -266,9 +266,9 @@ function calculateResponseTimes () {
             console.log("rowTTtotal =  " + rowRTTotal);
         // store total rowRT
         if ((rowRTTotal == 0) || (isNaN(rowRTTotal) == true)) {
-            var rowRT = 0;
+             rowRT = ("-");
         } else {
-            var rowRT = (rowRTTotal - previousRT); // extract previous row time because all times are delta with STARTTIME
+             rowRT = round((rowRTTotal - previousRT),2); // extract previous row time because all times are delta with STARTTIME
         } // END rowRTTotal IF
         
             rowRTArray.push(rowRT);
@@ -294,6 +294,8 @@ function identifyNormGroup () {
 
 function normScores () {
     // GOAL: determine how the participant did in comparison to the relevant norm group (age)
+    
+    console.log("rowRTArray = " + rowRTArray);
 
     // SET VARIABLES
         var normGroup = "";
@@ -310,40 +312,48 @@ function normScores () {
          // console.log(referenceData);
  
     // SPEED (per row)
-        for (i = 0; i < STIMULI_ROWS ; i++) {
+        for (x = 0; x < STIMULI_ROWS ; x++) {
             // GOAL: compare row rt with norm group data
             
             // extract row rt
-                var rowRT = rowRTArray[i];
+                var rowRT = rowRTArray[x];
                //  console.log(rowRT);
-            
-            // comapre with norm group data
-            if (rowRT > referenceData[3]) { // referenceData[3] = lowest RT boundary
-                if (rowRT > referenceData[2]) {
-                    if (rowRT > referenceData[1]) {
-                        if (rowRT > referenceData[0]) {
-                            // reaction time larger than upper RT boundary
-                            attentionAge = (attentionAge - 2);
+           
+           if ((isNaN(rowRT) == true) || (rowRT == 0)) {
+            // do nothing to attentionAge
+            attentionAge = "-";
+            console.log("rowRT =  NaN");
+            console.log("attentionAgeArray = " + attentionAgeArray);
+           } else {
+            console.log("rowRT = " + rowRT);
+                // comapre with norm group data
+                if (rowRT > referenceData[3]) { // referenceData[3] = lowest RT boundary
+                    if (rowRT > referenceData[2]) {
+                        if (rowRT > referenceData[1]) {
+                            if (rowRT > referenceData[0]) {
+                                // reaction time larger than upper RT boundary
+                                attentionAge = (attentionAge - 2);
+                            } else {
+                                // reaction time between [1] & [0]
+                                // attentionAge = calender age - 1
+                                attentionAge = (attentionAge - 1);
+                            }    // END IF [1]
                         } else {
-                            // reaction time between [1] & [0]
-                            // attentionAge = calender age - 1
-                            attentionAge = (attentionAge - 1);
+                           // reaction time between [2] & [1]
+                            // attentionAge = calender age
+                            attentionAge = attentionAge;
                         } // END IF [1]
                     } else {
-                        // reaction time between [2] & [1]
-                        // attentionAge = calender age
-                        attentionAge = attentionAge;
-                    } // END IF [1]
+                        // reaction time between [3] & [2]
+                        // attentionAge = +1 calender age
+                        attentionAge = (attentionAge + 1);
+                    } // END IF [2]
                 } else {
-                    // reaction time between [3] & [2]
-                    // attentionAge = +1 calender age
-                    attentionAge = (attentionAge + 1);
-                } // END IF [2]
-            } else {
-                // if reaction time lower than lowest RT boundary than no if's were met
-                // attentionAge = -2 calander age
-                attentionAge = (attentionAge + 2); 
-            } // END IF [3]
+                    // if reaction time lower than lowest RT boundary than no if's were met
+                    // attentionAge = -2 calander age
+                    attentionAge = (attentionAge + 2); 
+                } // END IF [3]
+            } // END  rowRT == 0 IF
             
            attentionAgeArray.push(attentionAge);
         } // END rt rows LOOP 
@@ -465,8 +475,8 @@ document.getElementById("maintext").innerHTML = (
     "</tr>" +
     "<tr>" +
         "<th>" + "TOTAL" +
-        "<th>" + "" +
-        "<th>" + "" +
+        "<th>" + totalStimuli +
+        "<th>" + "100 %" +
         "<th>" + AGE + " years" + 
         "<th>" + accuracyAgeArray[3] + " years" + 
     "</tr>" +
