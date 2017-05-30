@@ -113,7 +113,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Specific code snippets can be viewed by clicking the "> Code" buttons 
 
-<H4 id="content"> Content </H4>  
+<H3 id="content"> Content </H3>  
 
 * [Demographics](#demographics)
 * [Password Protect Results](#password)
@@ -123,7 +123,7 @@ This section provides context on the code that was used to create the Bourdon Vo
 * [Results](#results)  
 
 
-<H4 id="demographics"> Demographics </H4>
+<H3 id="demographics"> Demographics </H3>
 
 The experiment leader is asked to provide the participant's `FIRSTNAME`, `LASTNAME`, `GENDER`, and `AGE`. `FIRSTNAME`, `LASTNAME`, `GENDER` input is **not validated** because these are not used for any other reason than to adress the participant at a later phase. `AGE` is **validated** against two criteria: 1) The input is a number, and 2) the participant is between 6 and 17 years old. This validation is important because norm group data is not available for other age groups. 
 
@@ -266,11 +266,12 @@ function agePrompt ()  {
 ***
 
 
-<H4 id="password"> Password Protect Results </H5>
+<H3 id="password"> Password Protect Results </H3>
 
 Both the Experiment Leader and the Participant use the same computer, therefore, the *results* are protected from being viewed by the participant through a password. When the Eperiment Leader sets up the experiment by entering the participant demographics, he/she is also asked to specify a password. The default value is set to "password".  
 
-**WARNING** If the Experiment Leader forgets the password they previously specified, he/she will not be able to view the participant's results.
+**WARNING** 
+If the Experiment Leader forgets the password they previously specified, he/she will not be able to view the participant's results.
 
 <details><summary> Code: Prompt Password </summary><p>
 
@@ -315,7 +316,7 @@ The password that is entered by the Experiment Leader is stored in `sessionStora
 
 ***
 
-<H4 id="practice"> Practice Trials </H4>
+<H3 id="practice"> Practice Trials </H3>
 
 The participants is provided with two opportunities to become familiar with the upcoming task. Firstly, he/she is provided with the `practice.html` screen which shows 3 figures. The first figure contains 3 dots, the second 4 dots, and the third 5 dots. 
 
@@ -350,13 +351,13 @@ The participants is provided with two opportunities to become familiar with the 
 
 ```
 
-*note* the blackDot function is explained in the [stimuli](#stimuli) section
+*NOTE* the blackDot function is explained in the [stimuli](#stimuli) section
 </p></details>
 
 ***
 
 
-<H4 id="stimuli"> Stimuli </H4>
+<H3 id="stimuli"> Stimuli </H3>
 
 
 
