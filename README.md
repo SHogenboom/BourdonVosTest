@@ -120,6 +120,7 @@ This section provides context on the code that was used to create the Bourdon Vo
 * [Practice Trial](#practice)
 * [Bourdon Vos Test](#bvt)
 	+ [Stimuli](#stimuli)
+    + [Response Actions](#response)
 * [Results](#results)  
 
 
@@ -356,8 +357,252 @@ The participants is provided with two opportunities to become familiar with the 
 
 ***
 
+The participant is guided through the process of which figures to click (only those with 4 dots) and what to do if they made a mistake (i.e. how to make a correction). How the figures are made response active is discussed in [here](#stimuli).
 
-<H3 id="stimuli"> Stimuli </H3>
+<details><summary> Code: Response Instructions </summary><p>
+
+``` javascript
+
+        if (index == 1 && clicks == 0) {
+            document.getElementById("maintext").innerHTML = 
+            ("Easy right? But what if you clicked a figure with 3 or 5 dots" +
+            " by accident? Try clicking a figure twice and see what happens")
+            warning = false;
+        } else if ((clicks == 1 && index == 0) || (clicks == 1 && index == 2)){
+            document.getElementById("maintext").innerHTML = 
+            ("Welldone! You are ready for the Bourdon Vos Test" +
+            "<br>" + "Please click 'Start the Test' to get going.")
+            document.getElementById("button").innerHTML = "Start the Test";
+            document.getElementById("button").style.visibility = "visible";
+            document.getElementById("button").onclick = function() {window.location.href = "bv_test_fixed.html"};
+            warning = false;
+        } else if (index != 1 && warning == true) {
+            document.getElementById("maintext").innerHTML = 
+            ("You should click the figure with 4 dots first!");
+        } // END display of new instructions
+
+
+```
+
+</p></details>
+***
+
+Upon familiarization with all possible responses (i.e. 1 click = cross out, 2 clicks = correction) the participant is redirected to the actual practice phase of the BVT: a single line with random figures. Presentation of this practice line was programmed in the `bv_test_fixed.html` file as all necessary functions were already present there. 
+
+<H3 id="bvt"> Bourdon Vos Test </H3>
+
+In order to provide the participant with a functioning Bourdon Vos Test I had to create the [stimuli](#stimuli) and allow for mouse actions (i.e. [response action](#response).
+
+<H4 id="stimuli"> Stimulus Creation </H4>
+
+In order to create anything graphical on a webpage that is not an image, one has to create a `canvas` element. In the Bourdon Vos Test it is specified that their are 24 figures per row, and 33 rows. Therefore, depending on the window size, the canvasses are smaller or larger. It is assumed that computer screens are wider than they are high, thus only the maximum width has to be determined in order to create square canvasses
+
+<details><summary> Code: Determine Canvas Size </summary><p>
+
+``` javascript
+
+	function canvasSize() {
+    // GOAL: determine size of screen and adjust size of the presented stimuli to be as
+    // ... large as possible
+    // ASSUMPTION: Computer & Laptop screens are wider than they are high. 
+    // ... Thus in order to create maximum sized squares, only the width needs to be taken into account.
+    
+    // Determine current window size 
+           var winWidth = (window.innerWidth - (2* outerBorder)); // available amount of pixels on the inside of the window
+            
+    // Determine max canvas width
+        var canvasWidth = (winWidth / (stimuliColumns)); // -4 to allow for room for the borders between canvases & the side of the window
+                    
+     return canvasWidth;
+	}  // END canvasSize FUNCTION
+
+
+```
+
+</p></details>
+***
+
+After the maximum height and width of the canvasses are determined, an empty canvas is created and attached to an existing `<div>` HTML element. This function is repeated in the `stimuliPresentation` function to create the appropriate amount of canvasses as specified by the Bourdon Vos Test (24 figures x 33 rows = 792).
+
+<details><summary> Code: Create Empty Canvas </summary><p>
+
+``` javascript
+	
+    function createCanvas (appendObject, canvasID, canvasHeight, canvasWidth, posLeft, posTop) { 
+    // GOAL: create a new RESPONSIVE empty canvas
+        // appendObject: ID of the object to which the canvas should be appended <div id = "stimuli">
+        // canvasID: name you want to give to the created canvas
+        // canvasHeight:  height of the canvas
+        // canvasWidth: width of the canvas
+        // posLeft: left side of the canvas should be placed on which X-coordinate (in pixels)
+        // posTop: top side of the canvas should be placed on which Y-coordinate (in pixels)
+
+    // CREATE CANVAS
+        var addCanvas = document.createElement('canvas');       // Create new canvas element
+    
+    // ASSIGN PROPERTIES
+        addCanvas.id = canvasID; // .id to change on what is specified (itterates in stimulusPresentation function)
+        addCanvas.width = canvasWidth; // set canvasWidth (depending on screen size in canvasSize function)                                              
+        addCanvas.height = canvasHeight; //  set canvasHeight (depending on screen size in canvasSize function) 
+        addCanvas.style.position = "absolute";
+        addCanvas.style.left = posLeft;
+        addCanvas.style.top = posTop;
+        
+    // ASSIGN RESPONSE ACTIONS
+       addCanvas.onclick = function () {responseLogging() } ; // call upon responseLogging to track correct crossout and log hits/miss/mistakes
+        addCanvas.onmouseover = function () {canvasMouseOver()} ; // 
+        addCanvas.onmouseout = function () {canvasMouseOut()} ; 
+
+    // APPEND CANVAS TO EXISTING OBJECT
+        document.getElementById(appendObject).appendChild(addCanvas); // append newly created canvas to existing element 
+	} // END createCanvas FUNCTION
+
+```
+*NOTE* the variables are passed forward to this function in the main function `stimuliPresentation();`. Secondly, all response actions are stored in seperate functions.
+
+</p></details>
+***
+
+Once an empty canvas is created (or a screen full of empty canvasses) it is time to draw a dot figure on that canvas. To do so, first we have to determine how many 3, 4, and 5 dots figures there are, and randomize presentation order
+
+<details><summary> Code: Randomize 3/4/5 Dot Figures </summary><p>
+
+``` javascript
+
+ 	totalStimuli = stimuliColumns * stimuliRows;
+
+    
+    // CREATE DOT ARRAY
+        // Create an array with 1/3 of totalStimuli containing "3", "4", or "5" > will represent amount of dots later on
+        for (i = 3; i < 6; i++) {
+            for (x = 1; x < ((totalStimuli / 3) + 1); x++) { // +1 because counter starts at 1
+                dotArray.push(i)    // add the number (i) to the entire array
+            } // END 1/3 of figure LOOP
+        } // END create dot array LOOP
+        shuffleArray(dotArray); // shuffle content of dotArray to allow for random presentation order
+    
+```
+
+</p></details>
+***
+
+After knowing how many dots will be presented in each figure, it is key to determine where these dots can be drawn on the canvas. This is dependent on the canvas size. For this version of the O-BVT a 3x3 grid of dot placements was created. Future versions could increase this grid size to allow for more varied figures, similar to the figures in the BVT. 
+
+<details><summary> Code: Create Position Grid </summary><p>
+
+``` javascript
+
+	function dotCoordinates (canvasID) {
+    // GOAL: create a combination of X & Y coordinates that match size of the canvas
+        // canvasID: id of canvas to be drawn on
+        
+        // SET VARIABLES
+        var canvasWidth = (document.getElementById(canvasID).width - 6); // -6 to allow for 3px blank border where no circkel is drawn
+        var canvasHeight = (document.getElementById(canvasID).height - 6); // -6 to allow for 3px blank border where no circkel is drawn
+        var sizeCirckel = (canvasWidth / 11); // divide by 11 to allow blank spaces between the dots
+        // console.log(sizeCirckel);
+        arrayXpos = []; 
+        arrayYpos = [];
+        
+        // possible X positions
+             arrayXPos = [];                                                                // create empty array accesible outside function
+                for (q = 1; q < (3 + 1); q++) {                 // repeat X coordinates for all coordinates of Y
+                    for (k = 1; k < (3 + 1); k++) {         // positions for the amount of horizontalCirckles specified (+1 because k = 1)
+                        var posX = ((3 * sizeCirckel) * k);                       // (should be changed depending on canvas & circkel size)
+                        arrayXpos.push(posX);                                      // append new position to array containing all X coordinates
+                    } // END horizontal LOOP
+                } // END vertical LOOP
+            // window.alert(arrayXPos);                                               // TEST
+     
+         // possible Y positions
+            arrayYPos = [];                                                                // create empty array accesisble outside function
+                for (w = 1; w < (3 + 1); w++) {           // repeat Y coordinates for all coordinates of X
+                     for (l = 1; l < (3 + 1); l++) {                // positions for the amount of verticalCirckles specified (+1 because l = 1)
+                        var posY = ((3 * sizeCirckel) * l);                         // change depending on circkelSize
+                        arrayYpos.push(posY);                                       // append new position to array containing all Y position
+                    } // END vertical LOOP
+                } // END horizontal LOOP
+            //  window.alert(arrayYPos);                                               // TEST
+            
+            // sort so when paired with X creates unique XY coordinates
+                 arrayYpos.sort();
+                 
+      // shuffle XY positions
+            indexArray = [];                                                                     // create new Array for random indexing out of XY coordinate arrays
+                for (y = 1; y < 9; y++) {   // create integers for each point in the grid (1 - 9) 
+                    indexArray.push(y);                                                             // append integer to indexArray
+                } // END for LOOP
+            shuffleArray(indexArray);                                                             // shuffle order of integers to allow for random indexing (i.e. dot placement)
+    
+    return sizeCirckel;
+	} // END positionGrid FUNCTION
+
+```
+
+</p></details>
+***
+
+We now have an empty canvas upon which we can draw a figure, we know how many dots should go on that figure, and we know all possible positions of a single dot. All that is left now is to draw a dot, and repeat that action for the appropriate amount of times.
+
+<details><summary> Code: Draw Figure </summary><p>
+
+Draw Black Dot
+
+``` javascript
+
+	function blackDot (canvasID, posX, posY, sizeCirckel) {
+    // GOAL: draw a single black circkle
+            // canvasID: id of the canvas to be drawn on
+            // posX: X position of center circkel relative to canvas
+            // posY: Y position of center circkel relative to canvas
+            // sizeCirckel: size of circkel dependent on size of canvas
+        
+        // CALL CANVAS
+            var c = document.getElementById(canvasID);         // draw on prespecified canvas (see HTML)
+            var ctx = c.getContext("2d");                                    // unkown functionality but necessary 
+        
+        // DRAW CIRCKEL
+            ctx.beginPath();                                                        // initialize drawing
+            ctx.fillstyle = "black";                                                 // specify fill color = black
+            ctx.arc(posX,posY,sizeCirckel,0,2*Math.PI);            // specification of shape to draw (in this case a circkle)
+            ctx.stroke();                                                               // draw specified shape
+            ctx.closePath();                                                        // to allow for other figures to be drawn
+            ctx.fill();                                                                     // execute
+	} // END blackDot FUNCTION    
+
+```
+
+Repeat appropriate amount of times
+
+``` javascript
+
+	// DRAW FIGURES ON CANVAS
+                var sizeCirckel = dotCoordinates (canvasID);
+                    var dots = dotArray[(t-1)]; // -1 because index starts at 0
+                    
+                    for (k = 0 ; k < dots; k++) {
+                        var index =  indexArray[k];       
+                        var posX = arrayXpos[index]; 
+                         var posY = arrayYpos[index];
+                        blackDot (canvasID, posX, posY, sizeCirckel)
+            } // END drawing figures LOOP
+
+```
+
+</p></details>
+***
+
+<H4 id="response"> Response Actions </H4>
+
+
+
+
+
+
+
+
+
+
 
 
 
