@@ -1,18 +1,4 @@
-﻿/** Bourdon Vos Test
-* @author hogen.boom@hotmail.com (Hogenboom, S. A. M.)
-* @fileoverview Flow order: index > bv_pratice > bv_test > bv_results
-* @todo 
-*/
-
-// SET VARIABLES
-/*if (trial == true) {
-    var stimuliColumns = 24; // practice
-    var stimuliRows = 1; // 33 specified in Bourdon Vos Test
-} else {
-    var stimuliColumns = 24; // 24 specified in Bourdon Vos Test
-    var stimuliRows = 33; // 33 specified in Bourdon Vos Test
-} // END trial IF */
-
+﻿// SET VARIABLES
 stimuliColumns = 24; // 24 specified in Bourdon Vos Test
 stimuliRows = 33; // 33 specified in Bourdon Vos Test
 totalStimuli = stimuliColumns * stimuliRows;
@@ -41,6 +27,11 @@ function trialPresentation() {
     totalStimuli = stimuliColumns * stimuliRows;
   
     stimuliPresentation (); 
+    
+    document.getElementById("maintext").style.visibility = "visible"
+    document.getElementById("maintext").innerHTML = ("This is an example of the first row of the Bourdon Vos Test. It is important that you move the mouse over each figure. When you do this the figure will turn grey. Try completing the first row before you move on to the actual Bourdon Vos Test");
+    document.getElementById("maintext").style.position = "absolute";
+    document.getElementById("maintext").style.top = "110px";
     
 } // END TRIAL
 
@@ -401,29 +392,19 @@ function responseLogging () {
 function terminationButton () {  
     // GOAL: store data for result calculations
  
-    if (trial == true) {       
-        if ((responseArray.length == stimuliColumns)){
-            // all canvases responded to
-            
-            // PREPARE PARTICIPANT
+    if (trial == true) {             
+        // PREPARE PARTICIPANT
             window.alert("Welldone! You are now going to start the Bourdon Vos Test. Rember to only click those figures with 4 dots" +
             ", and to move your mouse over each figure. If you accidently clicked a figure with 3 or 5 dots, click again to correct your mistake. Good Luck!");
         
-            // PRESENT BV TASK
+        // PRESENT BV TASK
                 stimuliColumns = 24; // 24 specified in Bourdon Vos Test
                 stimuliRows = 33; // 33 specified in Bourdon Vos Test
                 totalStimuli = stimuliColumns * stimuliRows;
 
                 trial = false;
                 stimuliPresentation ();  // present actual task
-        } else {
-            // trial not done accordingly
-            window.alert("Unfortunately, something went wrong! Rember to only click those figures with 4 dots" +
-            ", and to move your mouse over each figure so it turns grey. Try not to make any mistakes");
-            
-            trialPresentation ();
-            
-        } // END reponse IF
+
     } else {
     // no trial so set termination button functionality!
     
