@@ -111,7 +111,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H2 id="design"> Design </H2>
 
-This section provides examples of the code that was used to create the Bourdon Vos Test from a more global perspective. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics.
+This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Specific code snippets can be viewed by clicking the "> Code" buttons 
 
 <H4 id="content"> Content </H4>  
 
@@ -123,32 +123,147 @@ This section provides examples of the code that was used to create the Bourdon V
 * [Results](#results)  
 
 
-<H6 id="demographics"> Demographics </H6>
+<H5 id="demographics"> Demographics </H5>
 
-**Goal** is to extract `firstName`, `lastName`, `gender`, `age`. Especially the participant's `age` is relevant to be able to compare the participant's results to norm group data.
-
+**Functionality**  
+The experiment leader is asked to provide the participant's `firstName`, `lastName`, `gender`, `age`. `firstName`, `lastName`, `gender` input is not validated because these are not used for any other reason than to adress the participant at a later phase. `age` is validated against two criteria: 1) The input is a number, and 2) the participant age lies between 6 and 17. This validation is important because norm group data is not available for other age groups. The experiment leader is provided with a way out by clicking "cancel" in the prompt boxes. In doing so the experiment leader does not continue with the rest of the O-BVT. 
 
 <details>
-	<summary> Prompt Demographic Input </summary> 
+	<summary> Code: Prompt Demographic Input </summary> 
     <p>  
 
 
 ```javascript
+    const FIRSTNAME = window.prompt("First name: "); // ... enter pp. first name
+        
+    if (FIRSTNAME != null) {
+        const LASTNAME = window.prompt("Last name: "); // ... enters pp. last name
+            if (LASTNAME != null) {
+                const GENDER = window.prompt("The participant is ... [Male/Female/Other]"); // ... enter pp gender [suggestions] 
+                    if (GENDER != null) {
+                        const AGE = agePrompt();
+                        if (AGE != null) {
+                                const RESULT_ACCES_PASSWORD =
+                                    window.prompt(("Please enter a password that will allow only you" +
+                                         " to access the participant's results after completion"), "password");
+                                // experimenter enters password that is required to extract results at the end
+                                
+                                    document.getElementById("maintext").innerHTML = 
+                                        ("Thank you for entering the participant's demographics" +
+                                            "<br>" + "It is now time to call the participant." + "<br>" +
+                                            "Please press 'next' to display the participant instructions");
+                                    document.getElementById("button").innerHTML = "next"; // change button text
+                                    document.getElementById("button").onclick = function(){window.location.href = "bv_practice.html"};
+                                    // load practice window upon clicking the button
+    
+                                // store variables in temporary memory for acces later on 
+                                    sessionStorage.setItem("FIRSTNAME", FIRSTNAME);
+                                    sessionStorage.setItem("LASTNAME", LASTNAME);
+                                    sessionStorage.setItem("AGE", AGE);
+                                    sessionStorage.setItem("RESULT_ACCES_PASSWORD", String(RESULT_ACCES_PASSWORD));
 
-	const FIRSTNAME = 
-        window.prompt("First name: "); // ... enter pp. first name
-    const LASTNAME = 
-        window.prompt("Last name: "); // ... enters pp. last name
-    const GENDER = 
-        window.prompt("The participant is ... [Male/Female/Other]"); // ... enter pp gender [suggestions] 
-    const AGE =
-        window.prompt("The participant is ... years old: ");// ... enter pp age > validated!
-
+                        } else {
+                            // finish task
+                            document.getElementById("maintext").innerHTML = 
+                                "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+                            document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+                        } // END AGE IF
+                    } else {
+                            // finish task
+                            document.getElementById("maintext").innerHTML = 
+                                "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+                            document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+                    } // END GENDER IF
+            } else {
+                // finish task
+                document.getElementById("maintext").innerHTML = 
+                    "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+                document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+            } // END lastname IF
+    } else {
+        // finish task
+            document.getElementById("maintext").innerHTML = 
+                "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+            document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+    } // END firstname IF
 ```  
-
-
 </p>
-</details>    
+</details>
+
+***
+
+<details> <summary> Code: Age Validation </summary> <p>
+
+``` javascript
+function agePrompt ()  {
+    // GOAL: To determine whether the input for the participant demographics is a number and falls between the appropriate age range for the Bourdon Vos Test (6 - 17)
+    
+    while (validated == "No") { 
+        var AGE = parseFloat(window.prompt("The participant is ... years old: ")); // parseFloat to change numerical input from prompt to number instead of string
+         
+         if (isNaN(AGE) == false) {
+            // number validation passed >> AGE is a number
+            
+            // check if age falls within limits: 6 < age < 17, if not prompt for re-entry of demographics  
+            if (AGE < 6 || AGE > 17) {
+                // pp age does not fall within age limit
+                window.alert("The participants age = " + AGE + ". The BVTest is only suited for children between 6 and 17 years"); 
+                    
+                    // Re-enter participant age?
+                        var reEnter =  window.confirm(
+                             "Do you wish to re-enter the participant's age?"); 
+                                // Confirm or cancel pop-up box
+                                // ... if confirmed reEnter == true, if canceld reEnter == false
+       
+                        if (reEnter == true) {
+                            validated == "No"; // prompts re-entry and re-validation for age
+                        } else { 
+                            // the experimenter did not want to re-enter the pp demographics
+                            // reEnter == false
+                            console.log("The experiment leader did not wish to re-enter the demographics")
+                            document.getElementById("maintext").innerHTML = 
+                            "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+                            document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+                        } // END reEnter  
+                    
+                } else {
+                    // participant age lies within age range
+                    validated = "Yes"; // will discontinue the while loop
+                }   // END age IF
+            
+            } else {
+                // pp age = not a number
+                window.alert("The participant age you specified was not a number. Please enter the participant's age in numbers only")
+
+                // Re-enter participant age?
+                        var reEnter =  window.confirm(
+                             "Do you wish to re-enter the participant's age?"); 
+                                // Confirm or cancel pop-up box
+                                // ... if confirmed reEnter == true, if canceld reEnter == false
+                                console.log(reEnter);
+                        if (reEnter == true) {
+                            validated == "No"; // prompts re-entry and re-validation for age
+                        } else { 
+                            // the experimenter did not want to re-enter the pp demographics
+                            // reEnter == false
+                            console.log("The experiment leader did not wish to re-enter the demographics")
+                            document.getElementById("maintext").innerHTML = 
+                            "Thank you for viewing the online Bourdon Vos Test. Please contact sally.hogenboom@student.uva.nl for any questions  or comments regarding the test.";
+                            document.getElementById("button").style.visibility = "hidden";  // no advance possible to task
+                            validated == "Yes";
+                            break;
+                        } // END reEnter  
+
+                // var AGE = 0;
+         } // END number IF         
+    } // END WHILE LOOP
+    
+    return AGE;
+} // END agePrompt FUNCTION    
+
+
+```
+</p> </details>
 
 ***
 
