@@ -111,7 +111,7 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H2 id="design"> Design </H2>
 
-This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Specific code snippets can be viewed by clicking the "> Code" buttons 
+This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. Necessary elements of the code are discussed, however, changes in button text etc are not discussed. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Relevant code snippets can be viewed by clicking the "> Code: ... " buttons 
 
 <H3 id="content"> Content </H3>  
 
@@ -724,19 +724,460 @@ All responses are stored in `sessionStorage` memory to allow for calling in the 
 </p></details>
 ***
 
+<H3 id="results"> Results </H3>
 
-In the results section, all data are cleaned (i.e. only the last responses is used for score calculations).
+Experiment Leaders can not access the results section unless the correct [password](#password) was entered. If the Experiment Leader does so, he/she will be provided with the Participant's scores and "Attention Age". "Attention Age" is calculated based on the participant's scores compared to the relevant norm group data. An "Attention Age" for accuracy and speed are provided. In addition to being able to view the data, the Experiment Leader is provided with the option to print the results.
 
+First, all responses are cleaned so that only the last time a person clicked a canvas is used to calculate absolute scores.
 
-
-
-
-<details><summary> Code:  </summary><p> 
+<details><summary> Code: Clean Responses </summary><p> 
 
 ``` javascript
 
+	function lastResponses () {
+    // GOAL: determine which response was made to which canvas
+    // ... and log if canvas was not responded to (i.e. not hovered over)
+    for (i = 0; i < ARRAY_N_DOTS.length; i++) { // loop for all canvases
+        var index = ARRAY_CANVAS_RESPONSE_ORDER.lastIndexOf(i);
+        
+        if (index == -1) { // canvas was not responsed to
+            // var noResponse = noResponse + 1;
+            cleanedResponseArray.push(999);
+            cleanedCorrectionArray.push(999);
+            cleanedResponseTimeArray.push(999);
+        } else { // canvas was responded to
+            cleanedResponseArray.push(ARRAY_MADE_RESPONSES[index]);
+            cleanedCorrectionArray.push(ARRAY_MADE_CORRECTIONS[index]);
+            cleanedResponseTimeArray.push(ARRAY_RESPONSE_TIMES[index]);
+        } // END response made IF
+    } // END all canvases LOOP
+	} // END lastResponses FUNCTION
 
 ```
+
+</p></details>
+***
+
+Then, the total amount of hits, misses, and false alarms is coded & compared to the norm group data. 
+
+<details><summary> Code: Accuracy Scores </summary><p> 
+
+Total amount of Hits, Misses, and False Alarms:
+
+``` javascript
+	function finalScore (cleanedResponseArray) {
+    // GOAL: calculate amount of hits, misses, and false alarms
+        // cleanedResponseArray: array with a response per canvas 
+            // CODING: HIT (1), Miss (2), False Alarm (3) 
+    
+    // SET VARIABLES
+        var count = 0;
+        
+    // LOOP RESPONSE OPTIONS       
+    for (x = 1; x < 4;  x++) {             // only 3 possible response options
+        // LOOP ALL RESPONSES MADE
+        for (y = 0; y < (cleanedResponseArray.length + 1); y++) {
+            if (cleanedResponseArray[y] == x) {         // if value is response option to be evaluated, increase count
+                count = count + 1;
+            } // END IF
+        } // END array LOOP
+      // window.alert(count);  
+      
+      if (x == 1) {
+        var Hits = count;
+      }  else if (x == 2) {
+        var Miss = count;
+      } else {
+        var FalseAlarms = count;
+      } // END IF  
+      
+      count = 0;
+      
+      return [Hits, Miss, FalseAlarms];
+    }   // END possible responses LOOP
+	} // END finalScore FUNCTION
+
+
+```
+
+Compare to norm group data:
+
+``` javascript
+
+	// ACCURACY
+            
+            // FALSE ALARMS 
+                if (falseAlarm > 4 ) {
+                    if (falseAlarm > 12) {
+                        // false alarms > 12 == -1
+                        var faAge =  Number(-1);
+                    } else {
+                     // false alarms between 4 & 12
+                        var faAge = 0;
+                    } // END IF [1]
+                } else {
+                    // falseAlarms < 4 == accuracyAge + 1
+                    var faAge = 1;
+                } // END falseAlarm IF [0]
+        
+                accuracyAgeArray.push((AGE + faAge));
+                
+            // CORRECTIONS
+                if (corrections == 0) {
+                    var cAge = 1;
+                } else if (corrections < 3) {
+                    var cAge = 0;
+                } else {
+                    // corrections > 3
+                    var cAge = (cAge-1);
+                } // END corrections IF
+                
+                accuracyAgeArray.push((AGE + cAge));
+                
+            // MISSES
+                if (miss > 0) {
+                    var mAge = Number(-1);
+                } else {
+                    // miss == 0
+                    var mAge = 0;
+                } // END miss IF
+                
+                accuracyAgeArray.push((AGE + mAge));
+                
+            // TOTAL
+                accuracyAgeTotal = (AGE + (faAge + cAge + mAge));
+
+```
+
+</p></details>
+***
+
+
+After determining the accuracy of the participants, it is also important to code how fast they were. To do so, first we had to calculate average row response times:
+
+<details><summary> Code: Average Row RT </summary><p> 
+
+``` javascript
+	function calculateResponseTimes () {
+    // GOAL: to calculate the response time for each row
+    // ... and to calculate the average response time per row
+    deltaResponseTimeArray = [];
+    var canvasDeltaTime = 0;
+    rowRTArray = [];
+
+    // CALCULATE DELTA TIME FOR ALL CANVASSES
+    for (i = 0; i < cleanedResponseTimeArray.length; i++) {
+        var canvasTime = cleanedResponseTimeArray[i]; // identify reaction time per canvas
+
+        if (canvasTime == 999) {
+            // no response was made i.e. no reaction time
+            canvasDeltaTime = 0;
+        } else {
+            canvasDeltaTime = ((canvasTime - STARTTIME) / 10000); // calculate delta response time between start and that canvas
+        } // END valid time IF
+        deltaResponseTimeArray.push(canvasDeltaTime);
+    } // END FOR LOOP
+    
+    var count = 0;
+    var previousRT = 0;
+    
+    for (x = 0; x < STIMULI_ROWS; x++) {
+     // reset rowReactionTime
+        var rowRTTotal = 0;
+                
+    if (x == 0) {
+        // first row reaction time
+        // totalRT = rowTotal
+        previousRT = 0;
+        // console.log("previousRT =" + previousRT);
+    } else {
+        previousRT = rowRTArray[(x-1)];
+        // console.log("previousRT =" + previousRT);
+    }
+        
+    // CALCULATE ROW RT
+        // loop all stimuli columns
+            for (c = 0; c < STIMULI_COLS; c++) {
+                // window.alert(deltaResponseTimeArray[count]);
+                // console.log(deltaResponseTimeArray[count]);
+                var rowRTTotal = round((rowRTTotal + deltaResponseTimeArray[count]),2);
+                count = count + 1;
+            } // END stimuli col LOOP
+            
+            // console.log("rowTTtotal =  " + rowRTTotal);
+        // store total rowRT
+        if ((rowRTTotal == 0) || (isNaN(rowRTTotal) == true)) {
+             rowRT = ("-");
+        } else {
+             rowRT = round((rowRTTotal - previousRT),2); // extract previous row time because all times are delta with STARTTIME
+        } // END rowRTTotal IF
+        
+            rowRTArray.push(rowRT);
+    } // END row LOOP
+            
+	} // END calculateResponseTimes FUNCTION
+
+```
+
+</p></details>
+***
+
+Then, these row reaction times (rowRT) had to be compared to the relevant norm group data.
+
+<details><summary> Code: Norm Group Data </summary><p> 
+
+``` javascript
+	// SPEED NORMS [0] - [3]
+    // highter than [0] == -2
+    // between [0] & [1] == -1
+    // between [1] & [2] == 0
+    // between [2] & [3] == +1
+    // smaller than [3] == +2
+ 
+ 	const NORM_GROUP_DATA = {
+    normGroup6: [31.5	,	24.9	,	18.4	,	16.5],
+    normGroup7: [27.6	,	23.5	,	18.0	,	15.6],
+    normGroup8: [23.2	,	19.6	,	16.4	,	13.7],
+    normGroup9: [20.4	,	18.0	,	14.3	,	12.5],
+    normGroup10: [20.6	,	16.8	,	13.7	,	12.0],
+    normGroup11: [17.2	,	14.9	,	12.4	,	11.1],
+    normGroup12: [17.1	,	14.7	,	11.9	,	10.0],
+    normGroup13: [16.5	,	14.2	,	11.1	,	9.1],
+    normGroup14: [15.3	,	12.8	,	9.9	,	8.4],
+    normGroup15: [14.2	,	11.6	,	9.7	,	9.2],
+    normGroup16: [13.6	,	11.4	,	9.0	,	8.4],
+    normGroup17: [13.0	,	11.1	,	9.1	,	8.2],
+ 	}   // END OBJECT
+
+
+```
+*NOTE* from Bourdon Vos Manual (Vos, 1998)
+</p></details>
+***
+
+
+<details><summary> Code: Speed Scores </summary><p> 
+
+Identify relevant norm group
+
+``` javascript
+
+    // GOAL: select the appropriate normGroup variable for calculation of scores
+    
+    for (i = 6; i < 18; i++) {
+        if (i == AGE) { // extract correct normgroup
+            var referenceData = "normGroup"+ i;
+        } // END IF
+    } // END FOR ALL AGES
+    
+    var referenceData = NORM_GROUP_DATA[normGroup]; // access relevant normgroup data (all data stored below)
+
+
+```
+
+Compare rowRT to norm group data
+
+``` javascript
+
+	// SPEED (per row)
+        for (x = 0; x < STIMULI_ROWS ; x++) {
+            // GOAL: compare row rt with norm group data
+            
+            // extract row rt
+                var rowRT = rowRTArray[x];
+               //  console.log(rowRT);
+           
+           if ((isNaN(rowRT) == true) || (rowRT == 0)) {
+            // do nothing to attentionAge
+            attentionAge = "-";
+            // console.log("rowRT =  NaN");
+            // console.log("attentionAgeArray = " + attentionAgeArray);
+           } else {
+            // console.log("rowRT = " + rowRT);
+                // comapre with norm group data
+                if (rowRT > referenceData[3]) { // referenceData[3] = lowest RT boundary
+                    if (rowRT > referenceData[2]) {
+                        if (rowRT > referenceData[1]) {
+                            if (rowRT > referenceData[0]) {
+                                // reaction time larger than upper RT boundary
+                                attentionAge = (attentionAge - 2);
+                            } else {
+                                // reaction time between [1] & [0]
+                                // attentionAge = calender age - 1
+                                attentionAge = (attentionAge - 1);
+                            }    // END IF [1]
+                        } else {
+                           // reaction time between [2] & [1]
+                            // attentionAge = calender age
+                            attentionAge = attentionAge;
+                        } // END IF [1]
+                    } else {
+                        // reaction time between [3] & [2]
+                        // attentionAge = +1 calender age
+                        attentionAge = (attentionAge + 1);
+                    } // END IF [2]
+                } else {
+                    // if reaction time lower than lowest RT boundary than no if's were met
+                    // attentionAge = -2 calander age
+                    attentionAge = (attentionAge + 2); 
+                } // END IF [3]
+            } // END  rowRT == 0 IF
+            
+           attentionAgeArray.push(attentionAge);
+        } // END rt rows LOOP 
+
+```
+
+</p></details>
+***
+
+Once all scores were calculated, output tables of all the scores were created:
+
+<details><summary> Code: Output Tables </summary><p> 
+
+Output Accuracy
+
+``` javascript
+
+	"<table>" +
+    "<tr>" +
+        "<th>" + "" +
+        "<th>" + "Absolute Amounts" +
+        "<th>" + "Percentages" +
+        "<th>" + "Calender Age" +
+        "<th>" + "Accuracy Age" +
+    "</tr>" +
+    "<tr>" +
+        "<td>" + "Hits" +
+        "<td>" + hits +
+        "<td>" + percHits + " %" +
+        "<td>" + AGE +
+        "<td>" + "-" +
+    "</tr>" +
+    "<tr>" +
+        "<td>" + "Misses" +
+        "<td>" + miss +
+        "<td>" + percMiss + " %" +
+        "<td>" + AGE + 
+        "<td>" + accuracyAgeArray[2] + 
+    "</tr>" +
+    "<tr>" +
+        "<td>" + "False Alarms" +
+        "<td>" + falseAlarm +
+        "<td>" + percFalseAlarms + " %" +
+        "<td>" + AGE + 
+        "<td>" + accuracyAgeArray[0] + 
+    "</tr>" +
+    "<tr>" +
+        "<td>" + "Corrections" +
+        "<td>" + corrections +
+        "<td>" + percCorrections + " %" +
+        "<td>" + AGE + 
+        "<td>" + accuracyAgeArray[1] + 
+    "</tr>" +
+     "<tr>" +
+        "<td>" + "" +
+        "<td>" + "" + 
+        "<td>" + "" + 
+        "<td>" + "" +
+        "<td>" + "" +
+    "</tr>" +
+    "<tr>" +
+        "<td>" + "<b>" + "Missed Responses" + 
+        "<td>" + "<b>"+ noResponse + 
+        "<td>" + "<b>"+ percNoResponse + " %" +
+        "<td>" + "<b>"+ "-" +
+        "<td>" + "<b>"+ "-" +
+    "</tr>" +
+       "<tr>" +
+        "<td>" + "Responses" +
+        "<td>" + responses + 
+        "<td>" + percResponses + " %" +
+        "<td>" + "-" +
+        "<td>" + "-" +
+    "</tr>" +
+    "<tr>" +
+        "<th>" + "TOTAL" +
+        "<th>" + totalStimuli +
+        "<th>" + "100 %" +
+        "<th>" + AGE + " years" + 
+        "<th>" + accuracyAgeArray[3] + " years" + 
+    "</tr>" +
+	"</table>" +
+	"<br>" +
+	outputTableRowData +
+	"<br>"
+	); // END HTML OBJECT
+
+```
+
+
+Output SPEED
+
+``` javascript
+	function outputTableRows () {
+    // GOAL: to create an output table for the row times
+    
+     finalAttentionAge = AGE;
+    
+    var headers =  String("<table>" +
+    "<tr>" +
+        "<th>" + "Row Number" +
+        "<th>" + "Reaction Time" +
+        "<th>" + "Calender Age" +
+        "<th>" + "Attention Age" +
+    "</tr>");
+    
+    var middleSection  = "";
+    
+    for (i = 0; i < STIMULI_ROWS; i++) {
+        middleSection = (String(middleSection) + (
+       "<tr>" + 
+        "<td>" + (i+1) +
+        "<td>" + rowRTArray[i] +
+        "<td>" + AGE + 
+        "<td>" +  attentionAgeArray[i] +
+    "</tr>"));
+    // console.log(middleSection);    
+    
+        if (attentionAgeArray[i] == "-") {
+            // do nothing to final attention age
+        } else {
+            finalAttentionAge = attentionAgeArray[i];
+        } // END finalAttentionAge IF
+     
+    } // END LOOP
+    
+    var endTable = ("<tr>" +
+        "<th>" + "TOTAL" +
+        "<th>" + ((FINISHTIME - STARTTIME)/1000) +
+        "<th>" + AGE + " years" +
+        "<th>" + finalAttentionAge + " years" +
+    "</tr>" +
+    "</table>");
+    
+    return (headers + middleSection + endTable);
+	} // END outputTableRows FUNCTION
+
+```
+
+</p></details>
+***
+
+<H4 id="internet"> Supporting Function From Internet </H4>
+
+A few functions were used that were not created by the author:
+
+<details><summary> Code: Round to x Decimals </summary><p> 
+
+``` javascript
+
+	function round(value, decimals) {
+  	return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+	}
+
+```
+<a href ="http://www.jacklmoore.com/notes/rounding-in-javascript/"> Source </a>
 
 </p></details>
 ***
