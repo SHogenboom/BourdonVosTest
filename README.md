@@ -39,7 +39,7 @@ This document contains information on the process behind creating the O-BVT in l
 
 <H3 id="scenario"> Scenario </H3>
 
-The BVT is administered by an `Experiment Leader` to a child aged 6 - 17 with (un)diagnosed attention deficits. Therefore, the O-BVT serves two audiences: the `Experiment Leader` and the `Participant`. The `Participant` is merely pre-occupied with crossing out any figure that contains 4 dots (leaving 3 and 5 dot figures untouched). To do so, the `Participant` needs to comprehend how to perform the task while on the computer. The `Experiment Leader` aims to determine if the `Participant`'s continued attention levels matches that of his/her peers. Therefore, the `Experiment Leader` normally (in the BVT) has to instruct the `Participant`, record reaction times, and compute total scores. In the O-BVT, this will all be done by the software, thereby significantly decreasing the time and effort it costs an `Experiment Leader` to administer the Bourdon Vos paradigm. 
+The BVT is administered by an `Experiment Leader` to a child aged 6 - 17 with (un)diagnosed attention deficits. Therefore, the O-BVT serves two audiences: the `Experiment Leader` and the `Participant`. The `Participant` is merely pre-occupied with crossing out any figure that contains 4 dots (leaving 3 and 5 dot figures untouched). To do so, the `Participant` needs to comprehend how to perform the task while on the computer. The `Experiment Leader` aims to determine if the `Participant`'s continued attention levels matches that of his/her peers. Therefore, the `Experiment Leader` normally (in the BVT) has to instruct the `Participant`, record reaction times, and compute total scores. In the O-BVT, this will all be done by the software, thereby significantly decreasing the time and effort it costs an `Experiment Leader` to administer the Bourdon Vos paradigm. The `Experiment Leader` is only tasked with entering the `Participant`'s demographics. 
 
 [*top*](#top)
 
@@ -65,13 +65,14 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 |2|[bv_test_fixed.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_test_fixed.html)|[bv_combined.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_combined.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)| Practice Stimuli + Practice Line + Bourdon Vos Test|
 |3|[bv\_results.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_results.html)|[bv\_results\_fixed.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_results_fixed.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)|Results|  
 
-*Table of HTML pages presented in the O-BVT in the order they are displayed to the user. Supporting Javascript & CSS files per page. All links refer to the source file location on 
-.*  
+*Table of HTML pages presented in the O-BVT in the order they are displayed to the user. Supporting Javascript & CSS files per page. All links refer to the source file location on gitHub.*  
 
 
 <H4 id="taskflowuser"> Task Flow User </H4>
 
-**Experiment Leader** follows instructions from the [User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) to start the O-BVT. The O-BVT starts with the index page to display **Experiment Leader** instructions & allows for entering the *demographics* of the participant. The **Experiment Leader** then calls the **Participant** to the computer who will start the *practice* phase. After completing the practice phase, indicating that the **Participant** understands how to operate the computer and what is expected in the task, the **Participant** will continue on to the main phase: the *Bourdon Vos Test*. When the **Participant** has finished the task, he/she will call the **Experiment Leader** again. The **Experiment Leader** then has to enter the pre-specified password in order to access the participant's *results*.
+*NOTE: all links refer to the JavaScript code documented in the [O-BVT Design](#design) section.*
+
+**Experiment Leader** follows instructions from the [User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) to start the O-BVT. The O-BVT starts with the index page to display **Experiment Leader** instructions & allows the **Experiment Leader** to enter the Participant's [*demographics*](#demographics). The **Experiment Leader** then calls the **Participant** to the computer who will start the [*practice*](#practice) phase. Here, the **Participant** will be instructed on the possible stimuli and the mouse actions, then -similar to the BVT - the **Participant** completes a first row of the Bourdon Vos Test. After completing the practice phase, indicating that the **Participant** understands how to operate the computer and what is expected in the task, the **Participant** will continue on to the main phase: the [*Bourdon Vos Test*](#bvt). When the **Participant** has finished the task, he/she will call the **Experiment Leader** again. The **Experiment Leader** then has to enter the pre-specified [password](#password) in order to access the participant's [*results*](#results).
 
 <H4 id="taskflowsoftware"> Task Flow Software </H4>
 
@@ -112,6 +113,8 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. Necessary elements of the code are discussed, however, changes in button text etc are not discussed. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Relevant code snippets can be viewed by clicking the "> Code: ... " buttons 
 
+[*top*](#top)
+
 <H3 id="content"> Content </H3>  
 
 * [Demographics](#demographics)
@@ -123,6 +126,7 @@ This section provides context on the code that was used to create the Bourdon Vo
 * [Results](#results)  
 * [Function From Internet Sources](#internet)
 
+[*top*](#top)
 
 <H3 id="demographics"> Demographics </H3>
 
@@ -266,6 +270,7 @@ function agePrompt ()  {
 
 ***
 
+[*top*](#top)
 
 <H3 id="password"> Password Protect Results </H3>
 
@@ -316,6 +321,8 @@ The password that is entered by the Experiment Leader is stored in `sessionStora
 </p></details>
 
 ***
+
+[*top*](#top)
 
 <H3 id="practice"> Practice Trials </H3>
 
@@ -390,9 +397,13 @@ The participant is guided through the process of which figures to click (only th
 
 Upon familiarization with all possible responses (i.e. 1 click = cross out, 2 clicks = correction) the participant is redirected to the actual practice phase of the BVT: a single line with random figures. Presentation of this practice line was programmed in the `bv_test_fixed.html` file as all necessary functions were already present there. 
 
+[*top*](#top)
+
 <H3 id="bvt"> Bourdon Vos Test </H3>
 
 In order to provide the participant with a functioning Bourdon Vos Test I had to create the [stimuli](#stimuli) and allow for mouse actions (i.e. [response action](#response).
+
+[*top*](#top)
 
 <H4 id="stimuli"> Stimulus Creation </H4>
 
@@ -598,6 +609,8 @@ Repeat appropriate amount of times
 
 ***
 
+[*top*](#top)
+
 <H4 id="response"> Response Actions </H4>
 
 The O-BVT requires the following response actions:
@@ -733,6 +746,8 @@ All responses are stored in `sessionStorage` memory to allow for calling in the 
 </p></details>
 
 ***
+
+[*top*](#top)
 
 <H3 id="results"> Results </H3>
 
@@ -1181,6 +1196,8 @@ Output SPEED
 
 ***
 
+[*top*](#top)
+
 <H4 id="internet"> Supporting Functions From Internet </H4>
 
 A few functions were used that were not created by the author:
@@ -1195,23 +1212,6 @@ A few functions were used that were not created by the author:
 
 ```
 <a href ="http://www.jacklmoore.com/notes/rounding-in-javascript/"> Source </a>
-
-</p></details>
-
-***
-
-<details><summary> Code: Random Integer </summary><p> 
-
-``` javascript
-
-	function getRandomInt(min, max) {
-      // GOAL: get a random integer in a range from min to max
-        return Math.floor(Math.random() * (max - min + 1) + min);
-	} // END RandomInt FUNCTION
-
-```
-
-<a href ="https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range"> Source </a>
 
 </p></details>
 
@@ -1268,14 +1268,19 @@ Retrieve Array
 
 ***
 
+[*top*](#top)
+
 <H2 id="implementation"> Implementation </H2>
 
 This was the first time that I programmed in HTML/JavaScript/CSS. I spoke to my supervisor C. Stevenson who pointed me in the direction of these three components that make up a website. Because I had only limited knowledge of HTML, and none of JavaScript and CSS, I started of by completing almost all tutorials on [w3schools](https://www.w3schools.com). This allowed me to come to grasp with different functions, and thus decide on which components I needed in order to create my O-BVT task. Of course [stackoverflow](https://stackoverflow.com) also provided useful answers to the many issues I came across. As I was completely new to the programming languages, some functions were not created by the Author. An example of this is how to store the content of an Array into memory. All functions (N = 4) that were extracted from the internet are cited in the [Supporting Functions From Internet](#internet) section.  
 
+[*top*](#top)
 
 <H3 id="versioncontrol"> Version Control </H3>
 
 Version control was established by creating a [GitHub](https://github.com) account. All source file documents were stored in the [BourdonVosTest](https://github.com/SHogenboom/BourdonVosTest) folder. Initially commits were only made locally, however, after a while I put the folder online in order to be able to access the O-BVT online as well. Commits were made whenever a certain part of the test was working. For example, a commit was made after creating a functioning password validation system. In general, if a commit was made before achieving a functioning piece of code, a comment was made as to what was still left to be solved.
+
+[*top*](#top)
 
 <H3 id="codingstyle"> Coding Style </H3>
 
@@ -1296,9 +1301,11 @@ I have also incorporated my own coding style preferences. Firstly, that all func
 * end all code lines with a `;`
 * space around operators
 
+[*top*](#top)
+
 <H3 id="testing"> Testing </H3>
 
-Testing of the O-BVT was done in multiple ways. It should be noted that not all `TEST`s remain in code due to cluttering of the code.   
+Testing of the O-BVT was done in multiple ways. It should be noted that not all `TEST`s remain in code due to cluttering of the code. Only vital `TEST`s are kept in code but commented out, to prevent the console from clogging.  
 
 1. **Visual Checks** are the easiest way of checking whether a webpage is doing what it should, is by checking the page in the web browser. For example, I checked whether a figure appeared on screen when I had programmed it to do so. Or whether the size of the stimuli would change when I increased/decreased the window size.
 
@@ -1320,6 +1327,7 @@ console.log("count delta RT = " + deltaResponseTimeArray[count]);
 
 5. **Manual calculations** were done in order to check whether hits/miss/false alarm percentages & absolute scores were logged correctly.
 
+[*top*](#top)
 
 <H3 id="documentation"> Documentation </H3>
 
@@ -1328,6 +1336,8 @@ Three types of documentation were created. Firstly, the [User Manual](https://gi
 Secondly, the current documentation was made in a markdown file, which is also available [online](https://github.com/SHogenboom/BourdonVosTest/blob/master/README.html). This document contains information on the process behind creating the O-BVT inline with the requirements for the course "Programming The Next Step", which was given at the University of Amsterdam, the Netherlands, in 2017.  
 
 Thirdly, all source files contain in-code documentation. Specifically, each function that was created contains information on the `goal` of that function and explains the input variables. Numerical coding for conditions are also explained (e.g., hits == 1, miss == 2, falseAlarm == 3).
+
+[*top*](#top)
 
 <H3 id="errorprovision"> Error Provision </H3>
 
@@ -1346,6 +1356,9 @@ function anyFunction (){
 ```
 In doing so I ensured that I did not put certain statements in the wrong loop and to prevent forgetting to close a loop or function. 
 
+Furthermore, essential variables / processes were logged in the console before continuing with building additional code. 
+
+[*top*](#top)
 
 <H2 id="verification"> Verification </H2>
 
@@ -1359,6 +1372,7 @@ Alpha testing revealed the following things:
 2. The O-BVT does not run on Android systems
 3. Absolute scores (hit/miss/false alarms) are confusing, they should be displayed in percentages. Maybe even a graph. 
 
+[*top*](#top)
 
 <H3 id="bugs"> Bug Reporting </H3>  
 
@@ -1366,7 +1380,15 @@ I implemented a bug report button leading to a [google form](https://goo.gl/form
 
 **WARNING** The form can currently only be completed by University of Amsterdam accounts due to allowing for screenshot file uploads.
 
+[*top*](#top)
+
 <H2 id="development"> Planned Developments </H2>
+
+**Vital Improvements**
+
+Currently, I have been unable to resolve one essential mistake: the correction of responses that were made two or more canvasses ago. I did not notice this mistake untill too late, as it does not become evident when one conducts the experiment in a normal fashion.
+
+**Envisioned Improvements**
 
 Although the O-BVT meets the basic requirements, I have envisioned a few adjustments / functionalities that should be implemented in the future. 
 
@@ -1380,6 +1402,10 @@ Although the O-BVT meets the basic requirements, I have envisioned a few adjustm
 
 5. The design could do with a brush up. It is currently all very minimal.
 
+6. I think the instructions are quite complicated for a 6 year old. It would be good to have instructions tailored to each age / reading ability.
+
+[*top*](#top)
+
 <H2 id="references"> References </H2>
 
 * <p id="bourdonvostest"> Bourdon Vos Test information </p>
@@ -1392,6 +1418,7 @@ Although the O-BVT meets the basic requirements, I have envisioned a few adjustm
 ![Screenshot Norm Group Data]
 (https://github.com/SHogenboom/BourdonVosTest/blob/master/Normtable_BV.png)
 
+[*top*](#top)
 
 
 
