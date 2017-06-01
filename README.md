@@ -1,8 +1,8 @@
 <H1 id="top"> Online Bourdon Vos Test </H1>
 
-The Online Bourdon Vos Test (O-BVT) has transformed the Bourdon Vos Test (BVT; 1998) from a paper-and-pencil version to a web based test. The O-BVT & BVT measure continued attention in children aged 6 - 17. This is done by providing the participants with a sheet (BVT) or screen (O-BVT) containing 33 rows with 24 figures each (i.e. 792 figures). Each figure contains of either 3, 4, or 5 black dots. This is why the adult version (the Bourdon Wiersma Test) is also called the "Dot Cancellation Test".  
+The Online Bourdon Vos Test (O-BVT) has transformed the Bourdon Vos Test (BVT; 1998) from a paper-and-pencil version to a web based test. The O-BVT & BVT measure continued attention in children aged 6 - 17. This is done by providing the participants with a sheet (BVT) or screen (O-BVT) containing 33 rows with 24 figures each (i.e. 792 figures). Each figure contains of either 3, 4, or 5 black dots. This is why the adult version (the Bourdon Wiersma Test) is also called the "Dot Cancellation Test".  The aim for participants is to cross out the figures with 4 dots (and only those!) as fast as possible. The participant's accuray and speed are compared to norm group data (e.g., age group) and provide an indication as to whether the participant suffers from attention deficits (a lower attention age) or scores above average (a higher attention age). The O-BVT benefits the Experiment Leaders greatly because they do not need to be present to administer the test, nor do they need to spent time on calculating the scores; this is all done for them.  
 
-**IF YOU WISH TO USE THE ONLINE BOURDON VOS TEST - PLEASE SEE THE [USER MANUAL](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf) FOR INSTRUCTIONS !**
+**IF YOU WISH TO USE THE ONLINE BOURDON VOS TEST - PLEASE SEE THE [USER MANUAL](#usermanual) FOR INSTRUCTIONS !**
 
 This document contains information on the process behind creating the O-BVT in line with the requirements for the course "Programming The Next Step", which was given at the University of Amsterdam, the Netherlands, in 2017. For other software developers I recommend looking at the [Design](#design) section as it contains examples of the code. Of course, all source files are accessible on GitHub: [Bourdon Vos Test](https://github.com/SHogenboom/BourdonVosTest). All files contain in-line comments.
 
@@ -26,7 +26,7 @@ This document contains information on the process behind creating the O-BVT in l
 	+ [Alpha Testing](#alphatester)
     + [Bug Reporting](#bugs)
 * [Planned Developments](#development)
-	+ 
+* [User Manual](#usermanual)
 * [References](#references)
 	+ [Bourdon Vos Test](#bourdonvostest)
     + [Norm Groups](#normgroup)
@@ -114,7 +114,9 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H2 id="design"> Design </H2>
 
-This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. Necessary elements of the code are discussed, however, changes in button text etc are not discussed. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Relevant code snippets can be viewed by clicking the "> Code: ... " buttons 
+This section provides context on the code that was used to create the Bourdon Vos Test from a more global perspective. Necessary elements of the code are discussed, however, changes in button text etc are not discussed. All code files are accessible  on [GitHub](https://github.com/SHogenboom/BourdonVosTest) and contain in-code comments for specifics. Relevant code snippets can be viewed by clicking the "> Code: ... " buttons. 
+
+[*Skip to 'Implementation'*](#implementation)
 
 [*top*](#top)
 
@@ -1406,6 +1408,13 @@ Although the O-BVT meets the basic requirements, I have envisioned a few adjustm
 5. The design could do with a brush up. It is currently all very minimal.
 
 6. I think the instructions are quite complicated for a 6 year old. It would be good to have instructions tailored to each age / reading ability.
+
+[*top*](#top)
+
+
+<H2 id="usermanual"> User Manual </H2>
+
+![User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/README_USERS.pdf)
 
 [*top*](#top)
 
