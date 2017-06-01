@@ -59,6 +59,9 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 
 <H3 id="taskflow"> Task Flow </H3>
 
+![Task Flow](https://github.com/SHogenboom/BourdonVosTest/blob/master/BVT%20Flowchart.png)
+
+
 | Page |`HTML` | `JavaScript` | `CSS` | Function|
 |:----:|:-----:|:------------:|:-----:|:-------:|
 |1|[index.html](https://github.com/SHogenboom/BourdonVosTest/blob/master/index.html)|[index.js](https://github.com/SHogenboom/BourdonVosTest/blob/master/index.js)|[bv\_css.css](https://github.com/SHogenboom/BourdonVosTest/blob/master/bv_css.css)|Demograhpics|
@@ -1415,8 +1418,7 @@ Although the O-BVT meets the basic requirements, I have envisioned a few adjustm
     
 * [Norm Group Data](https://github.com/SHogenboom/BourdonVosTest/blob/master/Normtable_BV.png) 
 
-![Screenshot Norm Group Data]
-(https://github.com/SHogenboom/BourdonVosTest/blob/master/Normtable_BV.png)
+![Screenshot Norm Group Data](https://github.com/SHogenboom/BourdonVosTest/blob/master/Normtable_BV.png)
 
 [*top*](#top)
 
