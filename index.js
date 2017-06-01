@@ -11,10 +11,43 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+window.onload = canvasSize(); // CALL canvasSize to determine if window is large enough to display Bourdon Vos Test
+
+// INTIALIZE VARIABLES
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function canvasSize() {
+    // GOAL: determine size of screen and adjust size of the presented stimuli to be as
+        // ... large as possible
+    // ASSUMPTION: Computer & Laptop screens are wider than they are high. 
+        // ... Thus in order to create maximum sized squares, only the width needs to be taken into account.
+    
+    // DETERMINE WINDOW SIZE
+           var winWidth = (window.innerWidth - 30); // available amount of pixels on the inside of the window taking into account a distance between the first figure and the windowborder
+            
+    // CALCULATE MAX CANVAS WIDTH
+        var canvasWidth = (winWidth / (24));  // divide by 24 because 24 columns have to fit the screen
+                
+    // SET MAX/MIN DIMENSIONS:
+        if (canvasWidth > 80) {
+            canvasWidth = 80;
+        } else if (canvasWidth < 50) {
+          window.alert("Screen too small to display Bourdon Vos Test. Please adjust window size (i.e. make fullscreen) & reload. If you cannot make the window any larger, you cannot display the Bourdon Vos test on your device.");
+            // pp will reload until window is large enough to display 24 figures in the width of the screen  
+        } // END IF
+                    
+     return canvasWidth;
+}  // END canvasSize FUNCTION
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // CREATE EL ENVIRONMENT
 document.body.style.backgroundColor = "Teal"; // set background color
 document.getElementById("button").innerHTML = "Demographics"; // display demographics button
-document.getElementById("button").onclick = function () {demographics() }; // call demographics function upon button click
+document.getElementById("button").onclick = function () {demographics() }; // CALL demographics function upon button click
 
 // DISPLAY INSTRUCTIONS
 document.getElementById("maintext").innerHTML = (
@@ -81,7 +114,7 @@ function demographics () {
 
 // SET NEW BUTTON
     document.getElementById("button").innerHTML = "next"; // change button text
-    document.getElementById("button").onclick = function(){window.location.href = "bv_practice.html"}; // load practice window upon clicking the button
+    document.getElementById("button").onclick = function(){window.location.href = "bv_test_fixed.html"}; // load practice window upon clicking the button
     
 // STORE DATA (temporary local memory)
     sessionStorage.setItem("FIRSTNAME", firstName);
