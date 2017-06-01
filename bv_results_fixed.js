@@ -1,52 +1,61 @@
-﻿
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// EXPERIMENT LEADER ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////// RESULTS ///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// GOAL
+// The Participant is finished with the Bourdon Vos Test
+// The Experiment Leader is able to access the results once the correct password is entered
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
-// https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
+// NOTE: function not written by author. 
+// SOURCE: https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
+// GOAL: to allow for array extraction from sessionStorage
 
-// FUNCTION FROM INTERNET - ALLOWS FOR ARRAY CALLING FROM STORAGE
 Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
 
-//  DATA FROM bv_test_fixed.html
-    const STARTTIME = sessionStorage.getItem("start");                                                // startTime BV Test
-    const FINISHTIME = sessionStorage.getItem("finish");                                             // finishTime entire page
-    const ARRAY_MADE_RESPONSES = sessionStorage.getObj("ARRAY_MADE_RESPONSES");                       // responses made // CODING: HIT (1), Miss (2), False Alarm (3) 
-    const ARRAY_MADE_CORRECTIONS = sessionStorage.getObj("ARRAY_MADE_CORRECTIONS");                     // corrections made // CODING: NO (0), YES (1)
-    const ARRAY_CANVAS_RESPONSE_ORDER = sessionStorage.getObj("ARRAY_CANVAS_RESPONSE_ORDER");    // order in which responses were made
-    const ARRAY_N_DOTS = sessionStorage.getObj("ARRAY_N_DOTS");                                      // amount of dots in each figure
-    const ARRAY_RESPONSE_TIMES = sessionStorage.getObj("ARRAY_RESPONSE_TIMES");                        // response times per canvas
-    // window.alert(Array.isArray(ARRAY_CANVAS_IDs));                                                  // TEST if variables are arrays
+//  DATA FROM bv_combined.js
+    const STARTTIME = sessionStorage.getItem("start"); // startTime BV Test
+    const FINISHTIME = sessionStorage.getItem("finish"); // finishTime entire page
+    const ARRAY_MADE_RESPONSES = sessionStorage.getObj("ARRAY_MADE_RESPONSES");  // responses made // CODING: HIT (1), Miss (2), False Alarm (3) 
+    const ARRAY_MADE_CORRECTIONS = sessionStorage.getObj("ARRAY_MADE_CORRECTIONS");  // corrections made // CODING: NO (0), YES (1)
+    const ARRAY_CANVAS_RESPONSE_ORDER = sessionStorage.getObj("ARRAY_CANVAS_RESPONSE_ORDER");  // order in which responses were made
+    const ARRAY_N_DOTS = sessionStorage.getObj("ARRAY_N_DOTS");    // amount of dots in each figure
+    const ARRAY_RESPONSE_TIMES = sessionStorage.getObj("ARRAY_RESPONSE_TIMES");  // response times per canvas
     const STIMULI_ROWS = sessionStorage.getItem("stimuliRows"); // amount of rows containing stimuli
     const STIMULI_COLS = sessionStorage.getItem("stimuliCols"); // amount of stimuli columns
 
-// DATA FROM bv_index.html
+// DATA FROM bv_index.js
     const FIRSTNAME = sessionStorage.getItem("FIRSTNAME"); // participants first name
     const LASTNAME = sessionStorage.getItem("LASTNAME");
     const AGE = Number(sessionStorage.getItem("AGE"));
     const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
  
-// console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
-console.log("ARRAY_CANVAS_RESPONSE_ORDER = " + ARRAY_CANVAS_RESPONSE_ORDER);
+ // TEST
+    // console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
+    // console.log("ARRAY_CANVAS_RESPONSE_ORDER = " + ARRAY_CANVAS_RESPONSE_ORDER);
 
-// SET VARIABLES
-    var cleanedResponseArray = [];
-    var cleanedCorrectionArray = [];
-    var cleanedResponseTimeArray = [];
-    validated = "";
-    var attentionAgeArray = [];
-    var accuracyAgeArray = [];
+// CREATE EMPTY VARIABLES
+    var cleanedResponseArray = []; // array of response associated with each canvas
+    var cleanedCorrectionArray = []; // array of amount of corrections made for each canvas
+    var cleanedResponseTimeArray = []; // array of delta RT for each canvas
+    var attentionAgeArray = []; // array for attentionAge for each stimuli row
+    var accuracyAgeArray = []; // array for accuracy miss/false alarms/ corrections
 
-    var hits = 0;
+    var hits = 0; 
     var miss = 0;
     var falseAlarm = 0;
     var corrections = 0;
     var noResponse = 0;
     var responses = 0;
     
-    var attentionAge = Number(AGE);
+    var attentionAge = Number(AGE); // code as number instead of prompt box string
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,21 +78,27 @@ document.getElementById("button").onclick = function () {passwordValidation() };
 
 function passwordValidation () {
     // GOAL: prevent participant from accessing the results.
-    // ... i.e. validate the password that is provided against the earlier specified password
+        // ... i.e. validate the password that is provided against the earlier specified password
+    // INPUT VARIABLES: none
     
-    // SET VARIABLES
-      validated = "No"; // make global so can be accessed in other functions
-    
+    // ASK PASSWORD    
     var passWord = String(window.prompt("Please enter the pre-specified password to access the results"));
     
+    // VALIDATE INPUT
     if (passWord == RESULT_ACCES_PASSWORD) {
-        window.alert("Correct password. These are the results: ")
-        validated = "Yes";
-        presentScores ();
-        document.getElementById("button").innerHTML="print results"; // allow for printing of results
-        document.getElementById("button").onclick = function () {print()};
+        window.alert("Correct password. These are the results: ");
+        validated = "Yes"; // 
         
-        document.body.style.backgroundColor = "LightGoldenRodYellow";
+        // SET EL ENVIRONMENT
+            document.body.style.backgroundColor = "Teal";
+
+        // CALL
+        presentScores (); // calculate and present results
+    
+        // SET BUTTON
+            document.getElementById("button").innerHTML="print results"; // change text
+            document.getElementById("button").onclick = function () {print()}; // allow for printing
+        
     } else {
             var passwordReentry = window.confirm("This is not the correct password. Do you wish to try again?");
             // returns true if "confirm" is pressed
@@ -97,9 +112,7 @@ function passwordValidation () {
                 document.getElementById("button").style.visibility = "hidden";
             } // END re-entry of password IF
             
-   } // END password Comparison
-   
-    return validated;
+   } // END password VALIDATION   
 } // END passwordValidation FUNCTION
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,6 +120,7 @@ function passwordValidation () {
 
 function presentScores () {
     // GOAL: display all relevant scores to the Experiment Leader
+    // INPUT VARIABLES: none
         
     // CLEAN RESPONSES
     lastResponses();
@@ -166,7 +180,9 @@ function presentScores () {
  
 function lastResponses () {
     // GOAL: determine which response was made to which canvas
-    // ... and log if canvas was not responded to (i.e. not hovered over)
+        // ... and log if canvas was not responded to (i.e. not hovered over)
+    // INPUT VARIABLES: none
+    
     for (i = 0; i < ARRAY_N_DOTS.length; i++) { // loop for all canvases
         var index = ARRAY_CANVAS_RESPONSE_ORDER.lastIndexOf(i);
         
@@ -188,7 +204,9 @@ function lastResponses () {
 function finalScore (cleanedResponseArray) {
     // GOAL: calculate amount of hits, misses, and false alarms
         // cleanedResponseArray: array with a response per canvas 
-            // CODING: HIT (1), Miss (2), False Alarm (3) 
+    // INPUT VARIABLES:
+       // cleanedResponseArray: array containing final response for each canvas
+    // CODING: HIT (1), Miss (2), False Alarm (3) 
     
     // SET VARIABLES
         var count = 0;
@@ -201,7 +219,6 @@ function finalScore (cleanedResponseArray) {
                 count = count + 1;
             } // END IF
         } // END array LOOP
-      // window.alert(count);  
       
       if (x == 1) {
         var Hits = count;
@@ -220,7 +237,9 @@ function finalScore (cleanedResponseArray) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function calculateResponseTimes () {
     // GOAL: to calculate the response time for each row
-    // ... and to calculate the average response time per row
+        // ... and to calculate the average response time per row
+    // INPUT VARIABLES: none
+    
     deltaResponseTimeArray = [];
     var canvasDeltaTime = 0;
     rowRTArray = [];
@@ -281,6 +300,8 @@ function calculateResponseTimes () {
 
 function identifyNormGroup () {
     // GOAL: select the appropriate normGroup variable for calculation of scores
+    // INPUT VARIABLES: none
+
     
     for (i = 6; i < 18; i++) {
         if (i == AGE) { // extract correct normgroup
@@ -295,6 +316,7 @@ function identifyNormGroup () {
 
 function normScores () {
     // GOAL: determine how the participant did in comparison to the relevant norm group (age)
+    // INPUT VARIABLES: none
     
    //  console.log("rowRTArray = " + rowRTArray);
 
@@ -409,7 +431,9 @@ function normScores () {
 
 
 function createOutput () {
-    
+    // GOAL: create an output table for accuracy
+     // INPUT VARIABLES: none
+   
 var outputTableRowData = outputTableRows();
     
 document.getElementById("maintext").innerHTML = (
@@ -492,7 +516,8 @@ outputTableRowData +
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function outputTableRows () {
-    // GOAL: to create an output table for the row times
+    // GOAL: to create an output table per stimuli row
+    // INPUT VARIABLES: none
     
      finalAttentionAge = AGE;
     
@@ -543,7 +568,7 @@ function outputTableRows () {
 // NOTE
 // Functions that were used to create the task that were not programmed by the author
 
-// http://www.jacklmoore.com/notes/rounding-in-javascript/
+// SOURCE: http://www.jacklmoore.com/notes/rounding-in-javascript/
 function round(value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
