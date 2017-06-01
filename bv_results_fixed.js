@@ -38,8 +38,8 @@ Storage.prototype.getObj = function(key) {
     const RESULT_ACCES_PASSWORD = String(sessionStorage.getItem("RESULT_ACCES_PASSWORD"));
  
  // TEST
-    // console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
-    // console.log("ARRAY_CANVAS_RESPONSE_ORDER = " + ARRAY_CANVAS_RESPONSE_ORDER);
+     // console.log("ARRAY_RESPONSE_TIMES = " + ARRAY_RESPONSE_TIMES);
+     // console.log("ARRAY_CANVAS_RESPONSE_ORDER = " + ARRAY_CANVAS_RESPONSE_ORDER);
 
 // CREATE EMPTY VARIABLES
     var cleanedResponseArray = []; // array of response associated with each canvas

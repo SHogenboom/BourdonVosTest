@@ -56,7 +56,7 @@ document.getElementById("maintext").innerHTML = (
 "Please click the 'demographics' button to enter the participant's demographics. You will also be asked to specify a password that protects the results from being accessed by the participant. Please be aware that if you forget the pre-specified password, you will not be able to access the results!"
 );
 
-console.log("Displayed Welcome Instructions.");
+// console.log("Displayed Welcome Instructions.");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function demographics () {
