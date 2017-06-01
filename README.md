@@ -60,7 +60,9 @@ All figures with 4 dots are to be clicked (i.e. crossed out). When the participa
 <H3 id="taskflow"> Task Flow </H3>
 
 ![Task Flow](https://github.com/SHogenboom/BourdonVosTest/blob/master/BVT%20Flowchart.png)
-*Task flow of the O-BVT. On the far left the source files are listed for each part of the task. These are also included in the table below. The middle section indicates the phases which the Experiment Leaders [blue] and Participants [green] experience.  The far right indicates all phases of the software.
+
+*Task flow of the O-BVT. On the far left the source files are listed for each part of the task. These are also included in the table below. The middle section indicates the phases which the Experiment Leaders [blue] and Participants [green] experience.  The far right indicates all phases of the software.*
+
 
 
 | Page |`HTML` | `JavaScript` | `CSS` | Function|
@@ -1415,7 +1417,13 @@ Although the O-BVT meets the basic requirements, I have envisioned a few adjustm
 
 <H2 id="usermanual"> User Manual </H2>
 
-![User Manual](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual.png)
+![User Manual1](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual.jpg)
+
+![User Manual2](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual2.jpg)
+
+![User Manual3](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual3.jpg)
+
+![User Manual4](https://github.com/SHogenboom/BourdonVosTest/blob/master/UserManual4.jpg)
 
 [*top*](#top)
 
