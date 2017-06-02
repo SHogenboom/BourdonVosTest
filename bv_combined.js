@@ -24,6 +24,7 @@ var clickArray = []; // store how many time a canvas was clicked (for correct re
 var responseArray = []; // log hits/misses/false alarms
 var correctionArray = []; // log whether response was corrected (i.e. clicked twice)
 var responseOrderArray = []; // log order of canvases responded to (for cleaning of data)
+var figureArray = []; // create array containing all created figures
 
 // CREATE PP ENVIRONMENT
     // style in CSS file [bv_css.css]
@@ -327,6 +328,7 @@ function stimuliPresentation (condition) {
         responseArray = []; // log hits/misses/false alarms
         correctionArray = []; // log whether response was corrected
         responseOrderArray = []; // log order of canvases responded to
+        figureArray = []; // array for all created figures
   
     // REMOVE ANY EXISTING CANVASES
         // (e.g., after practice trials were presented)
