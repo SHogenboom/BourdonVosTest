@@ -1299,7 +1299,7 @@ I started of by learning JavaScript on [w3schools](https://www.w3schools.com), a
 I have also incorporated my own coding style preferences. Firstly, that all functions should be accompanied by an explanation of their function. I find that this increases understanding of the code at a later time. Secondly, I mark all ends of functions, loops, and if statements as soon as I create one. This is mainly to do with error provision, as it allows me to keep track of where one section begins, and another finishes.   
 
 
-**According to me the most important JavaScript style guide aspects were: ** 
+**According to me the most important JavaScript style guide aspects were:** 
 
 * Indent coding with 4 spaces
 * camelCase name variables
